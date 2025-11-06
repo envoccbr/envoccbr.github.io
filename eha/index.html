@@ -248,8 +248,8 @@
                     </div>
                     <div class="mx-sm-3 mb-2">
                       <input type="text" class="form-control" id="searchText" name="searchText" placeholder="พิมพ์ที่นี่">
-                      <input type="text" id="spreadsheetId" name="spreadsheetId" value="15PJ8tntKPxriSxFZxnYx2w6vHqUeLwnwCRgQvA1azO0" hidden>
-                      <input type="text" id="range" name="range" value="BuriRam!A2:F" hidden>
+                      <!-- <input type="text" id="spreadsheetId" name="spreadsheetId" value="" hidden> -->
+                      <!-- <input type="text" id="range" name="range" value="" hidden> -->
                     </div>
                     <div class="mx-sm-3 mb-2">
                       <input class="btn btn-primary mb-2 rounded-pill" type="submit" value="ค้นหา">
@@ -270,6 +270,9 @@
     </div>
 
     <!-- variables -->
+      <!-- <?var url = getUrl();?>
+      <input type="hidden" id="getUrl" value="<?=url?>">
+      <script>var url = document.getElementById("getUrl").value</script> -->
       <script>
         var url = "https://script.google.com/macros/s/AKfycbz-s_1LzEIMjXVoZoVx7awwtPskKWFvIc_8oEULOBjagz1ci-W9qQHbYOV84Zr7I9g/exec"
         var header = document.getElementById("header")
