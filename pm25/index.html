@@ -458,7 +458,7 @@
             $.LoadingOverlay("show");
             try {
               const url = "https://script.google.com/macros/s/AKfycbwDbANK5qEXE2oBUDeZq0xkJDztdipTqzsgKhd7DTpdHAsFDfu2dZTaDFVcXuwjBdCI/exec";
-              const response = await fetch(url, { method: "POST", body: JSON.stringify( { "data": "pm25" } ) } );
+              const response = await fetch(url+"?data=pm25");
               const json = await response.json();
               const res = json.data;
               console.log(res);
