@@ -437,9 +437,9 @@
         document.getElementById('lastUpdate').innerText = 'วันที่ ' + new Date().toLocaleString('th-TH', {dateStyle: 'long'}) + ' เวลา ' + new Date().toLocaleString('th-TH', {timeStyle: 'short'}) + ' น.';
 
         // Update KPI Cards
-        document.getElementById('totalShelters').innerText = stats.totalShelters + '/183';
+        document.getElementById('totalShelters').innerText = `${stats.totalShelters}/183`;
         document.getElementById('percentShelters').innerText = Number((stats.totalShelters / 183) * 100).toFixed(2);
-        document.getElementById('activeShelters').innerText = stats.activeShelters;
+        document.getElementById('activeShelters').innerText = `${stats.activeShelters}/${stats.totalShelters}`;
         document.getElementById('currentPeople').innerText = stats.currentPeople.toLocaleString();
         document.getElementById('totalCapacity').innerText = stats.totalCapacity.toLocaleString();
         document.getElementById('vulnerableTotal').innerText = stats.vulnerable.total.toLocaleString();
