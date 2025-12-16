@@ -937,6 +937,7 @@
         });
         // Populate Table
         let tableBody = document.getElementById('shelterTableBody');
+        tableBody.innerHTML = "";
         activeList.forEach(row => {
           let tr = document.createElement('tr');
           tr.className = "bg-white border-b hover:bg-gray-50";
