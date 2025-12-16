@@ -44,15 +44,17 @@
         <h2 class="text-3xl font-bold text-green-600 mt-2" id="activeShelters">0</h2>
         <p class="text-xs text-gray-400 mt-1">แห่ง</p>
       </div>
-      <div class="card border-l-4 border-orange-500">
-        <p class="text-gray-500 text-sm">ผู้อพยพปัจจุบัน</p>
-        <h2 class="text-3xl font-bold text-orange-600 mt-2" id="currentPeople">0</h2>
-        <p class="text-xs text-gray-400 mt-1">คน (จากความจุทั้งหมด <span id="totalCapacity">0</span>)</p>
-      </div>
-      <div class="card border-l-4 border-red-500">
-        <p class="text-gray-500 text-sm">กลุ่มเปราะบางรวม</p>
-        <h2 class="text-3xl font-bold text-red-600 mt-2" id="vulnerableTotal">0</h2>
-        <p class="text-xs text-gray-400 mt-1">คน</p>
+      <div style="display: none;">
+        <div class="card border-l-4 border-orange-500">
+          <p class="text-gray-500 text-sm">ผู้อพยพปัจจุบัน</p>
+          <h2 class="text-3xl font-bold text-orange-600 mt-2" id="currentPeople">0</h2>
+          <p class="text-xs text-gray-400 mt-1">คน (จากความจุทั้งหมด <span id="totalCapacity">0</span>)</p>
+        </div>
+        <div class="card border-l-4 border-red-500">
+          <p class="text-gray-500 text-sm">กลุ่มเปราะบางรวม</p>
+          <h2 class="text-3xl font-bold text-red-600 mt-2" id="vulnerableTotal">0</h2>
+          <p class="text-xs text-gray-400 mt-1">คน</p>
+        </div>
       </div>
     </div>
 
@@ -67,10 +69,12 @@
       </div>
         
       <!-- Chart: Vulnerable Groups -->
-      <div class="card lg:col-span-2">
-        <h3 class="font-bold text-gray-700 mb-4">จำแนกกลุ่มเปราะบาง (คน)</h3>
-        <div class="relative h-64">
-          <canvas id="vulnerableChart"></canvas>
+      <div style="display: none;">
+        <div class="card lg:col-span-2">
+          <h3 class="font-bold text-gray-700 mb-4">จำแนกกลุ่มเปราะบาง (คน)</h3>
+          <div class="relative h-64">
+            <canvas id="vulnerableChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
