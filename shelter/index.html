@@ -77,14 +77,17 @@
     <div id="header" style="display: none;">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="card border-l-4 border-blue-500">
-          <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่ขึ้นทะเบียน)</p>
+          <!-- <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่ขึ้นทะเบียน)</p> -->
+          <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่รายงาน)</p>
           <h2 class="text-3xl font-bold text-blue-800 mt-2" id="totalShelters">รอข้อมูล</h2>
           <p class="text-xs text-gray-400 mt-1">แห่ง (ร้อยละ <span id="percentShelters">รอข้อมูล</span>)</p>
         </div>
-        <div class="card border-l-4 border-orange-500">
-          <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่มีผู้พักพิง)</p>
-          <h2 class="text-3xl font-bold text-red-800 mt-2" id="totalSheltersFix">รอข้อมูล</h2>
-          <p class="text-xs text-gray-400 mt-1">แห่ง (ร้อยละ <span id="percentSheltersFix">รอข้อมูล</span>)</p>
+        <div style="display: none;">
+          <div class="card border-l-4 border-orange-500">
+            <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่มีผู้พักพิง)</p>
+            <h2 class="text-3xl font-bold text-red-800 mt-2" id="totalSheltersFix">รอข้อมูล</h2>
+            <p class="text-xs text-gray-400 mt-1">แห่ง (ร้อยละ <span id="percentSheltersFix">รอข้อมูล</span>)</p>
+          </div>
         </div>
         <div class="card border-l-4 border-green-500">
           <p class="text-gray-500 text-sm">สถานะเปิดให้บริการ</p>
@@ -590,6 +593,7 @@
         document.getElementById('main').style.display = 'inline';
         $.LoadingOverlay("hide");
         document.getElementById('lastUpdate').innerText = 'วันที่ ' + new Date().toLocaleString('th-TH', {dateStyle: 'long'}) + ' เวลา ' + new Date().toLocaleString('th-TH', {timeStyle: 'short'}) + ' น.';
+        if (stats.totalShelters > 183) stats.totalShelters = 183;
         document.getElementById('totalShelters').innerText = `${stats.totalShelters}/183`;
         document.getElementById('percentShelters').innerText = Number((stats.totalShelters / 183) * 100).toFixed(2);
         document.getElementById('totalSheltersFix').innerText = `${stats.totalShelters}/120`;
