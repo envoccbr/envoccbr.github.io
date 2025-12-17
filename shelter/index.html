@@ -592,8 +592,8 @@
         document.getElementById('lastUpdate').innerText = 'วันที่ ' + new Date().toLocaleString('th-TH', {dateStyle: 'long'}) + ' เวลา ' + new Date().toLocaleString('th-TH', {timeStyle: 'short'}) + ' น.';
         document.getElementById('totalShelters').innerText = `${stats.totalShelters}/183`;
         document.getElementById('percentShelters').innerText = Number((stats.totalShelters / 183) * 100).toFixed(2);
-        document.getElementById('totalSheltersFix').innerText = `${stats.totalShelters}/122`;
-        document.getElementById('percentSheltersFix').innerText = Number((stats.totalShelters / 122) * 100).toFixed(2);
+        document.getElementById('totalSheltersFix').innerText = `${stats.totalShelters}/120`;
+        document.getElementById('percentSheltersFix').innerText = Number((stats.totalShelters / 120) * 100).toFixed(2);
         document.getElementById('activeShelters').innerText = `${stats.activeShelters}/${stats.totalShelters}`;
         document.getElementById('toiletCount').innerText = `${stats.sanitation.bathrooms} / ${stats.sanitation.toilets}`;
         document.getElementById('wastePass').innerText = `${stats.sanitation.wastePass}/${stats.totalShelters}`;
