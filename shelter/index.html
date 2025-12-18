@@ -80,7 +80,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="card border-l-4 border-blue-500">
           <!-- <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่ขึ้นทะเบียน)</p> -->
-          <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่รายงาน)</p>
+          <!-- <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด (ที่รายงาน)</p> -->
+          <p class="text-gray-500 text-sm">ศูนย์พักพิงทั้งหมด</p>
           <h2 class="text-3xl font-bold text-blue-800 mt-2" id="totalShelters">รอข้อมูล</h2>
           <p class="text-xs text-gray-400 mt-1">แห่ง</p>
           <p class="text-xs text-gray-400 mt-1" style="display: none;">แห่ง (ร้อยละ <span id="percentShelters">รอข้อมูล</span>)</p>
@@ -91,11 +92,11 @@
             <h2 class="text-3xl font-bold text-red-800 mt-2" id="totalSheltersFix">รอข้อมูล</h2>
             <p class="text-xs text-gray-400 mt-1">แห่ง (ร้อยละ <span id="percentSheltersFix">รอข้อมูล</span>)</p>
           </div>
-        </div>
-        <div class="card border-l-4 border-green-500">
-          <p class="text-gray-500 text-sm">สถานะเปิดให้บริการ</p>
-          <h2 class="text-3xl font-bold text-green-600 mt-2" id="activeShelters">รอข้อมูล</h2>
-          <p class="text-xs text-gray-400 mt-1">แห่ง</p>
+          <div class="card border-l-4 border-green-500">
+            <p class="text-gray-500 text-sm">สถานะเปิดให้บริการ</p>
+            <h2 class="text-3xl font-bold text-green-600 mt-2" id="activeShelters">รอข้อมูล</h2>
+            <p class="text-xs text-gray-400 mt-1">แห่ง</p>
+          </div>
         </div>
       </div>
     </div>
@@ -561,106 +562,106 @@
             stats.activeShelters++;
             activeList.push(row);
           }
-          if (stats.activeShelters > index) stats.activeShelters = bases * stats.activeShelters;
+          if (stats.activeShelters > index) stats.activeShelters = Number(bases * stats.activeShelters).toFixed(0);
 
           if (row[35] && row[35].includes("ผ่าน/มี")) stats.sanitation.wastePass++;
-          if (stats.sanitation.wastePass > index) stats.sanitation.wastePass = bases * stats.sanitation.wastePass;
+          if (stats.sanitation.wastePass > index) stats.sanitation.wastePass = Number(bases * stats.sanitation.wastePass).toFixed(0);
 
           if (row[46] && row[46].includes("ผ่าน/มี")) stats.sanitation.foodPass++;
-          if (stats.sanitation.foodPass > index) stats.sanitation.foodPass = bases * stats.sanitation.foodPass;
+          if (stats.sanitation.foodPass > index) stats.sanitation.foodPass = Number(bases * stats.sanitation.foodPass).toFixed(0);
 
           if (row[23] && row[23].includes("ผ่าน/มี")) stats.sanitation.waterPass++;
-          if (stats.sanitation.waterPass > index) stats.sanitation.waterPass = bases * stats.sanitation.waterPass;
+          if (stats.sanitation.waterPass > index) stats.sanitation.waterPass = Number(bases * stats.sanitation.waterPass).toFixed(0);
 
           if (row[22] && row[22].includes("ผ่าน/มี")) stats.chart1.c1_1++;
-          if (stats.chart1.c1_1 > index) stats.chart1.c1_1 = bases * stats.chart1.c1_1;
+          if (stats.chart1.c1_1 > index) stats.chart1.c1_1 = Number(bases * stats.chart1.c1_1).toFixed(0);
 
           if (row[23] && row[23].includes("ผ่าน/มี")) stats.chart1.c1_2++;
-          if (stats.chart1.c1_2 > index) stats.chart1.c1_2 = bases * stats.chart1.c1_2;
+          if (stats.chart1.c1_2 > index) stats.chart1.c1_2 = Number(bases * stats.chart1.c1_2).toFixed(0);
 
           if (row[24] && row[24].includes("ผ่าน/มี")) stats.chart1.c1_3++;
-          if (stats.chart1.c1_3 > index) stats.chart1.c1_3 = bases * stats.chart1.c1_3;
+          if (stats.chart1.c1_3 > index) stats.chart1.c1_3 = Number(bases * stats.chart1.c1_3).toFixed(0);
 
           if (row[25] && row[25].includes("ผ่าน/มี")) stats.chart1.c1_4++;
-          if (stats.chart1.c1_4 > index) stats.chart1.c1_4 = bases * stats.chart1.c1_4;
+          if (stats.chart1.c1_4 > index) stats.chart1.c1_4 = Number(bases * stats.chart1.c1_4).toFixed(0);
 
           if (row[29] && row[29].includes("ผ่าน/มี")) stats.chart2.c2_1++;
-          if (stats.chart2.c2_1 > index) stats.chart2.c2_1 = bases * stats.chart2.c2_1;
+          if (stats.chart2.c2_1 > index) stats.chart2.c2_1 = Number(bases * stats.chart2.c2_1).toFixed(0);
 
           if (row[30] && row[30].includes("ผ่าน/มี")) stats.chart2.c2_2++;
-          if (stats.chart2.c2_2 > index) stats.chart2.c2_2 = bases * stats.chart2.c2_2;
+          if (stats.chart2.c2_2 > index) stats.chart2.c2_2 = Number(bases * stats.chart2.c2_2).toFixed(0);
 
           if (row[31] && row[31].includes("ผ่าน/มี")) stats.chart2.c2_3++;
-          if (stats.chart2.c2_3 > index) stats.chart2.c2_3 = bases * stats.chart2.c2_3;
+          if (stats.chart2.c2_3 > index) stats.chart2.c2_3 = Number(bases * stats.chart2.c2_3).toFixed(0);
 
           if (row[33] && row[33].includes("ผ่าน/มี")) stats.chart3.c3_1++;
-          if (stats.chart3.c3_1 > index) stats.chart3.c3_1 = bases * stats.chart3.c3_1;
+          if (stats.chart3.c3_1 > index) stats.chart3.c3_1 = Number(bases * stats.chart3.c3_1).toFixed(0);
 
           if (row[34] && row[34].includes("ผ่าน/มี")) stats.chart3.c3_2++;
-          if (stats.chart3.c3_2 > index) stats.chart3.c3_2 = bases * stats.chart3.c3_2;
+          if (stats.chart3.c3_2 > index) stats.chart3.c3_2 = Number(bases * stats.chart3.c3_2).toFixed(0);
 
           if (row[35] && row[35].includes("ผ่าน/มี")) stats.chart3.c3_3++;
-          if (stats.chart3.c3_3 > index) stats.chart3.c3_3 = bases * stats.chart3.c3_3;
+          if (stats.chart3.c3_3 > index) stats.chart3.c3_3 = Number(bases * stats.chart3.c3_3).toFixed(0);
 
           if (row[36] && row[36].includes("ผ่าน/มี")) stats.chart3.c3_4++;
-          if (stats.chart3.c3_4 > index) stats.chart3.c3_4 = bases * stats.chart3.c3_4;
+          if (stats.chart3.c3_4 > index) stats.chart3.c3_4 = Number(bases * stats.chart3.c3_4).toFixed(0);
 
           if (row[41] && row[41].includes("ไม่พบ")) stats.chart4.c4_1++;
-          if (stats.chart4.c4_1 > index) stats.chart4.c4_1 = bases * stats.chart4.c4_1;
+          if (stats.chart4.c4_1 > index) stats.chart4.c4_1 = Number(bases * stats.chart4.c4_1).toFixed(0);
 
           if (row[42] && row[42].includes("ผ่าน/มี")) stats.chart4.c4_2++;
-          if (stats.chart4.c4_2 > index) stats.chart4.c4_2 = bases * stats.chart4.c4_2;
+          if (stats.chart4.c4_2 > index) stats.chart4.c4_2 = Number(bases * stats.chart4.c4_2).toFixed(0);
 
           if (row[43] && row[43].includes("ผ่าน/มี")) stats.chart4.c4_3++;
-          if (stats.chart4.c4_3 > index) stats.chart4.c4_3 = bases * stats.chart4.c4_3;
+          if (stats.chart4.c4_3 > index) stats.chart4.c4_3 = Number(bases * stats.chart4.c4_3).toFixed(0);
 
           if (row[45] && row[45].includes("ผ่าน/มี")) stats.chart5.c5_1++;
-          if (stats.chart5.c5_1 > index) stats.chart5.c5_1 = bases * stats.chart5.c5_1;
+          if (stats.chart5.c5_1 > index) stats.chart5.c5_1 = Number(bases * stats.chart5.c5_1).toFixed(0);
 
           if (row[46] && row[46].includes("ผ่าน/มี")) stats.chart5.c5_2++;
-          if (stats.chart5.c5_2 > index) stats.chart5.c5_2 = bases * stats.chart5.c5_2;
+          if (stats.chart5.c5_2 > index) stats.chart5.c5_2 = Number(bases * stats.chart5.c5_2).toFixed(0);
 
           if (row[47] && row[47].includes("ผ่าน/มี")) stats.chart5.c5_3++;
-          if (stats.chart5.c5_3 > index) stats.chart5.c5_3 = bases * stats.chart5.c5_3;
+          if (stats.chart5.c5_3 > index) stats.chart5.c5_3 = Number(bases * stats.chart5.c5_3).toFixed(0);
 
           if (row[48] && row[48].includes("ผ่าน/มี")) stats.chart5.c5_4++;
-          if (stats.chart5.c5_4 > index) stats.chart5.c5_4 = bases * stats.chart5.c5_4;
+          if (stats.chart5.c5_4 > index) stats.chart5.c5_4 = Number(bases * stats.chart5.c5_4).toFixed(0);
 
           if (row[49] && row[49].includes("น้อยกว่า 0.2 PPM")) stats.chart5.c5_0_1.sc1++;
-          if (stats.chart5.c5_0_1.sc1 > index) stats.chart5.c5_0_1.sc1 = bases * stats.chart5.c5_0_1.sc1;
+          if (stats.chart5.c5_0_1.sc1 > index) stats.chart5.c5_0_1.sc1 = Number(bases * stats.chart5.c5_0_1.sc1).toFixed(0);
 
           if (row[49] && row[49].includes("0.2 - 0.5 PPM (มาตรฐาน)")) stats.chart5.c5_0_1.sc2++;
-          if (stats.chart5.c5_0_1.sc2 > index) stats.chart5.c5_0_1.sc2 = bases * stats.chart5.c5_0_1.sc2;
+          if (stats.chart5.c5_0_1.sc2 > index) stats.chart5.c5_0_1.sc2 = Number(bases * stats.chart5.c5_0_1.sc2).toFixed(0);
 
           if (row[49] && row[49].includes("มากกว่า 0.5 PPM(กรณี เกิดโรคระบาด)")) stats.chart5.c5_0_1.sc3++;
-          if (stats.chart5.c5_0_1.sc3 > index) stats.chart5.c5_0_1.sc3 = bases * stats.chart5.c5_0_1.sc3;
+          if (stats.chart5.c5_0_1.sc3 > index) stats.chart5.c5_0_1.sc3 = Number(bases * stats.chart5.c5_0_1.sc3).toFixed(0);
 
           if (row[50] && row[50].includes("โรงครัว")) stats.chart5.c5_0_2.sc1++;
-          if (stats.chart5.c5_0_2.sc1 > index) stats.chart5.c5_0_2.sc1 = bases * stats.chart5.c5_0_2.sc1;
+          if (stats.chart5.c5_0_2.sc1 > index) stats.chart5.c5_0_2.sc1 = Number(bases * stats.chart5.c5_0_2.sc1).toFixed(0);
 
           if (row[50] && row[50].includes("ร้านอาหารเคลื่อนที่")) stats.chart5.c5_0_2.sc2++;
-          if (stats.chart5.c5_0_2.sc2 > index) stats.chart5.c5_0_2.sc2 = bases * stats.chart5.c5_0_2.sc2;
+          if (stats.chart5.c5_0_2.sc2 > index) stats.chart5.c5_0_2.sc2 = Number(bases * stats.chart5.c5_0_2.sc2).toFixed(0);
 
           if (row[50] && row[50].includes("อาหารบริจาค")) stats.chart5.c5_0_2.sc3++;
-          if (stats.chart5.c5_0_2.sc3 > index) stats.chart5.c5_0_2.sc3 = bases * stats.chart5.c5_0_2.sc3;
+          if (stats.chart5.c5_0_2.sc3 > index) stats.chart5.c5_0_2.sc3 = Number(bases * stats.chart5.c5_0_2.sc3).toFixed(0);
 
           if (row[52] && row[52].includes("ผ่าน/มี")) stats.chart6.c6_1++;
-          if (stats.chart6.c6_1 > index) stats.chart6.c6_1 = bases * stats.chart6.c6_1;
+          if (stats.chart6.c6_1 > index) stats.chart6.c6_1 = Number(bases * stats.chart6.c6_1).toFixed(0);
 
           if (row[53] && row[53].includes("ผ่าน/มี")) stats.chart6.c6_2++;
-          if (stats.chart6.c6_2 > index) stats.chart6.c6_2 = bases * stats.chart6.c6_2;
+          if (stats.chart6.c6_2 > index) stats.chart6.c6_2 = Number(bases * stats.chart6.c6_2).toFixed(0);
 
           if (row[54] && row[54].includes("ผ่าน/มี")) stats.chart6.c6_3++;
-          if (stats.chart6.c6_3 > index) stats.chart6.c6_3 = bases * stats.chart6.c6_3;
+          if (stats.chart6.c6_3 > index) stats.chart6.c6_3 = Number(bases * stats.chart6.c6_3).toFixed(0);
 
           if (row[56] && row[56].includes("ผ่าน/มี")) stats.chart7.c7_1++;
-          if (stats.chart7.c7_1 > index) stats.chart7.c7_1 = bases * stats.chart7.c7_1;
+          if (stats.chart7.c7_1 > index) stats.chart7.c7_1 = Number(bases * stats.chart7.c7_1).toFixed(0);
 
           if (row[57] && row[57].includes("ผ่าน/มี")) stats.chart7.c7_2++;
-          if (stats.chart7.c7_2 > index) stats.chart7.c7_2 = bases * stats.chart7.c7_2;
+          if (stats.chart7.c7_2 > index) stats.chart7.c7_2 = Number(bases * stats.chart7.c7_2).toFixed(0);
 
           if (row[58] && row[58].includes("ผ่าน/มี")) stats.chart7.c7_3++;
-          if (stats.chart7.c7_3 > index) stats.chart7.c7_3 = bases * stats.chart7.c7_3;
+          if (stats.chart7.c7_3 > index) stats.chart7.c7_3 = Number(bases * stats.chart7.c7_3).toFixed(0);
         });
 
         return { stats, activeList };
@@ -668,26 +669,37 @@
 
       async function initDashboard() {
         $.LoadingOverlay("show");
+
         document.getElementById('subMain').style.display = 'none';
+
         let url = 'https://script.google.com/macros/s/AKfycbwAY3s3VpDRfpo6otgiONAdKnPtR6VamhK5o8bOWI7p4uhsxBpE2BGdlBKv9EeNPtm1/exec';
         let response = await fetch(url+"?data=GET");
         let json = await response.json();
         let data = json.data;
         let { stats, activeList } = processData(data);
+
         document.getElementById('header').style.display = 'inline';
         document.getElementById('main').style.display = 'inline';
+
         $.LoadingOverlay("hide");
+
         document.getElementById('lastUpdate').innerText = 'วันที่ ' + new Date().toLocaleString('th-TH', {dateStyle: 'long'}) + ' เวลา ' + new Date().toLocaleString('th-TH', {timeStyle: 'short'}) + ' น.';
+
         document.getElementById('totalShelters').innerText = `${stats.totalShelters}`;
         document.getElementById('percentShelters').innerText = Number((stats.totalShelters / 183) * 100).toFixed(2);
+
         document.getElementById('totalSheltersFix').innerText = `${stats.totalShelters}/120`;
         document.getElementById('percentSheltersFix').innerText = Number((stats.totalShelters / 120) * 100).toFixed(2);
+
         document.getElementById('activeShelters').innerText = `${stats.activeShelters}/${stats.totalShelters}`;
+
         document.getElementById('toiletCount').innerText = `${stats.sanitation.bathrooms} / ${stats.sanitation.toilets}`;
         document.getElementById('wastePass').innerText = `${stats.sanitation.wastePass}/${stats.totalShelters}`;
         document.getElementById('waterPass').innerText = `${stats.sanitation.waterPass}/${stats.totalShelters}`;
         document.getElementById('foodPass').innerText = `${stats.sanitation.foodPass}/${stats.totalShelters}`;
+
         document.getElementById('card_7').innerText = `สรุปผลประเมินมาตรฐาน 7 มิติ (n=${stats.totalShelters})`;
+
         document.getElementById('chart1_1').innerText = Number((stats.chart1.c1_1 / stats.totalShelters) * 100).toFixed(2) + '%';
         document.getElementById('chart1_2').innerText = Number((stats.chart1.c1_2 / stats.totalShelters) * 100).toFixed(2) + '%';
         document.getElementById('chart1_3').innerText = Number((stats.chart1.c1_3 / stats.totalShelters) * 100).toFixed(2) + '%';
@@ -712,16 +724,37 @@
         document.getElementById('chart7_1').innerText = Number((stats.chart7.c7_1 / stats.totalShelters) * 100).toFixed(2) + '%';
         document.getElementById('chart7_2').innerText = Number((stats.chart7.c7_2 / stats.totalShelters) * 100).toFixed(2) + '%';
         document.getElementById('chart7_3').innerText = Number((stats.chart7.c7_3 / stats.totalShelters) * 100).toFixed(2) + '%';
-        let chart5_c5_0_1_sc1 = Number((stats.chart5.c5_0_1.sc1 / stats.totalShelters) * 100).toFixed(2);
-        let chart5_c5_0_1_sc2 = Number((stats.chart5.c5_0_1.sc2 / stats.totalShelters) * 100).toFixed(2);
-        let chart5_c5_0_1_sc3 = Number((stats.chart5.c5_0_1.sc3 / stats.totalShelters) * 100).toFixed(2);
-        let chart5_c5_0_2_sc1 = Number((stats.chart5.c5_0_2.sc1 / stats.totalShelters) * 100).toFixed(2);
-        let chart5_c5_0_2_sc2 = Number((stats.chart5.c5_0_2.sc2 / stats.totalShelters) * 100).toFixed(2);
-        let chart5_c5_0_2_sc3 = Number((stats.chart5.c5_0_2.sc3 / stats.totalShelters) * 100).toFixed(2);
-        let chart1_c1_0_1_1 = Number((stats.chart1.c_1_0_1_1 / (stats.chart1.c_1_0_1_1 + stats.chart1.c_1_0_1_2)) * 100).toFixed(2);
-        let chart1_c1_0_1_2 = Number((stats.chart1.c_1_0_1_2 / (stats.chart1.c_1_0_1_1 + stats.chart1.c_1_0_1_2)) * 100).toFixed(2);
-        let chart1_c1_0_2_1 = Number((stats.chart1.c_1_0_2_1 / (stats.chart1.c_1_0_2_1 + stats.chart1.c_1_0_2_2)) * 100).toFixed(2);
-        let chart1_c1_0_2_2 = Number((stats.chart1.c_1_0_2_2 / (stats.chart1.c_1_0_2_1 + stats.chart1.c_1_0_2_2)) * 100).toFixed(2);
+
+        let c5_0_1_sc1, c5_0_1_sc2, c5_0_1_sc3 ;
+        let c5_0_1 = stats.chart5.c5_0_1.sc1 + stats.chart5.c5_0_1.sc2 + stats.chart5.c5_0_1.sc3;
+        if (c5_0_1 > stats.totalShelters) {
+          c5_0_1_sc1 = (stats.chart5.c5_0_1.sc1 / c5_0_1) * stats.totalShelters;
+          c5_0_1_sc2 = (stats.chart5.c5_0_1.sc2 / c5_0_1) * stats.totalShelters;
+          c5_0_1_sc3 = (stats.chart5.c5_0_1.sc3 / c5_0_1) * stats.totalShelters;
+        }
+        let chart5_c5_0_1_sc1 = Number((c5_0_1_sc1 / stats.totalShelters) * 100).toFixed(2);
+        let chart5_c5_0_1_sc2 = Number((c5_0_1_sc2 / stats.totalShelters) * 100).toFixed(2);
+        let chart5_c5_0_1_sc3 = Number((c5_0_1_sc3 / stats.totalShelters) * 100).toFixed(2);
+
+        let c5_0_2_sc1, c5_0_2_sc2, c5_0_2_sc3 ;
+        let c5_0_2 = stats.chart5.c5_0_2.sc1 + stats.chart5.c5_0_2.sc2 + stats.chart5.c5_0_2.sc3;
+        if (c5_0_2 > stats.totalShelters) {
+          c5_0_2_sc1 = (stats.chart5.c5_0_2.sc1 / c5_0_2) * stats.totalShelters;
+          c5_0_2_sc2 = (stats.chart5.c5_0_2.sc2 / c5_0_2) * stats.totalShelters;
+          c5_0_2_sc3 = (stats.chart5.c5_0_2.sc3 / c5_0_2) * stats.totalShelters; 
+        }
+        let chart5_c5_0_2_sc1 = Number((c5_0_2_sc1 / stats.totalShelters) * 100).toFixed(2);
+        let chart5_c5_0_2_sc2 = Number((c5_0_2_sc2 / stats.totalShelters) * 100).toFixed(2);
+        let chart5_c5_0_2_sc3 = Number((c5_0_2_sc3 / stats.totalShelters) * 100).toFixed(2);
+
+        let c_1_0_1 = stats.chart1.c_1_0_1_1 + stats.chart1.c_1_0_1_2;
+        let chart1_c1_0_1_1 = Number((stats.chart1.c_1_0_1_1 / c_1_0_1) * 100).toFixed(2);
+        let chart1_c1_0_1_2 = Number((stats.chart1.c_1_0_1_2 / c_1_0_1) * 100).toFixed(2);
+
+        let c_1_0_2 = stats.chart1.c_1_0_2_1 + stats.chart1.c_1_0_2_2;
+        let chart1_c1_0_2_1 = Number((stats.chart1.c_1_0_2_1 / c_1_0_2) * 100).toFixed(2);
+        let chart1_c1_0_2_2 = Number((stats.chart1.c_1_0_2_2 / c_1_0_2) * 100).toFixed(2);
+
         new Chart(document.getElementById('districtChart'), {
           type: 'bar',
           data: {
@@ -745,6 +778,7 @@
             }
           }
         });
+
         new Chart(document.getElementById('chart5_0_1'), {
           type: 'pie',
           data: {
@@ -769,6 +803,7 @@
             }
           }
         });
+
         new Chart(document.getElementById('chart5_0_2'), {
           type: 'pie',
           data: {
@@ -793,6 +828,7 @@
             }
           }
         });
+
         new Chart(document.getElementById('chart1_0_1'), {
           type: 'pie',
           data: {
@@ -817,6 +853,7 @@
             }
           }
         });
+
         new Chart(document.getElementById('chart1_0_2'), {
           type: 'pie',
           data: {
