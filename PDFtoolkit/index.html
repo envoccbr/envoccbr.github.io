@@ -1174,9 +1174,8 @@
     document.getElementById('custom-font-file').addEventListener('change', async (e) => {
       let file = e.target.files[0]
       if (file) customFontBytes = await file.arrayBuffer()
+      console.log('customFontBytes = '+customFontBytes)
     })
-
-    console.log('customFontBytes = '+customFontBytes)
     
     let setupUploadArea = (areaId, inputId, callback) => {
       let area = document.getElementById(areaId)
