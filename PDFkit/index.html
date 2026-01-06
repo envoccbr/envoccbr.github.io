@@ -972,7 +972,7 @@
           </center>
           <h3>อัปโหลดไฟล์ PDF</h3>
           <p>คลิกหรือลากไฟล์มาวางที่นี่ (สามารถเลือกหลายไฟล์)</p>
-          <input type="file" id="merge-input" multiple="" accept=".pdf" style="display: none;">
+          <input type="file" id="merge-input" multiple="" accept=".pdf,application/pdf" style="display: none;">
         </div>
         <div class="file-list" id="merge-files"></div>
         <button class="action-btn" id="merge-btn" disabled="">รวมไฟล์ PDF</button>
@@ -988,7 +988,7 @@
           </center>
           <h3>อัปโหลดไฟล์ PDF</h3>
           <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
-          <input type="file" id="split-input" accept=".pdf" style="display: none;">
+          <input type="file" id="split-input" accept=".pdf,application/pdf" style="display: none;">
         </div>
         <div class="preview-grid" id="split-preview"></div>
         <div class="input-group">
@@ -1008,7 +1008,7 @@
           </center>
           <h3>อัปโหลดไฟล์ PDF</h3>
           <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
-          <input type="file" id="pagenumber-input" accept=".pdf" style="display: none;">
+          <input type="file" id="pagenumber-input" accept=".pdf,application/pdf" style="display: none;">
         </div>
 
         <div id="pagenumber-settings" style="display: none; margin: 30px 0; padding: 30px; background: #f8fafc; border-radius: 15px;">
@@ -1096,7 +1096,7 @@
           </center>
           <h3>อัปโหลดไฟล์ PDF</h3>
           <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
-          <input type="file" id="compress-input" accept=".pdf" style="display: none;">
+          <input type="file" id="compress-input" accept=".pdf,application/pdf" style="display: none;">
         </div>
         <div class="file-list" id="compress-files"></div>
         <button class="action-btn" id="compress-btn" disabled="">บีบอัดไฟล์</button>
@@ -1112,7 +1112,7 @@
           </center>
           <h3>อัปโหลดไฟล์ PDF</h3>
           <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
-          <input type="file" id="convert-input" accept=".pdf" style="display: none;">
+          <input type="file" id="convert-input" accept=".pdf,application/pdf" style="display: none;">
         </div>
         <div style="text-align: right; margin: 15px 0;">
           <button id="select-all-btn" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;" disabled="">เลือกทั้งหมด</button>
@@ -1317,7 +1317,8 @@
 
         let pdfBytes = await mergedPdf.save()
         let firstFileName = getFileNameWithoutExt(mergeFiles[0].name)
-        triggerDownload(pdfBytes, `${firstFileName}_merged.pdf`, 'merge')
+        let time = new Date().toLocaleString('th-TH')
+        triggerDownload(pdfBytes, `${time}_merged.pdf`, 'merge')
         
         showStatus('merge-status', 'success', '✅ รวมไฟล์สำเร็จ!')
         setTimeout(() => hideStatus('merge-status'), 3000)
