@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDFkit</title>
+  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body>
+
+  <!-- <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Sarabun', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #f8fafc, #eff6ff, #e0e7ff);
+    }
+    
+    .drag-over {
+      border-color: #3b82f6 !important;
+      background-color: #eff6ff !important;
+    }
+    
+    .file-item {
+      transition: all 0.2s ease;
+    }
+    
+    .file-item:hover {
+      transform: translateX(4px);
+    }
+    
+    .file-item.dragging {
+      opacity: 0.5;
+      transform: scale(0.98);
+    }
+    
+    .progress-bar {
+      transition: width 0.3s ease;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 2s infinite;
+    }
+    
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-up {
+      animation: slide-up 0.3s ease-out;
+    }
+    
+    .toast {
+      animation: slide-up 0.3s ease-out;
+    }
+    
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style> -->
+  <!-- <div id="app" class="min-h-screen">
+   <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+       <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+       </div>
+       <div>
+        <h1 class="text-xl font-bold text-slate-800">ระบบเครื่องมือจัดการ PDF</h1>
+       </div>
+      </div>
+     </div>
+    </div>
+   </header>
+   <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-3 gap-6">
+     <div class="lg:col-span-2 space-y-6">
+      <div id="upload-zone" class="bg-white rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
+       <div class="flex flex-col items-center gap-4">
+        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+         <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+         </svg>
+        </div>
+        <div>
+         <p class="text-lg font-semibold text-slate-700">ลากไฟล์มาวางที่นี่</p>
+         <p class="text-slate-500 mt-1">หรือคลิกเพื่อเลือกไฟล์</p>
+        </div><button id="upload-btn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl pulse-glow"> 📁 เลือกไฟล์ PDF </button>
+        <p class="text-xs text-slate-400">รองรับเฉพาะไฟล์ .pdf • ไม่จำกัดขนาด • เลือกได้หลายไฟล์</p>
+       </div><input type="file" id="file-input" accept=".pdf,application/pdf" multiple class="hidden">
+      </div>
+      <div id="file-list-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hidden">
+       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+         <h2 class="font-semibold text-slate-700">ไฟล์ที่เลือก</h2><span id="file-count" class="px-2 py-0.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-full">0 ไฟล์</span>
+        </div><button id="clear-all-btn" class="text-sm text-red-500 hover:text-red-600 font-medium flex items-center gap-1">
+         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+         </svg> ลบทั้งหมด </button>
+       </div>
+       <div id="file-list" class="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+       </div>
+       <div class="px-6 py-3 bg-slate-50 border-t border-slate-200">
+        <p class="text-sm text-slate-500">💡 ลากไฟล์เพื่อจัดลำดับ • ใช้ปุ่มลูกศรเพื่อเลื่อน</p>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+       <div class="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+        <h2 class="font-semibold text-slate-700 flex items-center gap-2">
+         <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+         </svg> ตั้งค่าไฟล์</h2>
+       </div>
+       <div class="p-6 space-y-4">
+        <div><label for="output-filename" class="block text-sm font-medium text-slate-700 mb-2">ชื่อไฟล์ที่รวมแล้ว</label> <input type="text" id="output-filename" value="merged_document" placeholder="ชื่อไฟล์" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+         <p class="text-xs text-slate-400 mt-1">.pdf จะถูกเพิ่มโดยอัตโนมัติ</p>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><input type="checkbox" id="add-page-numbers" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"> <label for="add-page-numbers" class="text-sm text-slate-700">เพิ่มเลขหน้าอัตโนมัติ</label>
+        </div>
+       </div>
+      </div>
+	  <button id="merge-btn" disabled class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+       </svg><span id="merge-btn-text">รวมไฟล์ PDF</span>
+	  </button>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+       <h3 class="font-semibold text-slate-700 mb-4">📊 สรุปข้อมูล</h3>
+       <div class="space-y-3">
+        <div class="flex justify-between items-center"><span class="text-slate-500">จำนวนไฟล์</span> <span id="stats-files" class="font-semibold text-slate-700">0 ไฟล์</span>
+        </div>
+        <div class="flex justify-between items-center"><span class="text-slate-500">ขนาดรวม</span> <span id="stats-size" class="font-semibold text-slate-700">0 KB</span>
+        </div>
+        <div class="flex justify-between items-center"><span class="text-slate-500">จำนวนหน้ารวม</span> <span id="stats-pages" class="font-semibold text-slate-700">0 หน้า</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+   <div id="progress-modal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 slide-up">
+     <div class="text-center">
+      <div class="w-20 h-20 mx-auto mb-6 relative">
+       <svg class="w-20 h-20 animate-spin" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="3" fill="none" /> <path class="opacity-75" fill="#3b82f6" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+       </svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">กำลังรวมไฟล์ PDF...</h3>
+      <p id="progress-text" class="text-slate-500 mb-4">กำลังเริ่มต้น...</p>
+      <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+       <div id="progress-bar" class="progress-bar bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full" style="width: 0%"></div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="success-modal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 slide-up">
+     <div class="text-center">
+      <div class="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
+       <svg class="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+       </svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">รวมไฟล์สำเร็จ! 🎉</h3>
+      <p id="success-info" class="text-slate-500 mb-2">ไฟล์ของคุณพร้อมดาวน์โหลดแล้ว</p>
+      <div class="space-y-3"><button id="download-btn" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg> ดาวน์โหลด PDF </button> <button id="merge-new-btn" class="w-full py-3 border border-slate-300 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all"> รวมไฟล์ใหม่ </button>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+   <footer class="bg-white/50 backdrop-blur-sm border-t border-slate-200 py-6 mt-8">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+    </div>
+   </footer>
+  </div> -->
+  <!-- <script>
+    // App state
+    let files = []
+    let mergedPdfBlob = null
+    let mergedPdfBase64 = null
+    let draggedItem = null
+
+    // DOM Elements
+    let uploadZone = document.getElementById('upload-zone')
+    let fileInput = document.getElementById('file-input')
+    let uploadBtn = document.getElementById('upload-btn')
+    let fileListContainer = document.getElementById('file-list-container')
+    let fileList = document.getElementById('file-list')
+    let fileCount = document.getElementById('file-count')
+    let clearAllBtn = document.getElementById('clear-all-btn')
+    let mergeBtn = document.getElementById('merge-btn')
+    let progressModal = document.getElementById('progress-modal')
+    let progressBar = document.getElementById('progress-bar')
+    let progressText = document.getElementById('progress-text')
+    let successModal = document.getElementById('success-modal')
+    let downloadBtn = document.getElementById('download-btn')
+    let mergeNewBtn = document.getElementById('merge-new-btn')
+
+    // Helper functions
+    let formatFileSize = bytes => {
+      if (bytes === 0) return '0 Bytes'
+      let k = 1024
+      let sizes = ['Bytes', 'KB', 'MB', 'GB']
+      let i = Math.floor(Math.log(bytes) / Math.log(k))
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+    }
+
+    let showToast = (message, type = 'info') => {
+      let toast = document.createElement('div')
+      let bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-emerald-500' : 'bg-blue-500'
+      let icon = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️'
+      toast.className = `toast ${bgColor} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 max-w-sm`
+      toast.innerHTML = `<span>${icon}</span><span>${message}</span>`
+      document.getElementById('toast-container').appendChild(toast)
+      setTimeout(() => toast.remove(), 4000)
+    }
+
+    let updateStats = e => {
+      let totalSize = files.reduce((sum, f) => sum + f.file.size, 0)
+      let totalPages = files.reduce((sum, f) => sum + (f.pageCount || 0), 0)
+      
+      document.getElementById('stats-files').textContent = `${files.length} ไฟล์`
+      document.getElementById('stats-size').textContent = formatFileSize(totalSize)
+      document.getElementById('stats-pages').textContent = `${totalPages} หน้า`
+      fileCount.textContent = `${files.length} ไฟล์`
+      
+      mergeBtn.disabled = files.length < 2
+      fileListContainer.classList.toggle('hidden', files.length === 0)
+    }
+
+    async function getPageCount(file) {
+      try {
+        let arrayBuffer = await file.arrayBuffer()
+        let pdf = await PDFLib.PDFDocument.load(arrayBuffer)
+        return pdf.getPageCount()
+      } catch (e) {
+        console.error('Error reading PDF:', e)
+        return 0
+      }
+    }
+
+    let renderFileList = e => {
+      fileList.innerHTML = files.map((f, index) => `
+        <div class="file-item px-6 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors cursor-grab" draggable="true" data-index="${index}">
+          <div class="flex items-center justify-center w-8 h-8 bg-slate-100 rounded-lg text-slate-500 font-semibold text-sm flex-shrink-0">
+            ${index + 1}
+          </div>
+          <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium text-slate-700 truncate">${escapeHtml(f.file.name)}</p>
+            <p class="text-sm text-slate-400">${formatFileSize(f.file.size)} • ${f.pageCount || '...'} หน้า</p>
+          </div>
+          <div class="flex items-center gap-1 flex-shrink-0">
+            <button onclick="moveFile(${index}, -1)" class="p-2 hover:bg-slate-200 rounded-lg transition-colors ${index === 0 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === 0 ? 'disabled' : ''} title="เลื่อนขึ้น">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+              </svg>
+            </button>
+            <button onclick="moveFile(${index}, 1)" class="p-2 hover:bg-slate-200 rounded-lg transition-colors ${index === files.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === files.length - 1 ? 'disabled' : ''} title="เลื่อนลง">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <button onclick="removeFile(${index})" class="p-2 hover:bg-red-100 rounded-lg transition-colors group" title="ลบ">
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `).join('')
+      
+      // Add drag and drop handlers
+      document.querySelectorAll('.file-item').forEach(item => {
+        item.addEventListener('dragstart', handleDragStart)
+        item.addEventListener('dragend', handleDragEnd)
+        item.addEventListener('dragover', handleDragOver)
+        item.addEventListener('drop', handleDrop)
+      })
+    }
+
+    let escapeHtml = text => {
+      let div = document.createElement('div')
+      div.textContent = text
+      return div.innerHTML
+    }
+
+    let handleDragStart = e => {
+      draggedItem = this
+      this.classList.add('dragging')
+    }
+
+    let handleDragEnd = e => {
+      this.classList.remove('dragging')
+      draggedItem = null
+    }
+
+    let handleDragOver = e => {
+      e.preventDefault()
+    }
+
+    let handleDrop = e => {
+      e.preventDefault()
+      if (draggedItem && draggedItem !== this) {
+        let fromIndex = parseInt(draggedItem.dataset.index)
+        let toIndex = parseInt(this.dataset.index)
+        let item = files.splice(fromIndex, 1)[0]
+        files.splice(toIndex, 0, item)
+        renderFileList()
+        updateStats()
+      }
+    }
+
+    let moveFile = (index, direction) => {
+      let newIndex = index + direction
+      if (newIndex >= 0 && newIndex < files.length) {
+        let item = files.splice(index, 1)[0]
+        files.splice(newIndex, 0, item)
+        renderFileList()
+        updateStats()
+      }
+    }
+
+    let removeFile = index => {
+      files.splice(index, 1)
+      renderFileList()
+      updateStats()
+      showToast('ลบไฟล์แล้ว', 'info')
+    }
+
+    async function handleFiles(inputFiles) {
+      let pdfFiles = Array.from(inputFiles).filter(f => 
+        f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+      )
+      
+      if (pdfFiles.length === 0) {
+        showToast('กรุณาเลือกไฟล์ PDF เท่านั้น', 'error')
+        return
+      }
+
+      showToast(`กำลังโหลด ${pdfFiles.length} ไฟล์...`, 'info')
+
+      for (let file of pdfFiles) {
+        let exists = files.some(f => f.file.name === file.name && f.file.size === file.size)
+        if (!exists) {
+          let pageCount = await getPageCount(file)
+          if (pageCount > 0) {
+            files.push({ file, pageCount })
+          } else {
+            showToast(`ไม่สามารถอ่านไฟล์ ${file.name}`, 'error')
+          }
+        }
+      }
+
+      renderFileList()
+      updateStats()
+      showToast(`เพิ่ม ${pdfFiles.length} ไฟล์แล้ว`, 'success')
+    }
+
+    async function mergePDFs() {
+      if (files.length < 2) return
+
+      progressModal.classList.remove('hidden')
+      progressBar.style.width = '0%'
+      progressText.textContent = 'กำลังเริ่มต้น...'
+
+      try {
+        let mergedPdf = await PDFLib.PDFDocument.create()
+        let totalPages = 0
+        let addPageNumbers = document.getElementById('add-page-numbers').checked
+
+        for (let i = 0; i < files.length; i++) {
+          progressText.textContent = `กำลังประมวลผลไฟล์ ${i + 1} จาก ${files.length}...`
+          progressBar.style.width = `${((i + 1) / files.length) * 70}%`
+
+          let arrayBuffer = await files[i].file.arrayBuffer()
+          let pdf = await PDFLib.PDFDocument.load(arrayBuffer)
+          let copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
+          copiedPages.forEach(page => {
+            mergedPdf.addPage(page)
+            totalPages++
+          })
+        }
+
+        if (addPageNumbers) {
+          progressText.textContent = 'กำลังเพิ่มเลขหน้า...'
+          progressBar.style.width = '75%'
+          
+          let pages = mergedPdf.getPages()
+          let helveticaFont = await mergedPdf.embedFont(PDFLib.StandardFonts.Helvetica)
+          
+          for (let i = 0; i < pages.length; i++) {
+            let page = pages[i]
+            let { width } = page.getSize()
+            page.drawText(`${i + 1} / ${pages.length}`, {
+              x: width / 2 - 20,
+              y: 30,
+              size: 10,
+              font: helveticaFont,
+              color: PDFLib.rgb(0.5, 0.5, 0.5),
+            })
+          }
+        }
+
+        progressText.textContent = 'กำลังสร้างไฟล์...'
+        progressBar.style.width = '85%'
+
+        let mergedPdfBytes = await mergedPdf.save()
+        mergedPdfBlob = new Blob([mergedPdfBytes], { type: 'application/pdf' })
+        
+        // Convert to base64 for server upload
+        mergedPdfBase64 = arrayBufferToBase64(mergedPdfBytes)
+
+        progressBar.style.width = '100%'
+        progressText.textContent = 'เสร็จสิ้น!'
+
+        setTimeout(e => {
+          progressModal.classList.add('hidden')
+          showSuccessModal(totalPages)
+        }, 500)
+
+      } catch (error) {
+        progressModal.classList.add('hidden')
+        showToast('เกิดข้อผิดพลาด: ' + error.message, 'error')
+        console.error('Merge error:', error)
+      }
+    }
+
+    let arrayBufferToBase64 = buffer => {
+      let binary = ''
+      let bytes = new Uint8Array(buffer)
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i])
+      }
+      return btoa(binary)
+    }
+
+    let showSuccessModal = totalPages => {
+      let filename = document.getElementById('output-filename').value || 'merged_document'
+      document.getElementById('success-info').textContent = 
+        `รวม ${files.length} ไฟล์ เป็น ${totalPages} หน้า • ${formatFileSize(mergedPdfBlob.size)}`
+      
+      successModal.classList.remove('hidden')
+    }
+
+    let downloadMergedPDF = e => {
+      if (!mergedPdfBlob) return
+
+      let filename = document.getElementById('output-filename').value || 'merged_document'
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(mergedPdfBlob)
+      link.download = `${filename}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
+      showToast('ดาวน์โหลดสำเร็จ!', 'success')
+    }
+
+    let resetApp = e => {
+      files = []
+      mergedPdfBlob = null
+      mergedPdfBase64 = null
+      renderFileList()
+      updateStats()
+      successModal.classList.add('hidden')
+      document.getElementById('output-filename').value = 'merged_document'
+    }
+
+    // Event Listeners
+    uploadZone.addEventListener('click', e => {
+      if (e.target !== uploadBtn) {
+        fileInput.click()
+      }
+    })
+    
+    uploadBtn.addEventListener('click', e => {
+      e.stopPropagation()
+      fileInput.click()
+    })
+
+    fileInput.addEventListener('change', e => {
+      if (e.target.files.length > 0) {
+        handleFiles(e.target.files)
+      }
+      e.target.value = ''
+    })
+
+    uploadZone.addEventListener('dragover', e => {
+      e.preventDefault()
+      uploadZone.classList.add('drag-over')
+    })
+
+    uploadZone.addEventListener('dragleave', e => {
+      e.preventDefault()
+      uploadZone.classList.remove('drag-over')
+    })
+
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault()
+      uploadZone.classList.remove('drag-over')
+      if (e.dataTransfer.files.length > 0) {
+        handleFiles(e.dataTransfer.files)
+      }
+    })
+
+    clearAllBtn.addEventListener('click', e => {
+      files = []
+      renderFileList()
+      updateStats()
+      showToast('ลบไฟล์ทั้งหมดแล้ว', 'info')
+    })
+
+    mergeBtn.addEventListener('click', mergePDFs)
+    downloadBtn.addEventListener('click', downloadMergedPDF)
+    mergeNewBtn.addEventListener('click', resetApp)
+
+    // Initialize
+    updateStats()
+    
+    // Log when ready
+    console.log('PDF Merge App initialized')
+  </script> -->
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    button, input, select, textarea {
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 20px;
+      background: none;
+      border: none;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .nav-tab:hover {
+      background: #e0e7ff;
+    }
+
+    .nav-tab.active {
+      background: white;
+      color: #2563eb;
+      border-bottom: 3px solid #2563eb;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .tool-section {
+      display: none;
+    }
+
+    .tool-section.active {
+      display: block;
+    }
+
+    .upload-area {
+      border: 3px dashed #cbd5e1;
+      border-radius: 15px;
+      padding: 60px 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #f8fafc;
+      margin-bottom: 30px;
+    }
+
+    .upload-area:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .upload-area.drag-over {
+      border-color: #2563eb;
+      background: #dbeafe;
+      transform: scale(1.02);
+    }
+
+    .upload-area svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      color: #64748b;
+    }
+
+    .upload-area h3 {
+      color: #1e293b;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    .upload-area p {
+      color: #64748b;
+      font-size: 1em;
+    }
+
+    .file-list {
+      margin: 30px 0;
+    }
+
+    .file-item {
+      background: #f8fafc;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+      cursor: move;
+    }
+
+    .file-item:hover {
+      background: #e0e7ff;
+      transform: translateX(5px);
+    }
+
+    .file-item.dragging {
+      opacity: 0.5;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .file-icon {
+      width: 40px;
+      height: 40px;
+      background: #2563eb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .file-details h4 {
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+
+    .file-details p {
+      color: #64748b;
+      font-size: 0.9em;
+    }
+
+    .file-remove {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .file-remove:hover {
+      background: #dc2626;
+    }
+
+    .input-group {
+      margin: 20px 0;
+    }
+
+    .input-group label {
+      display: block;
+      color: #1e293b;
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: all 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .action-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .action-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .status-message {
+      display: none;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .status-message.show {
+      display: block;
+    }
+
+    .status-message.loading {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-message.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(30, 64, 175, 0.3);
+      border-top-color: #1e40af;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .preview-item {
+      border: 3px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+    }
+
+    .preview-item:hover {
+      border-color: #2563eb;
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+    }
+
+    .preview-item.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .preview-item canvas {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 8px;
+    }
+
+    .preview-item p {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9em;
+      margin: 0;
+    }
+
+    .preview-page-number {
+      position: absolute;
+      background: rgba(37, 99, 235, 0.1);
+      border: 2px solid #2563eb;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    footer {
+      background: #1e293b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    footer a:hover {
+      color: #60a5fa;
+    }
+
+    .footer-icon {
+      display: inline-block;
+      vertical-align: middle;
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .nav-tab {
+        font-size: 0.9em;
+        padding: 15px 10px;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
+  </style>
+  <div class="container">
+    <header>
+      <h1>📄 PDF Toolkit</h1>
+      <p>เครื่องมือจัดการ PDF ออนไลน์</p>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tool="merge">รวมไฟล์ PDF</button>
+      <button class="nav-tab" data-tool="split">แยกไฟล์ PDF</button>
+      <button class="nav-tab" data-tool="pagenumber">ใส่เลขหน้า</button>
+      <button class="nav-tab" data-tool="compress">บีบอัด PDF</button>
+      <button class="nav-tab" data-tool="convert">แปลงเป็นภาพ</button>
+    </nav>
+
+    <div class="content">
+      <div class="tool-section active" id="merge-section">
+        <div class="upload-area" id="merge-upload">
+          <center>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </center>
+          <h3>อัปโหลดไฟล์ PDF</h3>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่ (สามารถเลือกหลายไฟล์)</p>
+          <input type="file" id="merge-input" multiple="" accept=".pdf,application/pdf" style="display: none;">
+        </div>
+        <div class="file-list" id="merge-files"></div>
+        <button class="action-btn" id="merge-btn" disabled="">รวมไฟล์ PDF</button>
+        <div class="status-message" id="merge-status"></div>
+      </div>
+        
+      <div class="tool-section" id="split-section">
+        <div class="upload-area" id="split-upload">
+          <center>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </center>
+          <h3>อัปโหลดไฟล์ PDF</h3>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
+          <input type="file" id="split-input" accept=".pdf,application/pdf" style="display: none;">
+        </div>
+        <div class="preview-grid" id="split-preview"></div>
+        <div class="input-group">
+          <label>หน้าที่ต้องการแยก (เช่น 1, 3-5, 8) หรือคลิกเลือกจาก Preview ด้านบน</label>
+          <input type="text" id="split-pages" placeholder="ตัวอย่าง: 1, 3-5, 8">
+        </div>
+        <button class="action-btn" id="split-btn" disabled="">แยกหน้า PDF</button>
+        <div class="status-message" id="split-status"></div>
+      </div>
+        
+      <div class="tool-section" id="pagenumber-section">
+        <div class="upload-area" id="pagenumber-upload">
+          <center>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </center>
+          <h3>อัปโหลดไฟล์ PDF</h3>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
+          <input type="file" id="pagenumber-input" accept=".pdf,application/pdf" style="display: none;">
+        </div>
+
+        <div id="pagenumber-settings" style="display: none; margin: 30px 0; padding: 30px; background: #f8fafc; border-radius: 15px;">
+          <h3 style="color: #1e293b; margin-bottom: 20px;">⚙️ ตั้งค่าเลขหน้า</h3>
+            
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div class="input-group">
+              <label>📍 ตำแหน่ง</label>
+              <select id="pn-position" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1em;">
+                <option value="bottom-center">ล่างตรงกลาง</option>
+                <option value="bottom-left">ล่างซ้าย</option>
+                <option value="bottom-right">ล่างขวา</option>
+                <option value="top-center">บนตรงกลาง</option>
+                <option value="top-left">บนซ้าย</option>
+                <option value="top-right">บนขวา</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>🔢 รูปแบบ</label>
+              <select id="pn-format" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1em;">
+                <option value="number">1, 2, 3</option>
+                <option value="thai">ก, ข, ค</option>
+                <option value="alpha">A, B, C</option>
+                <option value="page-number">หน้า 1, หน้า 2</option>
+                <option value="number-total">1/10, 2/10</option>
+                <option value="page-number-total">หน้า 1 จาก 10</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>📄 เริ่มใส่เลขหน้าตั้งแต่หน้า</label>
+              <input type="number" id="pn-start-page" value="1" min="1" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1em;">
+            </div>
+
+            <div class="input-group">
+              <label>🔤 ขนาดฟอนต์</label>
+              <select id="pn-fontsize" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1em;">
+                <option value="8">8pt</option>
+                <option value="10">10pt</option>
+                <option value="12" selected="">12pt</option>
+                <option value="14">14pt</option>
+                <option value="16">16pt</option>
+                <option value="18">18pt</option>
+                <option value="20">20pt</option>
+                <option value="24">24pt</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>🎨 สีตัวอักษร</label>
+              <input type="color" id="pn-color" value="#000000" style="width: 100%; height: 45px; border: 2px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
+            </div>
+
+            <div class="input-group">
+              <label>✍️ ฟอนต์</label>
+              <select id="pn-font" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1em;">
+                <option value="Helvetica">Helvetica (อังกฤษ)</option>
+                <option value="Times-Roman">Times Roman (อังกฤษ)</option>
+                <option value="custom">📁 อัปโหลดฟอนต์ .ttf</option>
+              </select>
+            </div>
+
+            <div class="input-group" id="custom-font-upload" style="display: none;">
+              <label>📎 เลือกไฟล์ฟอนต์ .ttf</label>
+              <input type="file" id="custom-font-file" accept=".ttf" style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px;">
+            </div>
+          </div>
+
+          <button id="pn-preview-btn" style="background: #10b981; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">👁️ ดูตัวอย่าง</button>
+        </div>
+
+        <div class="preview-grid" id="pagenumber-preview"></div>
+
+        <button class="action-btn" id="pagenumber-btn" disabled="">ใส่เลขหน้าและดาวน์โหลด</button>
+        <div class="status-message" id="pagenumber-status"></div>
+      </div>
+      
+      <div class="tool-section" id="compress-section">
+        <div class="upload-area" id="compress-upload">
+          <center>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </center>
+          <h3>อัปโหลดไฟล์ PDF</h3>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
+          <input type="file" id="compress-input" accept=".pdf,application/pdf" style="display: none;">
+        </div>
+        <div class="file-list" id="compress-files"></div>
+        <button class="action-btn" id="compress-btn" disabled="">บีบอัดไฟล์</button>
+        <div class="status-message" id="compress-status"></div>
+      </div>
+        
+      <div class="tool-section" id="convert-section">
+        <div class="upload-area" id="convert-upload">
+          <center>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </center>
+          <h3>อัปโหลดไฟล์ PDF</h3>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่ (เลือกได้ 1 ไฟล์)</p>
+          <input type="file" id="convert-input" accept=".pdf,application/pdf" style="display: none;">
+        </div>
+        <div style="text-align: right; margin: 15px 0;">
+          <button id="select-all-btn" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;" disabled="">เลือกทั้งหมด</button>
+        </div>
+        <div class="preview-grid" id="convert-preview"></div>
+        <button class="action-btn" id="convert-btn" disabled="">แปลงเป็นภาพ JPG</button>
+        <div class="status-message" id="convert-status"></div>
+      </div>
+    </div>
+
+    <footer>
+    </footer>
+  </div>
+
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+    
+    let mergeFiles = []
+    let splitFile = null
+    let compressFile = null
+    let splitSelectedPages = new Set()
+    
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', e => {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
+        document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'))
+        
+        tab.classList.add('active')
+        let tool = tab.dataset.tool
+        document.getElementById(`${tool}-section`).classList.add('active')
+      })
+    })
+    
+    let customFontBytes = null
+
+    document.getElementById('pn-font').addEventListener('change', e => {
+      let uploadDiv = document.getElementById('custom-font-upload')
+      if (e.target.value === 'custom') uploadDiv.style.display = 'block'
+      else {
+        uploadDiv.style.display = 'none'
+        customFontBytes = null
+      }
+    })
+
+    document.getElementById('custom-font-file').addEventListener('change', async (e) => {
+      let file = e.target.files[0]
+      if (file) customFontBytes = await file.arrayBuffer()
+    })
+    
+    let setupUploadArea = (areaId, inputId, callback) => {
+      let area = document.getElementById(areaId)
+      let input = document.getElementById(inputId)
+
+      area.addEventListener('click', () => input.click())
+      
+      area.addEventListener('dragover', e => {
+        e.preventDefault()
+        area.classList.add('drag-over')
+      })
+
+      area.addEventListener('dragleave', e => {
+        area.classList.remove('drag-over')
+      })
+
+      area.addEventListener('drop', e => {
+        e.preventDefault()
+        area.classList.remove('drag-over')
+        let files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf')
+        if (files.length > 0) callback(files)
+      })
+
+      input.addEventListener('change', e => {
+        let files = Array.from(e.target.files)
+        if (files.length > 0) callback(files)
+      })
+    }
+    
+    let showStatus = (statusId, type, message) => {
+      let status = document.getElementById(statusId)
+      status.className = `status-message show ${type}`
+      if (type === 'loading') status.innerHTML = `<span class="spinner"></span>${message}`
+      else status.textContent = message
+    }
+
+    // Hide Status
+    let hideStatus = statusId => {
+      document.getElementById(statusId).classList.remove('show')
+    }
+    
+    let formatFileSize = bytes => {
+      if (bytes < 1024) return bytes + ' B'
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB'
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB'
+    }
+    
+    let getFileNameWithoutExt = filename => {
+      return filename.substring(0, filename.lastIndexOf('.')) || filename
+    }
+    
+    let triggerDownload = (bytes, fileName, toolName) => {
+      let blob = new Blob([bytes], { type: 'application/pdf' })
+      let url = URL.createObjectURL(blob)
+      let a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+    
+    setupUploadArea('merge-upload', 'merge-input', files => {
+      mergeFiles.push(...files)
+      renderMergeFiles()
+    })
+
+    let renderMergeFiles = e => {
+      let container = document.getElementById('merge-files')
+      container.innerHTML = ''
+        
+      mergeFiles.forEach((file, index) => {
+        let item = document.createElement('div')
+        item.className = 'file-item'
+        item.draggable = true
+        item.dataset.index = index
+        
+        item.innerHTML = `
+          <div class="file-info">
+            <div class="file-icon">PDF</div>
+            <div class="file-details">
+              <h4>${file.name}</h4>
+              <p>${formatFileSize(file.size)}</p>
+            </div>
+          </div>
+          <button class="file-remove" onclick="removeMergeFile(${index})">ลบ</button>
+        `
+          
+        item.addEventListener('dragstart', e => {
+          e.dataTransfer.effectAllowed = 'move'
+          e.dataTransfer.setData('text/plain', index)
+          item.classList.add('dragging')
+        })
+
+        item.addEventListener('dragend', e => {
+          item.classList.remove('dragging')
+        })
+
+        item.addEventListener('dragover', e => {
+          e.preventDefault()
+          let dragging = container.querySelector('.dragging')
+          let afterElement = getDragAfterElement(container, e.clientY)
+          if (afterElement == null) container.appendChild(dragging)
+          else container.insertBefore(dragging, afterElement)
+        })
+
+        item.addEventListener('drop', e => {
+          e.preventDefault()
+          let fromIndex = parseInt(e.dataTransfer.getData('text/plain'))
+          let toIndex = parseInt(item.dataset.index)
+            
+          if (fromIndex !== toIndex) {
+            let [removed] = mergeFiles.splice(fromIndex, 1)
+            mergeFiles.splice(toIndex, 0, removed)
+            renderMergeFiles()
+          }
+        })
+
+        container.appendChild(item)
+      })
+
+      document.getElementById('merge-btn').disabled = mergeFiles.length === 0
+    }
+
+    let getDragAfterElement = (container, y) => {
+      let draggableElements = [...container.querySelectorAll('.file-item:not(.dragging)')]
+      
+      return draggableElements.reduce((closest, child) => {
+        let box = child.getBoundingClientRect()
+        let offset = y - box.top - box.height / 2
+        
+        if (offset < 0 && offset > closest.offset) return { offset: offset, element: child }
+        else return closest
+      }, { offset: Number.NEGATIVE_INFINITY }).element
+    }
+
+    let removeMergeFile = index => {
+      mergeFiles.splice(index, 1)
+      renderMergeFiles()
+    }
+
+    document.getElementById('merge-btn').addEventListener('click', async (e) => {
+      showStatus('merge-status', 'loading', 'กำลังรวมไฟล์...')
+        
+      try {
+        let { PDFDocument } = PDFLib
+        let mergedPdf = await PDFDocument.create()
+
+        for (let file of mergeFiles) {
+          let arrayBuffer = await file.arrayBuffer()
+          let pdf = await PDFDocument.load(arrayBuffer)
+          let copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
+          copiedPages.forEach(page => mergedPdf.addPage(page))
+        }
+
+        let pdfBytes = await mergedPdf.save()
+        let firstFileName = getFileNameWithoutExt(mergeFiles[0].name)
+        let time = new Date().toLocaleString('th-TH')
+        triggerDownload(pdfBytes, `${time}_merged.pdf`, 'merge')
+        
+        showStatus('merge-status', 'success', '✅ รวมไฟล์สำเร็จ!')
+        setTimeout(() => hideStatus('merge-status'), 3000)
+      } catch (error) {
+        showStatus('merge-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+    
+    setupUploadArea('split-upload', 'split-input', async (files) => {
+      splitFile = files[0]
+      splitSelectedPages.clear()
+      document.getElementById('split-pages').value = ''
+      await renderSplitPreview()
+    })
+
+    async function renderSplitPreview() {
+      let container = document.getElementById('split-preview')
+      container.innerHTML = ''
+
+      if (!splitFile) return
+
+      try {
+        let arrayBuffer = await splitFile.arrayBuffer()
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+          
+        for (let i = 1; i <= pdf.numPages; i++) {
+          let page = await pdf.getPage(i)
+          let viewport = page.getViewport({ scale: 0.5 })
+          
+          let canvas = document.createElement('canvas')
+          let context = canvas.getContext('2d')
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise
+
+          let item = document.createElement('div')
+          item.className = 'preview-item'
+          item.innerHTML = `
+            <canvas></canvas>
+            <p>หน้า ${i}</p>
+          `
+          item.querySelector('canvas').replaceWith(canvas)
+            
+          item.addEventListener('click', e => {
+            if (splitSelectedPages.has(i)) {
+              splitSelectedPages.delete(i)
+              item.classList.remove('selected')
+            } else {
+              splitSelectedPages.add(i)
+              item.classList.add('selected')
+            }
+            updateSplitPagesInput()
+          })
+
+          container.appendChild(item)
+        }
+
+        document.getElementById('split-btn').disabled = false
+      } catch (error) {
+        showStatus('split-status', 'error', '❌ ไม่สามารถโหลด PDF: ' + error.message)
+      }
+    }
+
+    let updateSplitPagesInput = e => {
+      let sorted = Array.from(splitSelectedPages).sort((a, b) => a - b)
+      document.getElementById('split-pages').value = sorted.join(', ')
+    }
+
+    let parsePageRanges = input => {
+      let pages = new Set()
+      let parts = input.split(',').map(p => p.trim())
+
+      for (let part of parts) {
+        if (part.includes('-')) {
+          let [start, end] = part.split('-').map(n => parseInt(n.trim()))
+          for (let i = start; i <= end; i++) {
+            pages.add(i - 1) 
+          }
+        } else {
+          let page = parseInt(part)
+          if (!isNaN(page)) pages.add(page - 1) 
+        }
+      }
+
+      return Array.from(pages).sort((a, b) => a - b)
+    }
+
+    document.getElementById('split-btn').addEventListener('click', async (e) => {
+      let pagesInput = document.getElementById('split-pages').value.trim()
+        
+      if (!pagesInput) {
+        showStatus('split-status', 'error', '❌ กรุณาระบุหน้าที่ต้องการแยก')
+        return
+      }
+
+      showStatus('split-status', 'loading', 'กำลังแยกหน้า...')
+
+      try {
+        let { PDFDocument } = PDFLib
+        let arrayBuffer = await splitFile.arrayBuffer()
+        let pdf = await PDFDocument.load(arrayBuffer)
+        
+        let pages = parsePageRanges(pagesInput)
+          
+        if (pages.length === 0 || pages.some(p => p < 0 || p >= pdf.getPageCount())) {
+          throw new Error('หมายเลขหน้าไม่ถูกต้อง')
+        }
+
+        let newPdf = await PDFDocument.create()
+        let copiedPages = await newPdf.copyPages(pdf, pages)
+        copiedPages.forEach(page => newPdf.addPage(page))
+
+        let pdfBytes = await newPdf.save()
+        let originalFileName = getFileNameWithoutExt(splitFile.name)
+        triggerDownload(pdfBytes, `${originalFileName}_split.pdf`, 'split')
+        
+        showStatus('split-status', 'success', '✅ แยกหน้าสำเร็จ!')
+        setTimeout(() => hideStatus('split-status'), 3000)
+      } catch (error) {
+        showStatus('split-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+    
+    let pageNumberFile = null
+    let pageNumberPdfDoc = null
+    let pageNumberPreviewData = null
+
+    setupUploadArea('pagenumber-upload', 'pagenumber-input', async (files) => {
+      pageNumberFile = files[0]
+      document.getElementById('pagenumber-settings').style.display = 'block'
+      document.getElementById('pagenumber-preview').innerHTML = ''
+      document.getElementById('pagenumber-btn').disabled = true
+    })
+    
+    let numberToThai = num => {
+      let thai = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ']
+      return thai[(num - 1) % thai.length]
+    }
+    
+    let numberToLetter = num => {
+      return String.fromCharCode(64 + ((num - 1) % 26 + 1))
+    }
+    
+    let formatPageNumber = (pageNum, totalPages, format) => {
+      switch(format) {
+        case 'number':
+          return pageNum.toString()
+        case 'thai':
+          return numberToThai(pageNum)
+        case 'alpha':
+          return numberToLetter(pageNum)
+        case 'page-number':
+          return `หน้า ${pageNum}`
+        case 'number-total':
+          return `${pageNum}/${totalPages}`
+        case 'page-number-total':
+          return `หน้า ${pageNum} จาก ${totalPages}`
+        default:
+          return pageNum.toString()
+      }
+    }
+
+    // Get position coordinates
+    let getPosition = (position, page, fontSize) => {
+      let { width, height } = page.getSize()
+      let margin = 30
+      
+      let positions = {
+        'bottom-center': { x: width / 2, y: margin },
+        'bottom-left': { x: margin, y: margin },
+        'bottom-right': { x: width - margin, y: margin },
+        'top-center': { x: width / 2, y: height - margin - fontSize },
+        'top-left': { x: margin, y: height - margin - fontSize },
+        'top-right': { x: width - margin, y: height - margin - fontSize }
+      }
+        
+      return positions[position] || positions['bottom-center']
+    }
+    
+    let hexToRgb = hex => {
+      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16) / 255,
+        g: parseInt(result[2], 16) / 255,
+        b: parseInt(result[3], 16) / 255
+      } : { r: 0, g: 0, b: 0 }
+    }
+    
+    document.getElementById('pn-preview-btn').addEventListener('click', async (e) => {
+      if (!pageNumberFile) return
+        
+      showStatus('pagenumber-status', 'loading', 'กำลังสร้างตัวอย่าง...')
+        
+      try {
+        let arrayBuffer = await pageNumberFile.arrayBuffer()
+        let { PDFDocument, StandardFonts, rgb } = PDFLib
+        
+        let pdfDoc = await PDFDocument.load(arrayBuffer)
+        pdfDoc.registerFontkit(fontkit)
+        let pages = pdfDoc.getPages()
+        let totalPages = pages.length
+        
+        let position = document.getElementById('pn-position').value
+        let format = document.getElementById('pn-format').value
+        let startPage = parseInt(document.getElementById('pn-start-page').value) || 1
+        let fontSize = parseInt(document.getElementById('pn-fontsize').value)
+        let colorHex = document.getElementById('pn-color').value
+        let fontName = document.getElementById('pn-font').value
+        let colorRgb = hexToRgb(colorHex)
+          
+        let font
+        if (fontName === 'custom') {
+          if (!customFontBytes) throw new Error('กรุณาเลือกไฟล์ฟอนต์ .ttf')
+          font = await pdfDoc.embedFont(customFontBytes)
+        } 
+        else font = await pdfDoc.embedFont(fontName === 'Times-Roman' ? StandardFonts.TimesRoman : StandardFonts.Helvetica)
+          
+        for (let i = 0; i < pages.length; i++) {
+          if (i + 1 < startPage) continue
+          
+          let page = pages[i]
+          let pageNum = i - startPage + 2
+          let text = formatPageNumber(pageNum, totalPages - startPage + 1, format)
+          let textWidth = font.widthOfTextAtSize(text, fontSize)
+          
+          let pos = getPosition(position, page, fontSize)
+          let x = pos.x
+            
+          if (position.includes('center')) x -= textWidth / 2
+          else if (position.includes('right')) x -= textWidth
+          
+          page.drawText(text, {
+            x: x,
+            y: pos.y,
+            size: fontSize,
+            font: font,
+            color: rgb(colorRgb.r, colorRgb.g, colorRgb.b)
+          })
+        }
+          
+        pageNumberPdfDoc = pdfDoc
+        pageNumberPreviewData = { position, format, startPage, fontSize, colorHex, fontName }
+        
+        await renderPageNumberPreview(pdfDoc)
+          
+        document.getElementById('pagenumber-btn').disabled = false
+        showStatus('pagenumber-status', 'success', '✅ ตัวอย่างพร้อมแล้ว!')
+        setTimeout(() => hideStatus('pagenumber-status'), 2000)
+      } catch (error) {
+        showStatus('pagenumber-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+    
+    async function renderPageNumberPreview(pdfDoc) {
+      let container = document.getElementById('pagenumber-preview')
+      container.innerHTML = ''
+        
+      try {
+        let pdfBytes = await pdfDoc.save()
+        let pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise
+          
+        for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) { 
+          let page = await pdf.getPage(i)
+          let viewport = page.getViewport({ scale: 0.5 })
+          
+          let canvas = document.createElement('canvas')
+          let context = canvas.getContext('2d')
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise
+
+          let item = document.createElement('div')
+          item.className = 'preview-item'
+          item.style.cursor = 'default'
+          item.innerHTML = `
+            <canvas></canvas>
+            <p>หน้า ${i}</p>
+          `
+          item.querySelector('canvas').replaceWith(canvas)
+
+          container.appendChild(item)
+        }
+          
+        if (pdf.numPages > 10) {
+          let note = document.createElement('p')
+          note.style.textAlign = 'center'
+          note.style.color = '#64748b'
+          note.style.marginTop = '20px'
+          note.textContent = `แสดงเฉพาะ 10 หน้าแรก (ไฟล์มี ${pdf.numPages} หน้า)`
+          container.appendChild(note)
+        }
+      } catch (error) {
+        console.error('Preview error:', error)
+      }
+    }
+    
+    document.getElementById('pagenumber-btn').addEventListener('click', async (e) => {
+      if (!pageNumberPdfDoc) {
+        showStatus('pagenumber-status', 'error', '❌ กรุณาดูตัวอย่างก่อน')
+        return
+      }
+        
+      showStatus('pagenumber-status', 'loading', 'กำลังสร้างไฟล์...')
+        
+      try {
+        let pdfBytes = await pageNumberPdfDoc.save()
+        let originalFileName = getFileNameWithoutExt(pageNumberFile.name)
+        triggerDownload(pdfBytes, `${originalFileName}_numbered.pdf`, 'pagenumber')
+        
+        showStatus('pagenumber-status', 'success', '✅ สำเร็จ! ดาวน์โหลดไฟล์แล้ว')
+        setTimeout(() => hideStatus('pagenumber-status'), 3000)
+      } catch (error) {
+        showStatus('pagenumber-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+    
+    setupUploadArea('compress-upload', 'compress-input', files => {
+      compressFile = files[0]
+      renderCompressFile()
+    })
+
+    let renderCompressFile = e => {
+      let container = document.getElementById('compress-files')
+      container.innerHTML = ''
+        
+      if (compressFile) {
+        container.innerHTML = `
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">PDF</div>
+              <div class="file-details">
+                <h4>${compressFile.name}</h4>
+                <p>${formatFileSize(compressFile.size)}</p>
+              </div>
+            </div>
+            <button class="file-remove" onclick="removeCompressFile()">ลบ</button>
+          </div>
+        `
+      }
+
+      document.getElementById('compress-btn').disabled = !compressFile
+    }
+
+    let removeCompressFile = e => {
+      compressFile = null
+      renderCompressFile()
+    }
+
+    document.getElementById('compress-btn').addEventListener('click', async (e) => {
+      showStatus('compress-status', 'loading', 'กำลังบีบอัดไฟล์...')
+
+      try {
+        let { PDFDocument } = PDFLib
+        let arrayBuffer = await compressFile.arrayBuffer()
+        let originalSize = arrayBuffer.byteLength
+        
+        let pdf = await PDFDocument.load(arrayBuffer)
+        let pdfBytes = await pdf.save({ useObjectStreams: true })
+        
+        let compressedSize = pdfBytes.byteLength
+        let reduction = ((originalSize - compressedSize) / originalSize * 100).toFixed(2)
+        
+        let originalFileName = getFileNameWithoutExt(compressFile.name)
+        triggerDownload(pdfBytes, `${originalFileName}_compressed.pdf`, 'compress')
+        
+        showStatus('compress-status', 'success', `✅ บีบอัดสำเร็จ! ลดขนาดลง ${reduction}%`)
+        setTimeout(() => hideStatus('compress-status'), 3000)
+      } catch (error) {
+        showStatus('compress-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+    
+    let convertFile = null
+    let convertSelectedPages = new Set()
+
+    setupUploadArea('convert-upload', 'convert-input', async (files) => {
+      convertFile = files[0]
+      convertSelectedPages.clear()
+      await renderConvertPreview()
+    })
+
+    async function renderConvertPreview() {
+      let container = document.getElementById('convert-preview')
+      container.innerHTML = ''
+
+      if (!convertFile) return
+
+      try {
+        let arrayBuffer = await convertFile.arrayBuffer()
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+          
+        for (let i = 1; i <= pdf.numPages; i++) {
+          let page = await pdf.getPage(i)
+          let viewport = page.getViewport({ scale: 0.5 })
+          
+          let canvas = document.createElement('canvas')
+          let context = canvas.getContext('2d')
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise
+
+          let item = document.createElement('div')
+          item.className = 'preview-item'
+          item.innerHTML = `
+              <canvas></canvas>
+              <p>หน้า ${i}</p>
+          `
+          item.querySelector('canvas').replaceWith(canvas)
+            
+          item.addEventListener('click', e => {
+            if (convertSelectedPages.has(i)) {
+              convertSelectedPages.delete(i)
+              item.classList.remove('selected')
+            } else {
+              convertSelectedPages.add(i)
+              item.classList.add('selected')
+            }
+            updateConvertButtons()
+          })
+
+          container.appendChild(item)
+        }
+
+        document.getElementById('convert-btn').disabled = false
+        document.getElementById('select-all-btn').disabled = false
+      } catch (error) {
+        showStatus('convert-status', 'error', '❌ ไม่สามารถโหลด PDF: ' + error.message)
+      }
+    }
+
+    let updateConvertButtons = e => {
+      document.getElementById('convert-btn').disabled = convertSelectedPages.size === 0
+    }
+    
+    document.getElementById('select-all-btn').addEventListener('click', async (e) => {
+      if (!convertFile) return
+      
+      let arrayBuffer = await convertFile.arrayBuffer()
+      let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+      
+      if (convertSelectedPages.size === pdf.numPages) {
+          convertSelectedPages.clear()
+          document.querySelectorAll('#convert-preview .preview-item').forEach(item => {
+            item.classList.remove('selected')
+          })
+      } else {
+        convertSelectedPages.clear()
+        for (let i = 1; i <= pdf.numPages; i++) {
+          convertSelectedPages.add(i)
+        }
+        document.querySelectorAll('#convert-preview .preview-item').forEach(item => {
+          item.classList.add('selected')
+        })
+      }
+      
+      updateConvertButtons()
+    })
+    
+    document.getElementById('convert-btn').addEventListener('click', async (e) => {
+      if (convertSelectedPages.size === 0) {
+        showStatus('convert-status', 'error', '❌ กรุณาเลือกหน้าที่ต้องการแปลง')
+        return
+      }
+
+      showStatus('convert-status', 'loading', 'กำลังแปลงเป็นภาพ...')
+
+      try {
+        let arrayBuffer = await convertFile.arrayBuffer()
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+        
+        let zip = new JSZip()
+        let selectedArray = Array.from(convertSelectedPages).sort((a, b) => a - b)
+
+        for (let pageNum of selectedArray) {
+          let page = await pdf.getPage(pageNum)
+          let viewport = page.getViewport({ scale: 1.0 })
+          
+          let canvas = document.createElement('canvas')
+          let context = canvas.getContext('2d')
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise
+            
+          let blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/jpeg', 0.95)
+          })
+          
+          zip.file(`page-${pageNum}.jpg`, blob)
+        }
+          
+        let zipBlob = await zip.generateAsync({ type: 'blob' })
+        
+        let url = URL.createObjectURL(zipBlob)
+        let a = document.createElement('a')
+        a.href = url
+        let originalFileName = getFileNameWithoutExt(convertFile.name)
+        a.download = `${originalFileName}_images.zip`
+        a.click()
+        URL.revokeObjectURL(url)
+        
+        showStatus('convert-status', 'success', `✅ แปลงสำเร็จ! ${selectedArray.length} หน้า`)
+        setTimeout(() => hideStatus('convert-status'), 3000)
+      } catch (error) {
+        showStatus('convert-status', 'error', '❌ เกิดข้อผิดพลาด: ' + error.message)
+      }
+    })
+  </script>
+ </body>
+</html>
