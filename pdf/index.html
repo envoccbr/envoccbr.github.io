@@ -1455,7 +1455,11 @@
     })
     
     let numberToThai = num => {
-      let thai = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ']
+      let thai = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 
+                  'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 
+                  'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 
+                  'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 
+                  'ฮ']
       return thai[(num - 1) % thai.length]
     }
     
@@ -1468,9 +1472,11 @@
         case 'number':
           return pageNum.toString()
         case 'thai':
-          return numberToThai(pageNum)
+          // return numberToThai(pageNum)
+          return ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][(pageNum - 1) % 41]
         case 'alpha':
-          return numberToLetter(pageNum)
+          // return numberToLetter(pageNum)
+          return String.fromCharCode(64 + ((pageNum - 1) % 26 + 1))
         case 'page-number':
           return `หน้า ${pageNum}`
         case 'number-total':
@@ -1520,7 +1526,7 @@
         let pdfDoc = await PDFDocument.load(arrayBuffer)
         pdfDoc.registerFontkit(fontkit)
         let pages = pdfDoc.getPages()
-        let totalPages = pages.length
+        let totalPage = pages.length
         
         let position = document.getElementById('pn-position').value
         let format = document.getElementById('pn-format').value
@@ -1542,7 +1548,8 @@
           
           let page = pages[i]
           let pageNum = i - startPage + 2
-          let text = formatPageNumber(pageNum, totalPages - startPage + 1, format)
+          let totalPages = totalPage - startPage + 1
+          let text = formatPageNumber(pageNum, totalPages, format)
           let textWidth = font.widthOfTextAtSize(text, fontSize)
           
           let pos = getPosition(position, page, fontSize)
