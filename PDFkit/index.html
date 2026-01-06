@@ -1473,16 +1473,16 @@
           return pageNum.toString()
         case 'thai':
           // return numberToThai(pageNum)
-          return ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][(pageNum - 1) % 41]
+          return '('+['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][(pageNum - 1) % 41]+')'
         case 'alpha':
           // return numberToLetter(pageNum)
           return String.fromCharCode(64 + ((pageNum - 1) % 26 + 1))
         case 'page-number':
-          return `หน้า ${pageNum}`
+          return `(หน้า ${pageNum})`
         case 'number-total':
           return `${pageNum}/${totalPages}`
         case 'page-number-total':
-          return `หน้า ${pageNum} จาก ${totalPages}`
+          return `(หน้า ${pageNum} จาก ${totalPages})`
         default:
           return pageNum.toString()
       }
