@@ -1836,7 +1836,9 @@
 
         for (let pageNum of selectedArray) {
           let page = await pdf.getPage(pageNum)
-          let viewport = page.getViewport({ scale: 1.0 })
+          let selectedDPI = 300;
+          let scale = selectedDPI / 72;
+          let viewport = page.getViewport({ scale })
           
           let canvas = document.createElement('canvas')
           let context = canvas.getContext('2d')
