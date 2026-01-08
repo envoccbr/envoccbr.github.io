@@ -247,9 +247,7 @@
                       </label>
                     </div>
                     <div class="mx-sm-3 mb-2">
-                      <input type="text" class="form-control" id="searchText" name="searchText" placeholder="พิมพ์ที่นี่">
-                      <input type="text" id="spreadsheetId" name="spreadsheetId" value="14GFF4S_mqUOdzUq-C_K-CmvrbASOlhTNr1JqQszhs4Y" hidden>
-                      <input type="text" id="range" name="range" value="BuriRam!A2:F" hidden>
+                      <input type="text" class="form-control" id="searchtext" name="searcttext" placeholder="พิมพ์ที่นี่">
                     </div>
                     <div class="mx-sm-3 mb-2">
                       <input class="btn btn-primary mb-2 rounded-pill" type="submit" value="ค้นหา">
@@ -270,11 +268,7 @@
     </div>
 
     <!-- variables -->
-      <!-- <?var url = getUrl();?>
-      <input type="hidden" id="getUrl" value="<?=url?>">
-      <script>var url = document.getElementById("getUrl").value</script> -->
       <script>
-        var url = "https://script.google.com/macros/s/AKfycbwQeTHpVyRvEGh8WUdcPWqcDQHbKoHJByqwXO-mnxsXe-soIlYYUO4-zC3pzr-tHEo/exec"
         var header = document.getElementById("header")
         var footer = document.getElementById("footer")
         var text = document.getElementById("searchText")
@@ -305,7 +299,7 @@
           } 
           else {
             try {
-              var response = await fetch(url, { 
+              var response = await fetch("https://script.google.com/macros/s/AKfycbxteks4dHtYjCOXATSMr5oaqVbrF1_yyVHWxuxjfGP6f-yi6AUKELr2zXtGSNJPQg0SRw/exec", { 
                 method: "POST", 
                 body: new FormData(searchForm) 
               })
