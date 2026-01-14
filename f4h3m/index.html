@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">	<!--, viewport-fit=cover">-->
+
+    <title>f4h3m</title>
+    <link rel="icon" href="https://mnm19.com/f4h3m/www/images/f4h3mLogo.png" type="image/x-icon">
+
+    <script src="https://mnm19.com/f4h3m/www/components/loader.js"></script>
+    <script src="https://mnm19.com/f4h3m/www/js/main.js"></script>
+    <script src="https://mnm19.com/f4h3m/www/js/numeral.js"></script>
+
+    <link rel="stylesheet" href="https://mnm19.com/f4h3m/www/components/loader.css">
+    <link rel="stylesheet" href="https://mnm19.com/f4h3m/www/css/main.css">
+
+	  <script src="https://kit.fontawesome.com/0ea0cca094.js" crossorigin="anonymous"></script>
+  
+    <link rel="manifest" href="https://mnm19.com/f4h3m/www/manifest.json">
+
+    <script defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEgXxkIc-lpe_aYmJaQZHuSeZMT-Jq1_s&amp;libraries=geometry&amp;callback=initialize"></script>
+
+    <!--IOS-->
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!--black-translucent"-->
+      <meta name="apple-mobile-web-app-title" content="Food4Health V.3M">
+    <!--end for IOS-->
+
+    <!--ANDROID-->
+      <!--<meta name="mobile-web-app-capable" content="yes">-->
+      <link rel="manifest" href="https://mnm19.com/f4h3m/www/manifest.json">
+    <!--end for Android-->
+
+
+    <!--//make page show exactly the way it should be//-->
+    <script>
+      document.addEventListener('init', function(event) {
+        var page = event.target;
+        if (page.id == "home-page") {
+          //fnCalculate();
+          //basicCalc();
+        }
+      });
+    </script>
+    
+    <script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/63/10a/common.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/63/10a/util.js"></script>
+  </head>
+  <body data-device-back-button-handler-id="0" style="touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 302.486px; height: 538.02px; margin: 0px auto; border: 1px solid blue;">
+    <body">
+      <!--tab bar-->
+      <ons-page class="page page--wrapper" shown=""><div class="page__background"></div><div class="page__content" style="">
+          <ons-tabbar id="tabbar" activeindex="0" hide-tabs="true"><div class="tabbar__content ons-tabbar__content ons-swiper" style="touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); bottom: 0px;"><div class="ons-swiper-target active" style="transform: translate3d(0px, 0px, 0px);"><ons-page class="main_pages page page--home_bg" id="home-page" modifier="home_bg" style="font-family: Kanit; width: 100%;" shown=""><ons-toolbar class="noborder1 toolbar toolbar--transparent" id="toolbar" modifier="transparent"><div class="left toolbar__left toolbar--transparent__left">
+                      <ons-toolbar-button id="btn_logout" style="color: white; display:none" class="toolbar-button" disabled=""><i class="fa-solid fa-right-from-bracket fa-lg" aria-hidden="true"></i></ons-toolbar-button></div><div class="center toolbar__center toolbar__title toolbar--transparent__center" style="text-align:center; font-family:Kanit"><font style="color:white"><span id="home_header">Food4Health V.3</span></font></div><div class="right toolbar__right toolbar--transparent__right">
+                      <ons-toolbar-button id="btn_newmenu" style="color: lightyellow; display:none" class="toolbar-button"><i class="fa-solid fa-file" aria-hidden="true"></i></ons-toolbar-button></div></ons-toolbar><div class="page__background page--home_bg__background" style="background-image: url(&quot;https://mnm19.com/f4hsuite/f4hm/www/images/f4h3m-background.png&quot;);"></div><div class="page__content page--home_bg__content">
+              
+          
+              <div id="PINlogin" style="">
+                  <div id="div_plogo" style="width: 100%; height: 30%; text-align: center;">
+                      <img id="plogo" src="https://mnm19.com/f4h3m/www/images/f4h3mLogo.png" width="50%" style="position: relative; top: 13%;">
+                  </div>
+                  <div id="div_pinprogress" style="width: 100%; position: relative; height: 10%; top: 8%; color: white;">
+                    <table width="100%" border="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div id="pd1" class="pd" style="width: 9.87896px; height: 9.87896px; left: 109.254px;"></div>
+                            <div id="pd2" class="pd" style="width: 9.87896px; height: 9.87896px; left: 114.194px;"></div>
+                            <div id="pd3" class="pd" style="width: 9.87896px; height: 9.87896px; left: 119.133px;"></div>
+                            <div id="pd4" class="pd" style="width: 9.87896px; height: 9.87896px; left: 124.073px;"></div>
+                            <div id="pd5" class="pd" style="width: 9.87896px; height: 9.87896px; left: 129.012px;"></div>
+                            <div id="pd6" class="pd" style="width: 9.87896px; height: 9.87896px; left: 133.952px;"></div>
+                </td>
+              </tr>
+                          <tr>
+                            <td align="center">กรุณาป้อนรหัสผ่านจำนวน 6 หลัก</td>
+                          </tr>
+                      </tbody></table>
+                  </div>
+                  <div id="div_ppin" style="font-family: Kanit; width: 100%; height: 60%; top: 15%; margin: 0px auto; position: relative;">
+                    <table width="100%" border="0">
+                        <tbody><tr>
+                            <td width="100%">
+                                  <div id="pk1">1</div>
+                                  <div id="pk2">2</div>
+                                  <div id="pk3">3</div>                            
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>
+                                  <div id="pk4">4</div>
+                                  <div id="pk5">5</div>
+                                  <div id="pk6">6</div>                            
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>
+                                  <div id="pk7">7</div>
+                                  <div id="pk8">8</div>
+                                  <div id="pk9">9</div>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td width="100%" style="height:18%">
+                                  <div id="pkA">&nbsp;</div>
+                                  <div id="pk0">0</div>
+                                  <div id="pk11" style="height: 36.8254px;"><i class="fa-solid fa-delete-left" aria-hidden="true"></i></div>
+                              </td>
+                          </tr>
+                      </tbody></table>
+                  </div>
+              </div>
+              <div id="div_allHMmenu" style="width: 100%; height: 98%; display: none;" class="keep-scrolling">
+                  <ons-card style="height:98%; font-family:'Kanit'; overflow-y:scroll;" class="keep-scrolling card">
+                      <table id="tbl_allHMmenu" width="100%" border="0" style="overflow-y:hidden">
+                          <tbody><tr><td colspan="4" align="center">รายการเมนูทั้งหมด</td></tr>
+                          <tr>
+                              <td width="5%" style="background-color:#BBE2EC" align="center" class="highRow">ลบ</td>
+                              <td width="5%" style="background-color:#BBE2EC" align="center">ผ่าน</td>
+                              <td width="70%" style="background-color:#BBE2EC" align="center">ชื่อเมนู</td>
+                              <td width="20%" style="background-color:#BBE2EC" align="center">ภาพ</td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+              </div>
+              <div id="div_makemenu" class="keep-scrolling" style="display: none;">
+                  <ons-card id="ons_menudetail" style="font-family:Kanit; padding-top: 2px; padding-bottom: 2px;" class="card">
+                      <div id="div_menudetail">
+                          <table width="100%" border="0" style="border-collapse: collapse">
+                              <tbody><tr>
+                                  <td width="50%" class="highRow">ประเภทอาหาร&nbsp;<font style="color: red">*</font>
+                                      <!--<input type="text" id="lst_menutype" list="menutypelist" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; font-family:'Kanit'; width:90%;"></input>-->
+                                      <!--<datalist id="menutypelist">-->
+                                    <select id="lst_menutype" style="font-family:'Kanit'; font-size:large; border:none;">
+                                          <option value="1">1. ข้าวและกับข้าว</option>
+                                          <option value="2">2. อาหารจานเดียว</option>
+                                          <option value="3">3. อาหารตามสั่ง</option>
+                                          <option value="4">4. อาหารประเภทเส้น</option>
+                                          <option value="5">5. ขนม</option>
+                                          <option value="6">6. เครื่องดื่ม</option>
+                                          <option value="7">7. ผลไม้</option>
+                                      </select>
+                                      <!--</datalist>-->
+                                  </td>
+                                  <td class="highRow">ชื่อเมนูอาหาร&nbsp;<font style="color: red">*</font>
+                                      <input type="text" id="menuname" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; width:90%" onblur="checkDuplicateMenuName()">
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td width="40%" class="highRow">จำนวนคนกิน&nbsp;<font style="color: red">*</font><br>
+                                      <input type="text" id="noofeater" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; font-family:'Kanit'; width:50%;">
+                                  </td>
+                                  <td class="highRow">ราคา (บาท)&nbsp;<font style="color: red">*</font><br>
+                                      <input type="text" id="price" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; width:50%">
+                                  </td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                  </ons-card>
+                  <ons-card id="ons_analyze" style="padding-top:2px; padding-bottom:2px" class="card">
+                      <table width="100%" border="0" style="font-size:0.9em">
+                          <tbody><tr>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">คาร์โบไฮเดรต %</td>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">โปรตีน %</td>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">ไขมัน %</td>
+                          </tr>
+                          <tr>
+                              <td align="center"><span id="carbohydrate_r">&nbsp;</span></td>
+                              <td align="center"><span id="protein_r">&nbsp;</span></td>
+                              <td align="center"><span id="fat_r">&nbsp;</span></td>
+                          </tr>
+                      </tbody></table>
+                      <table width="100%" border="0">
+                          <tbody><tr>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">พลังงาน<br><font style="font-size:0.5em">(กิโลแคลอรี)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">โซเดียม<br><font style="font-size:0.5em">(มิลลิกรัม)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">น้ำตาล<br><font style="font-size:0.5em">(กรัม)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">ไขมัน<br><font style="font-size:0.5em">(กรัม)</font></td>
+                          </tr>
+                          <tr>
+                              <td align="center"><span id="dash_energy">&nbsp;</span></td>
+                              <td align="center"><span id="dash_sodium">&nbsp;</span></td>
+                              <td align="center"><span id="dash_sugar">&nbsp;</span></td>
+                              <td align="center"><span id="dash_fat">&nbsp;</span></td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+                  <ons-card id="ons_ctrlbutton" style="padding-top:2px; padding-bottom:2px" class="card">
+                      <table width="100%" border="0">
+                          <tbody><tr align="center">
+                              <td><ons-button id="btn_addmenu" style="background-color:#4395A3; color:black; font-family:'Kanit';font-size:12px" class="button">+วัตถุดิบ</ons-button></td>
+                              <td><ons-button id="btn_savemenu" style="background-color:#F7CE8E; color:black; font-family:'Kanit';font-size:12px" class="button">บันทึก</ons-button></td>
+                              <td><ons-button id="btn_analyze" style="font-family:'Kanit'; background-color:#96775F; color:black;font-size:12px" class="button">วิเคราะห์</ons-button></td>
+                              <td><ons-button id="btn_snapshot" style="background-color:#E26119; color:black; font-family:'Kanit';font-size:12px" class="button"><i class="fa-solid fa-camera" aria-hidden="true"></i></ons-button><input type="file" id="selectedimage" accept"images="" *"="" onchange="uploadHMFile(this.files[0])" hidden=""></td>
+                              <td><ons-button id="btn_editmenu" style="background-color:#E26119; color:black; font-family:'Kanit';font-size:12px" class="button">แก้ไข</ons-button></td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+
+                  <ons-card id="onsIngredient" style="font-family: Kanit; padding-top: 2px; padding-bottom: 2px; height: 119.372px;" class="card">
+                      <div id="div_menuingredient" style="overflow-y: scroll; height: 100%;" class="keep-scrolling">
+                          <table id="tbl_menuingredient" width="100%" border="0" cellspace="2" style="overflow-y:hidden">
+                              <tbody><tr align="center">
+                                  <td class="highTD" width="5%" style="font-family:'Kanit'; border:1px solid #FBE7C6; border-radius: 10px 0 0 10px">ลบ</td>
+                                  <td width="65%" class="highTD">วัตถุดิบ</td>
+                                  <td width="15%" class="highTD">ปริมาณ</td>
+                                  <td width="15%" class="highTD" style="font-family:'Kanit'; border:1px solid #FBE7C6; border-radius: 0 10px 10px 0">หน่วย</td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                      <div id="div_addpopup" style="display: none; overflow-y: scroll; height: 100%;" class="keep-scrolling">
+                          <div align="right" style="width:100%"><i id="btn_popupClose" class="fa-solid fa-circle-xmark" aria-hidden="true"></i></div>
+                          <ons-card style="font-family:'Kanit'" class="card">
+                              <ons-label>ค้นหาชื่อวัตถุดิบ</ons-label>
+                              <input type="text" id="searchText" placeholder="คำค้นหา อย่างน้อย 2 ตัวอักษร" style="font-family:'Kanit'; height:'35px'; border:none; font-size:large; width: 70%">
+                              <ons-button id="btn_ingredientSearch" modifier="cta" class="button button--cta">
+                                  <ons-icon icon="md-search" size="30px" fixed-width="true" class="ons-icon zmdi zmdi-search" style="font-size: 30px;"></ons-icon>
+                              </ons-button>
+
+                              <ons-label>ชื่อวัตถุดิบ</ons-label>
+                              <select id="ingList" onblur="getUnit()" class="highTD" style="font-family:'kanit';font-size:large; width:99%"></select>
+
+                              <ons-label>ปริมาณ</ons-label><br>
+                              <table width="100%">
+                                  <tbody><tr>
+                                      <td width="40%">
+                                          <input type="text" id="adding_quantity" class="pPopup" style="border: 1px solid red; font-family:'Kanit'; font-size:large; width:65%">
+                                      </td>
+                                      <td width="35%">
+                                          <select id="quanunit" style="font-family:'Kanit'; font-size:large; border:none;">
+                                              <option value="0">กรัม</option>
+                                              <option value="1">ช้อนชา</option>
+                                              <option value="2">ช้อนกินข้าว</option>
+                                              <option value="3">ทัพพี</option>
+                                              <option value="4">ถ้วยตวง</option>
+                                              <option value="5">ส่วน</option>
+                                              <option value="6">ฟอง</option>
+                                              <option value="7">ผล/ยวง/ฝัก</option>
+                                              <option value="8">ชิ้นพอคำ</option>
+                                              <option value="9">เม็ด</option>
+                                          </select>
+                                      </td>
+                                      <td width="25%">
+                                          <ons-button id="btn_addingsave" style="font-family:'Kanit'" class="button">บันทึก</ons-button>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="3" width="100%" style="font-size:1em">
+                      <div id="aQ1_2" class="autoQ">1/2</div><div id="aQ1_3" class="autoQ">1/3</div><div id="aQ1_4" class="autoQ">1/4</div><div id="aQ3_4" class="autoQ">3/4</div><div id="aQ1_8" class="autoQ">1/8</div>
+                                      </td>
+                                  </tr>
+                              </tbody></table>
+                          </ons-card>
+                      </div>
+                  </ons-card>
+                  <ons-card id="onsAnalyze" style="font-family: Kanit; padding-top: 2px; padding-bottom: 2px; height: 119.372px;" class="card">
+                      <div id="div_ingredientPass" class="keep-scrolling" style="overflow-y:scroll;">
+                          <table width="100%" border="0" style="overflow-y:hidden">
+                              <tbody><tr><td colspan="2" align="right"><i id="btn_ingPassClose" class="fa-solid fa-circle-xmark" data-fa-transform="grow-2" aria-hidden="true"></i></td></tr>
+                              <tr>
+                                  <td colspan="2" align="center"><h1><font style="color:red">ยังไม่ผ่านเกณฑ์วัตถุดิบ</font></h1></td>
+                              </tr>
+                              <tr>
+                                  <td colspan="2" align="center">ข้อกำหนดเกณฑ์รับรองเมนูชูสุขภาพ</td>
+                              </tr>
+                              <tr>
+                                  <td width="8%" class="lightBlue">เกณฑ์</td>
+                                  <td width="92%" align="center" class="lightBlue">ข้อกำหนด</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond1" align="center"></td>
+                                  <td>1. ทำจากอาหารกลุ่มเนื้อสัตว์ ปลา ถั่ว ไข่ เต้าหู้ และผัก</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond2" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">2. มีส่วนประกอบกลุ่มข้าวแป้ง ไม่เกิน 2 ทัพพี/คน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond3" align="center"></td>
+                                  <td>3. ใช้เนื้อสัตว์ที่มีไขมันต่ำ ถั่วเมล็ดแห้ง เช่นปลา เนื้อสัตว์ไม่ติดมัน 2-4 ช้อนกินข้าว/คน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond4" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">4. ใช้ผักและผลไม้ที่ปลอดภัยต่อสุขภาพ เช่นผักอินทรีย์ ผักพื้นบ้าน ไม่น้อยกว่า 2 ทัพพี หรือ 140 กรัมต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond5" align="center"></td>
+                                  <td>5. ไม่หวานจัด โดยใช้น้ำตาลไม่เกิน ครึ่งช้อนชาต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond6" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">6. เป็นอาหารที่ไม่มันจัด ใช้น้ำมันไม่เกิน 2 ช้อนชา หรือหัวกะทิไม่เกิน 2 ช้อนกินข้าวต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond7" align="center"></td>
+                                  <td>7. เป็นอาหารที่ไม่เค็มจัด ใช้น้ำปลา/ซีอิ๊ว/ซอสปรุงรส ไม่เกิน 1 ช้อนชา หรือเกลือไม่เกิน 1/8 ช้อนชาต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond8" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">8. ต้องใช้เครื่องปรุงรสเสริมไอโอดีน อย่างน้อย 1 รายการ</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond9" align="center"></td>
+                                  <td>9. ไม่ใช้ผงชูรส, ซุปก้อนสำเร็จรูป หรือผงปรุงรส</td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                      <div id="div_recipeAdjust" class="keep-scrolling" style="overflow-y:scroll; font-family:'Kanit'">
+                          <table id="tbl_recipeAdjust" width="100%" border="0" style="overflow-y:hidden; height:98%">
+                              <tbody><tr><td colspan="2" align="right"><i id="btn_recpAdjClose" class="fa-solid fa-circle-xmark" aria-hidden="true"></i></td></tr>
+                              <tr>
+                                  <td align="center" id="pass_fail"><font style="color:red"><h1><span id="pass_fail1"></span></h1></font></td>
+                              </tr>
+                              <tr>
+                                  <td align="center"><span id="cause"></span></td>
+                              </tr>
+                              <tr>
+                                  <td><span id="howtofix"></span></td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                  </ons-card>
+              </div>
+          </div></ons-page><ons-page class="main_pages page page--certificate_bg" id="certificate-page" modifier="certificate_bg" style="font-family:'Kanit';"><ons-toolbar class="noborder toolbar toolbar--transparent" modifier="transparent"><div class="left toolbar__left toolbar--transparent__left">&nbsp;</div><div class="center toolbar__center toolbar__title toolbar--transparent__center" style="text-align:center; font-family:Kanit"><font style="color:white">ใบรับรองเมนูชูสุขภาพ</font></div><div class="right toolbar__right toolbar--transparent__right"><span id="btn_certdownload" hidden=""><font style="color:white"><li class="fa-solid fa-file-arrow-down fa-xl" aria-hidden="true"></li>&nbsp;&nbsp;</font></span></div></ons-toolbar><div class="page__background page--certificate_bg__background"></div><div class="page__content page--certificate_bg__content">
+          
+          <ons-card id="ons_certificate" style="font-family:'Kanit'; height:98%" class="card">
+              <div id="div_certificate" style="width:100%; height:100%; overflow-y:scroll" class="keep-scrolling">
+                  <div width="100%" style="border:1px solid #E26119; border-radius:10px; padding:10px 5px 10px 28px">
+                              <ons-radio name="certtype" id="hm" value="1" checked="" onchange="changeCerttype()" class="radio-button">
+        <input type="radio" class="radio-button__input" name="certtype" value="1">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;เมนูชูสุขภาพ</ons-label><br>
+                              <ons-radio name="certtype" id="s20" value="2" onchange="changeCerttype()" class="radio-button">
+        <input type="radio" class="radio-button__input" name="certtype" value="2">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดโซเดียม 20%</ons-label><br>
+                              <ons-radio name="certtype" id="u20" value="3" onchange="changeCerttype()" class="radio-button">
+        <input type="radio" class="radio-button__input" name="certtype" value="3">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดน้ำตาล 20%</ons-label><br>
+                              <ons-radio name="certtype" id="f20" value="4" onchange="changeCerttype()" class="radio-button">
+        <input type="radio" class="radio-button__input" name="certtype" value="4">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดไขมัน 20%</ons-label><br>
+                          </div><table id="tbl_certificate" width="100%" border="0" style="overflow-y:hidden; border-collapse:collapse">
+                      <tbody><tr>
+                          
+                      </tr>
+                      <tr><td>&nbsp;</td></tr>
+                      <tr class="highRow">
+                          <td colspan="3" align="center" style="background-color:#BBE2EC">รายชื่อเมนูที่ผ่านการรับรอง</td>
+                      </tr>
+                  </tbody></table>
+              </div>
+          </ons-card>
+    </div></ons-page><ons-page class="main_pages page page--hmmap_bg" id="hmmap-page" modifier="hmmap_bg" style="font-family:'Kanit';"><ons-toolbar class="noborder toolbar toolbar--transparent" modifier="transparent"><div class="left toolbar__left toolbar--transparent__left"><span id="btn_locreset" hidden=""><font style="color:white">&nbsp;&nbsp;<i class="fa-solid fa-arrow-left" aria-hidden="true"></i></font></span></div><div class="center toolbar__center toolbar__title toolbar--transparent__center" style="text-align:center; font-family:Kanit"><font style="color:white">แผนที่เมนูชูสุขภาพ</font></div><div class="right toolbar__right toolbar--transparent__right"><span id="btn_save"><font style="color:white"></font></span></div></ons-toolbar><div class="page__background page--hmmap_bg__background"></div><div class="page__content page--hmmap_bg__content">
+              
+
+              <div id="allmap"></div>
+              <div id="div_nearyou" style="text-align:center">
+                  <ons-radio name="maprange" id="allrange" value="1" checked="" onchange="changeMapRange();" class="radio-button">
+        <input type="radio" class="radio-button__input" name="maprange" value="1">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;แสดงทั้งหมด</ons-label>&nbsp;&nbsp;&nbsp;
+                  <ons-radio name="maprange" id="nearyou" value="2" onchange="changeMapRange();" class="radio-button">
+        <input type="radio" class="radio-button__input" name="maprange" value="2">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;ร้านใกล้คุณ</ons-label><br>
+              </div>
+
+              <div id="div_hmmap" class="keep-scrolling">
+                  <div id="div_markerShop" class="keep-scrolling">
+                      <div id="div_markerShop1">
+                          <table id="tbl_markerShop" width="100%" border="0" cellpadding="7">
+                              <tbody><tr>
+                                  <td width="5%"></td>
+                                  <td width="95%" align="center" class="f12"></td>
+                                  <td width="1px" style="visibility:collapse;"></td>
+                              </tr>       
+                              <tr>
+                                  <td colspan="3" align="center" class="f12">โปรดเลือกเมนูชูสุขภาพ</td>
+                              </tr>       
+                          </tbody></table>    
+                      </div>
+                  </div>
+                  <div id="div_markershopDetail">
+                      <ons-card style="font-family:'Kanit'; text-align:center" class="card">
+                          <ons-label><font size="+2.5"><span id="loc_menuname"></span></font></ons-label>
+                          <div id="div_hmImg" style="width:100%"></div>
+                      </ons-card>
+                      <ons-card style="font-family:'Kanit';" class="card">
+                          <div id="div_hmMapNut">
+                              <table width="100%" border="0" style="border-collapse:collapse, border:2px solid white">
+                                  <tbody><tr>
+                                      <td class="highRowG"><font color="white">ชื่อร้าน:</font></td>
+                                      <td class="highRowY"><font size="+1.75"><span id="loc_name"></span></font></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">ที่อยู่:</font></td>
+                                      <td class="highRowY"><span id="loc_address"></span></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">เวลาเปิด-ปิด:</font></td>
+                                      <td class="highRowY"><span id="loc_officehour"></span></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">โทรศัพท์:</font></td>
+                                      <td class="highRowY"><span id="loc_telno"></span></td>
+                                  </tr>
+                              </tbody></table>
+                          </div>
+                      </ons-card>
+                      <ons-card style="font-family:'Kanit'" class="card">
+                          <div>
+                              <table width="100%" border="0">
+                                  <tbody><tr>
+                                      <td colspan="2" align="center"><font size="+1.8">คุณค่าทางโภชนาการ</font></td>
+                                  </tr>
+                                  <tr class="highRowDB">
+                                      <td align="center">รายการ</td>
+                                      <td align="center">ปริมาณ</td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>พลังงาน/Energy (kcal)</td>
+                                      <td align="center"><span id="loc_energy"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>คาร์โบไฮเดรท/Carbohydrate (g)</td>
+                                      <td align="center"><span id="loc_carbohydrate"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โปรตีน/Protein (g)</td>
+                                      <td align="center"><span id="loc_protein"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ไขมัน/Fat (g)</td>
+                                      <td align="center"><span id="loc_fat"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>แคลเซียม/Calcium (mg)</td>
+                                      <td align="center"><span id="loc_calcium"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โพแทสเซียม/Potassium (mg)</td>
+                                      <td align="center"><span id="loc_potassium"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>เส้นใยอาหาร/Dietaryfiber (g)</td>
+                                      <td align="center"><span id="loc_dietaryfiber"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>น้ำตาล/Sugar (g)</td>
+                                      <td align="center"><span id="loc_sugar"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>โซเดียม/Sodium (mg)</td>
+                                      <td align="center"><span id="loc_sodium"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>คอเลสเตอรอล/Cholesterol (g)</td>
+                                      <td align="center"><span id="loc_cholesterol"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>เหล็ก/Iron (mg)</td>
+                                      <td align="center"><span id="loc_iron"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน เอ/Vitamin A (IU)</td>
+                                      <td align="center"><span id="loc_vitamina"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>วิตามิน บี1/Vitamin B1 (mg)</td>
+                                      <td align="center"><span id="loc_vitaminb1"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน บี2/Vitamin B2 (mg)</td>
+                                      <td align="center"><span id="loc_vitaminb2"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>วิตามิน ซี/Vitamin C (mg)</td>
+                                      <td align="center"><span id="loc_vitaminc"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน อี/Vitamin E (mg)</td>
+                                      <td align="center"><span id="loc_vitamine"></span></td>
+                                  </tr>                                <tr class="highRow">
+                                      <td>ฟอสฟอรัส/Phosphorus (mg)</td>
+                                      <td align="center"><span id="loc_phosphorus"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>แมกนีเซียม/Magnesium (mg)</td>
+                                      <td align="center"><span id="loc_magnesium"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ทองแดง/Copper (mg)</td>
+                                      <td align="center"><span id="loc_copper"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>สังกะสี/Zinc (mg)</td>
+                                      <td align="center"><span id="loc_zinc"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ไอโอดีน/Iodine (mg)</td>
+                                      <td align="center"><span id="loc_iodine"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>เบต้าแคโรทีน/Betacarotine (mg)</td>
+                                      <td align="center"><span id="loc_betacarotine"></span></td>
+                                  </tr>
+
+                                  <tr class="highRowLB">
+                                      <td>ไนอาซิน/Niacin (mg)</td>
+                                      <td align="center"><span id="loc_niacin"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โฟเลต/Folate (mg)</td>
+                                      <td align="center"><span id="loc_folate"></span></td>
+                                  </tr>
+                              </tbody></table>
+                          </div>
+                      </ons-card>
+                      <ons-card id="ons_lochmmap" style="font-family:'Kanit';" class="card">
+
+                      </ons-card>
+                  </div>
+              </div>
+          </div></ons-page><ons-page class="main_pages page page--other_bg" id="other-page" modifier="other_bg" style="font-family:'Kanit';"><ons-toolbar class="noborder toolbar toolbar--transparent" modifier="transparent"><div class="left toolbar__left toolbar--transparent__left"><span id="btn_otherBack" hidden=""><font style="color:white">&nbsp;&nbsp;<li class="fa-solid fa-arrow-left" aria-hidden="true"></li></font></span></div><div class="center toolbar__center toolbar__title toolbar--transparent__center" style="text-align:center; font-family:Kanit"><font style="color:white; font-family:Kanit"><span id="other_header">อื่นๆ</span></font></div><div class="right toolbar__right toolbar--transparent__right"><span id="btn_save"><font style="color:white"></font></span></div></ons-toolbar><div class="page__background page--other_bg__background"></div><div class="page__content page--other_bg__content">
+          
+          <div id="div_othermenu">
+              <ons-card style="font-family:'Kanit'; position:relative; top:5%" class="card">
+                  <ons-button id="btn_suggestion" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">แนะนำติชม</ons-button><br><br>
+                  <ons-button id="btn_howtouse" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">วิธีการใช้งาน</ons-button><br><br>
+                  <ons-button id="btn_logodownload" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">ดาวน์โหลดสัญลักษณ์โลโก้</ons-button><br><br>
+                  <ons-button id="btn_HMcriteria" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">เกณฑ์รับรองเมนูชูสุขภาพและเมนูทางเลือก</ons-button><br><br>
+                  <ons-button id="btn_healthPoint" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">คะแนน Health Point</ons-button><br><br>
+                  <ons-button id="btn_expcertificate" modifier="large" width="90%" style="font-family:'Kanit'" class="button button--large">ใบรับรองฯ ที่กำลังจะหมดอายุ</ons-button>
+              </ons-card>
+          </div>
+          <div id="div_sugggroup" class="keep-scrolling" style="text-align:center; height:100%">
+              <ons-card style="font-family:'Kanit'; height:98%" class="card">
+              <table id="tbl_suggestion" width="100%">
+                  <tbody><tr>
+                      <td width="100%">&nbsp;</td>
+                  </tr>
+                  <tr>
+                      <td align="left" class="highRow">
+                          <select id="suggType" size="1" style="width:80%; line-height:90%; height:90%; font-family:'Kanit'; font-size:large" onchange="suggChange()">
+                              <option value="1">การใช้งาน</option>
+                              <option value="2">เพิ่มความสามารถของโปรแกรม</option>
+                              <option value="7">ขอเพิ่มวัตถุดิบที่ไม่มีในรายการ</option>
+                              <option value="8">ความพึงพอใจ</option>
+                          </select>
+                          <button id="btn_suggsend" class="ui blue button" style="font-family:'Kanit'; background-color:#4395A3">ส่ง</button>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <span id="sp_satisfaction" hidden="">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s10.png" id="s_s1">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s20.png" id="s_s2">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s30.png" id="s_s3">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s40.png" id="s_s4">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s50.png" id="s_s5"></span>
+                          <textarea id="txt_suggestion" rows="15" style="width:98%; max-width:100%; height:100%; font-family:'Kanit'; font-size:large" placeholder="กรุณาเขียนคำแนะนำของท่าน เมื่อเสร็จแล้วกดปุ่ม 'ส่ง'"></textarea></td>
+                  </tr>
+              </tbody></table>
+              </ons-card>
+          </div>
+          <div id="div_howtouse" class="keep-scrolling" style="text-align:center; overflow-y:scroll;">
+              <ons-card style="font-family:'Kanit'" class="card">
+                  <video id="v_howtouse" controls="" loop="" style="width:100%; height:auto">
+                    <source src="" type="video/mp4">
+                    This browser does not display the video tag.
+                  </video>
+              </ons-card>
+          </div>
+          <div id="div_logodownload" style="height:100%">
+              <ons-card style="font-family:'Kanit';height:98%; text-align:center" class="card">
+                  <a href="https://mnm19.com/f4h3m/www/images/healthymenuLogo.png" id="download_logo" download="download"><img src="https://mnm19.com/f4h3m/www/images/healthymenuLogo.png" width="95%"></a><br>
+                  <ons-label>คลิ๊กที่สัญลักษณ์โลโก้ เพื่อดาวน์โหลด</ons-label>
+              </ons-card>
+          </div>
+          <div id="div_hmcriteria" style="width:100%; height:100%">
+              <ons-card style="font-family:Kanit; width:95%; height:98%; overflow-y:scroll" class="keep-scrolling card">
+                  <table width="100%" height="100%" border="0">
+                      <tbody><tr>
+                          <td id="hmcriteria" width="100%" style="font-size:14px;"></td>
+                      </tr>
+                  </tbody></table>
+              </ons-card>
+          </div>
+          <div id="div_healthpoint" style="width:100%; height:100%">
+              <ons-card style="font-family:Kanit; height:97%; overflow-y:scroll" class="keep-scrolling card">
+                  <table width="100%" height="100%" border="0">
+                    <tbody><tr><td width="100%" align="center" style="height:30%"><img src="https://mnm19.com/f4h3m/www/images/healthpoint.png" width="60%" <="" td=""></td></tr>
+                    <tr><td width="100%" align="center" style="font-size:2em">ท่านมีคะแนน<br>Health Point</td></tr>
+                      <tr><td id="healthpoint" width="100%" style="font-size:3.5em; color: blue; text-align:center"></td></tr>
+                    <tr><td width="100%" align="center" style="font-size:1.4em">คะแนน</td>
+                  </tr></tbody></table>
+              </ons-card>
+          </div>
+          <div id="div_expcertificate" style="width:100%; height:100%">
+              <ons-card style="font-family:Kanit; height:97%; overflow-y:scroll" class="keep-scrolling card">
+                  <table id="tbl_expcertificate" width="100%" border="0">
+                    <tbody><tr>
+                        <td width="30%" align="center" class="highRowDB" style="color:white">วันที่อนุมัติ</td>
+                          <td width="30%" align="center" class="highRowDB" style="color:white">วันที่หมดอายุ</td>
+                          <td width="40%" align="center" class="highRowDB" style="color:white">ชื่อเมนู</td>
+                      </tr>
+                  </tbody></table>
+              </ons-card>
+          </div>
+      </div></ons-page><ons-page class="main_pages page page--setup_bg" id="setup-page" modifier="setup_bg" style="font-family:'Kanit';"><ons-toolbar class="noborder toolbar toolbar--transparent" modifier="transparent"><div class="left toolbar__left toolbar--transparent__left"><span id="btn1"><font style="color:white"></font></span></div><div class="center toolbar__center toolbar__title toolbar--transparent__center" style="text-align:center; font-family:Kanit"><font style="color:white">ตั้งค่าระบบ</font></div><div class="right toolbar__right toolbar--transparent__right"><span id="btn2"><font style="color:white"></font></span></div></ons-toolbar><div class="page__background page--setup_bg__background"></div><div class="page__content page--setup_bg__content">
+          
+          <div id="div_setup" class="keep-scrolling" style="text-align:center; overflow-y:scroll;">
+            <div id="div_setuptop">
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <ons-label>ชื่อ-นามสกุล<font style="color:red"> *</font></ons-label>
+                      <input id="name" placeholder="ชื่อ-นามสกุล" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                  </ons-card>
+                  <ons-card class="card">
+                      <ons-label>เพศ<font style="color:red"> *</font></ons-label><br>
+                      <ons-radio name="gender" id="gender_1" value="1" checked="" class="radio-button">
+        <input type="radio" class="radio-button__input" name="gender" value="1">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;ชาย</ons-label><br><br>
+                      <ons-radio name="gender" id="gender_2" value="2" class="radio-button">
+        <input type="radio" class="radio-button__input" name="gender" value="2">
+        <span class="radio-button__checkmark"></span>
+      </ons-radio><ons-label>&nbsp;&nbsp;หญิง</ons-label><br><br>
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <ons-label>ชื่อร้านอาหาร<font style="color:red"> *</font></ons-label>
+                      <input id="shopname" placeholder="ชื่อร้านอาหาร" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <ons-label>ที่อยู่<font style="color:red"> * (หากมีแต่บ้านเลขที่ ให้เพิ่ม หมู่ที่ หรือซอย หรือถนน ต่อท้าย)</font></ons-label>
+                      <input id="address" placeholder="บ้านเลขที่ หมู่ที่ ถนน" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <table width="100%" border="0">
+                          <tbody><tr>
+                              <td class="highRow">
+                                  <ons-label for="province">จังหวัด<font style="color:red"> *</font><ons-label><br>
+                                      <select id="province" placeholder="จังหวัด" onchange="clearDistrict()" onclick="clearDistrict()" onblur="fillDistrict()" class="tall" style="border:none; width:99%; font-size:large">
+                                  </select><br><br><br>
+                              </ons-label></ons-label></td>
+                          </tr>
+                          <tr>
+                              <td class="highRow">
+                                  <ons-label for="amphur">อำเภอ/เขต<font style="color:red"> *</font></ons-label><br>
+                                      <select id="amphur" placeholder="อำเภอ/เขต" onchange="clearSubDistrict()" onclick="clearSubDistrict()" onblur="fillSubDistrict()" class="tall" style="border:none; width:99%; font-size:large">
+                                  </select><br><br><br>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="highRow">
+                                  <ons-label for="tumbol">ตำบล/แขวง<font style="color:red"> *</font></ons-label><br>
+                                  <select id="tumbol" placeholder="ตำบล/แขวง" class="tall" style="border:none; width:99%; font-size:large" onblur="showRegMap();"></select><br><br>
+                              </td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <ons-label>เวลาเปิด-ปิด<font style="color:red"> *</font></ons-label>
+                      <input id="officehour" placeholder="เวลาเปิด-ปิด (เพิ่ม น. ต่อท้ายเวลา)" type="text" size="98%" style="width:99%; border:none; font-size:large" float="" onblur="checkOfficehour()">
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      <ons-label>หมายเลขโทรศัพท์<font style="color:red"> * (ไม่เว้นวรรค ไม่มีเครื่องหมายใดๆ)</font></ons-label>
+                      <input id="peopleid" placeholder="หมายเลขโทรศัพท์ (ไม่เว้นวรรค ไม่มีเครื่องหมายใดๆ)" type="number" size="98%" maxlength="13" style="width:99%; border:none; font-size:large" float="">
+                  </ons-card>
+                  <ons-card id="ons_map" style="font-family:'Kanit', height:250px" class="card">
+                      <ons-label>แผนที่ร้าน<font style="color:red"> *</font></ons-label>
+
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit', text-align:center" class="card">
+                      <ons-label>รูปถ่ายร้านอาหาร/เจ้าของร้าน<font style="color:red"> *</font></ons-label>
+                      <div id="div_imgusr" style="width:100%"><img src="https://mnm19.com/f4h3m/www/images/img-placeholder.png" width="100%" style="opacity:20%"></div>
+                      <input type="file" id="img_user" accept="" "images="" *"="" onchange="uploadFile(this.files[0])" hidden="">
+                  </ons-card>
+                  
+                  <ons-card style="font-family:'Kanit', text-align:center" class="card">
+                      <ons-label>LineMan url (ถ้ามี)<font style="color:red"> </font></ons-label>
+                      <input id="linemanurl" placeholder="LineMan url" type="text" size="98%" maxlength="30" style="width:99%; border:none; font-size:large" float="">
+                  </ons-card>
+                  <ons-card style="font-family:'Kanit'" class="card">
+                      รหัสผ่าน 6 หลัก<font style="color:red"> *</font>
+                      <table id="tbl_pin" width="100%" border="0" cellspacing="8">
+                          <tbody><tr class="highRow">
+                              <td align="center" class="pinsetupRow">
+                                  <input type="number" id="pin1" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                  <input type="number" id="pin2" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                  <input type="number" id="pin3" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                  <input type="number" id="pin4" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                  <input type="number" id="pin5" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                  <input type="number" id="pin6" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                              </td>
+                          </tr>
+                      </tbody></table>
+          </ons-card></div>
+        </div>
+          
+
+          <div id="div_pdpa" style="width:100%; height: 100%; display:none; overflow-y: scroll" class="keep-scrolling">
+              <ons-card class="card">
+                  <table width="100%" border="0">
+                      <tbody><tr>
+                          <td style="display: block">
+                              
+                          </td>                        
+                      </tr>
+                      <tr><td id="pdpa" width="100%"></td></tr>
+                      <tr>
+                          <td align="center">
+                              <input type="checkbox" id="inp_pdpa">
+                              <label for="inp_pdpa">ยอมรับเงื่อนไข</label>
+                              <ons-button modifier="large" id="btn_saveuser" style="width:85%; margin: 0 auto; background-color: red; font-family:'Kanit';'" disabled="true" class="button button--large">ลงทะเบียน</ons-button>
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </ons-card>
+          </div>
+      </div></ons-page></div><div class="ons-swiper-blocker"></div></div><div class="tabbar ons-tabbar__footer ons-swiper-tabbar" style="display: none;">
+              <ons-tab icon="fa-house-chimney" label="หน้าแรก" page="home.html" id="homepage" style="font-family:Kanit" active="" class="tabbar__item active"><input type="radio" style="display: none;"><button class="tabbar__button"><div class="tabbar__icon"><ons-icon icon="fa-house-chimney" class="ons-icon fa-house-chimney fa" aria-hidden="true"></ons-icon></div><div class="tabbar__label">หน้าแรก</div></button></ons-tab>
+              <ons-tab icon="fa-award" label="ใบรับรอง" page="certificate.html" id="certificate-page" style="font-family:'Kanit'" class="tabbar__item"><input type="radio" style="display: none;"><button class="tabbar__button"><div class="tabbar__icon"><ons-icon icon="fa-award" class="ons-icon fa-award fa" aria-hidden="true"></ons-icon></div><div class="tabbar__label">ใบรับรอง</div></button></ons-tab>
+              <ons-tab icon="fa-map-location-dot" label="เมนูชูสุขภาพ" page="hmmap.html" id="hmmap-page" style="font-family:'Kanit'" class="tabbar__item"><input type="radio" style="display: none;"><button class="tabbar__button"><div class="tabbar__icon"><ons-icon icon="fa-map-location-dot" class="ons-icon fa-map-location-dot fa" aria-hidden="true"></ons-icon></div><div class="tabbar__label">เมนูชูสุขภาพ</div></button></ons-tab>
+              <ons-tab icon="fa-microchip" label="อื่นๆ" page="other.html" id="other-page" style="font-family:'Kanit'" class="tabbar__item"><input type="radio" style="display: none;"><button class="tabbar__button"><div class="tabbar__icon"><ons-icon icon="fa-microchip" class="ons-icon fa-microchip fa" aria-hidden="true"></ons-icon></div><div class="tabbar__label">อื่นๆ</div></button></ons-tab>
+              <ons-tab icon="fa-cog" label="ตั้งค่า" page="setup.html" id="setuppage" style="font-family:'Kanit'" class="tabbar__item"><input type="radio" style="display: none;"><button class="tabbar__button"><div class="tabbar__icon"><ons-icon icon="fa-cog" class="ons-icon fa-cog fa" aria-hidden="true"></ons-icon></div><div class="tabbar__label">ตั้งค่า</div></button></ons-tab>
+          <div class="tabbar__border" style="display: none; width: 80.506px; transition: all; transform: translate3d(0%, 0px, 0px);"></div></div></ons-tabbar>
+      </div></ons-page>
+
+      <!-- The Home Page -->
+      <template id="home.html">
+          <ons-page class="main_pages" id="home-page" modifier="home_bg" style="font-family:'Kanit';">
+              <ons-toolbar class="noborder1" id="toolbar" modifier="transparent">
+                  <div class="left">
+                      <ons-toolbar-button id="btn_logout" style="color: white; display:none"><i class="fa-solid fa-right-from-bracket fa-lg"></i></ons-toolbar-button></div>
+                  <div class="center" style="text-align:center; font-family:Kanit"><font style="color:white"><span id="home_header">Food4Health V.3</span></font></div>
+                  <div class="right">
+                      <ons-toolbar-button id="btn_newmenu" style="color: lightyellow; display:none"><i class="fa-solid fa-file"></i></ons-toolbar-button></div>
+              </ons-toolbar>
+          
+              <div id="PINlogin" style="display:none">
+                  <div id="div_plogo">
+                      <img id="plogo" src="https://mnm19.com/f4h3m/www/images/f4h3mLogo.png" width="50%">
+                  </div>
+                  <div id="div_pinprogress" style="width:100%">
+                    <table width="100%" border="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div id="pd1" class="pd"></div>
+                            <div id="pd2" class="pd"></div>
+                            <div id="pd3" class="pd"></div>
+                            <div id="pd4" class="pd"></div>
+                            <div id="pd5" class="pd"></div>
+                            <div id="pd6" class="pd"></div>
+                </td>
+              </tr>
+                          <tr>
+                            <td align="center">กรุณาป้อนรหัสผ่านจำนวน 6 หลัก</td>
+                          </tr>
+                      </tbody></table>
+                  </div>
+                  <div id="div_ppin" style="font-family:'Kanit';">
+                    <table width="100%" border="0">
+                        <tbody><tr>
+                            <td width="100%">
+                                  <div id="pk1">1</div>
+                                  <div id="pk2">2</div>
+                                  <div id="pk3">3</div>                            
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>
+                                  <div id="pk4">4</div>
+                                  <div id="pk5">5</div>
+                                  <div id="pk6">6</div>                            
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>
+                                  <div id="pk7">7</div>
+                                  <div id="pk8">8</div>
+                                  <div id="pk9">9</div>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td width="100%" style="height:18%">
+                                  <div id="pkA">&nbsp;</div>
+                                  <div id="pk0">0</div>
+                                  <div id="pk11" style="height:100%"><i class="fa-solid fa-delete-left"></i></div>
+                              </td>
+                          </tr>
+                      </tbody></table>
+                  </div>
+              </div>
+              <div id="div_allHMmenu" style="width:100%; height:98%" class="keep-scrolling">
+                  <ons-card style="height:98%; font-family:'Kanit'; overflow-y:scroll;" class="keep-scrolling">
+                      <table id="tbl_allHMmenu" width="100%" border="0" style="overflow-y:hidden">
+                          <tbody><tr><td colspan="4" align="center">รายการเมนูทั้งหมด</td></tr>
+                          <tr>
+                              <td width="5%" style="background-color:#BBE2EC" align="center" class="highRow">ลบ</td>
+                              <td width="5%" style="background-color:#BBE2EC" align="center">ผ่าน</td>
+                              <td width="70%" style="background-color:#BBE2EC" align="center">ชื่อเมนู</td>
+                              <td width="20%" style="background-color:#BBE2EC" align="center">ภาพ</td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+              </div>
+              <div id="div_makemenu" class="keep-scrolling">
+                  <ons-card id="ons_menudetail" style="font-family:Kanit; padding-top: 2px; padding-bottom: 2px;">
+                      <div id="div_menudetail">
+                          <table width="100%" border="0" style="border-collapse: collapse">
+                              <tbody><tr>
+                                  <td width="50%" class="highRow">ประเภทอาหาร&nbsp;<font style="color: red">*</font>
+                                      <!--<input type="text" id="lst_menutype" list="menutypelist" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; font-family:'Kanit'; width:90%;"></input>-->
+                                      <!--<datalist id="menutypelist">-->
+                                    <select id="lst_menutype" style="font-family:'Kanit'; font-size:large; border:none;">
+                                          <option value="1">1. ข้าวและกับข้าว</option>
+                                          <option value="2">2. อาหารจานเดียว</option>
+                                          <option value="3">3. อาหารตามสั่ง</option>
+                                          <option value="4">4. อาหารประเภทเส้น</option>
+                                          <option value="5">5. ขนม</option>
+                                          <option value="6">6. เครื่องดื่ม</option>
+                                          <option value="7">7. ผลไม้</option>
+                                      </select>
+                                      <!--</datalist>-->
+                                  </td>
+                                  <td class="highRow">ชื่อเมนูอาหาร&nbsp;<font style="color: red">*</font>
+                                      <input type="text" id="menuname" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; width:90%" onblur="checkDuplicateMenuName()">
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td width="40%" class="highRow">จำนวนคนกิน&nbsp;<font style="color: red">*</font><br>
+                                      <input type="text" id="noofeater" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; font-family:'Kanit'; width:50%;">
+                                  </td>
+                                  <td class="highRow">ราคา (บาท)&nbsp;<font style="color: red">*</font><br>
+                                      <input type="text" id="price" style="border:1px solid lightgrey; border-radius: 5%; font-size:large; width:50%">
+                                  </td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                  </ons-card>
+                  <ons-card id="ons_analyze" style="padding-top:2px; padding-bottom:2px">
+                      <table width="100%" border="0" style="font-size:0.9em">
+                          <tbody><tr>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">คาร์โบไฮเดรต %</td>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">โปรตีน %</td>
+                              <td width="32%" style="background-color:#0D9276; color:white" align="center">ไขมัน %</td>
+                          </tr>
+                          <tr>
+                              <td align="center"><span id="carbohydrate_r">&nbsp;</span></td>
+                              <td align="center"><span id="protein_r">&nbsp;</span></td>
+                              <td align="center"><span id="fat_r">&nbsp;</span></td>
+                          </tr>
+                      </tbody></table>
+                      <table width="100%" border="0">
+                          <tbody><tr>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">พลังงาน<br><font style="font-size:0.5em">(กิโลแคลอรี)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">โซเดียม<br><font style="font-size:0.5em">(มิลลิกรัม)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">น้ำตาล<br><font style="font-size:0.5em">(กรัม)</font></td>
+                              <td width="19%" style="background-color:#FFF6E9" align="center">ไขมัน<br><font style="font-size:0.5em">(กรัม)</font></td>
+                          </tr>
+                          <tr>
+                              <td align="center"><span id="dash_energy">&nbsp;</span></td>
+                              <td align="center"><span id="dash_sodium">&nbsp;</span></td>
+                              <td align="center"><span id="dash_sugar">&nbsp;</span></td>
+                              <td align="center"><span id="dash_fat">&nbsp;</span></td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+                  <ons-card id="ons_ctrlbutton" style="padding-top:2px; padding-bottom:2px">
+                      <table width="100%" border="0">
+                          <tbody><tr align="center">
+                              <td><ons-button id="btn_addmenu" style="background-color:#4395A3; color:black; font-family:'Kanit';font-size:12px">+วัตถุดิบ</ons-button></td>
+                              <td><ons-button id="btn_savemenu" style="background-color:#F7CE8E; color:black; font-family:'Kanit';font-size:12px">บันทึก</ons-button></td>
+                              <td><ons-button id="btn_analyze" style="font-family:'Kanit'; background-color:#96775F; color:black;font-size:12px">วิเคราะห์</ons-button></td>
+                              <td><ons-button id="btn_snapshot" style="background-color:#E26119; color:black; font-family:'Kanit';font-size:12px"><i class="fa-solid fa-camera"></i></ons-button><input type="file" id="selectedimage" accept"images="" *"="" onchange="uploadHMFile(this.files[0])" hidden=""></td>
+                              <td><ons-button id="btn_editmenu" style="background-color:#E26119; color:black; font-family:'Kanit';font-size:12px">แก้ไข</ons-button></td>
+                          </tr>
+                      </tbody></table>
+                  </ons-card>
+
+                  <ons-card id="onsIngredient" style="display:none1; font-family:Kanit; padding-top:2px; padding-bottom:2px">
+                      <div id="div_menuingredient" style="overflow-y:scroll" class="keep-scrolling">
+                          <table id="tbl_menuingredient" width="100%" border="0" cellspace="2" style="overflow-y:hidden">
+                              <tbody><tr align="center">
+                                  <td class="highTD" width="5%" style="font-family:'Kanit'; border:1px solid #FBE7C6; border-radius: 10px 0 0 10px">ลบ</td>
+                                  <td width="65%" class="highTD">วัตถุดิบ</td>
+                                  <td width="15%" class="highTD">ปริมาณ</td>
+                                  <td width="15%" class="highTD" style="font-family:'Kanit'; border:1px solid #FBE7C6; border-radius: 0 10px 10px 0">หน่วย</td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                      <div id="div_addpopup" style="display:none; overflow-y:scroll" class="keep-scrolling">
+                          <div align="right" style="width:100%"><i id="btn_popupClose" class="fa-solid fa-circle-xmark"></i></div>
+                          <ons-card style="font-family:'Kanit'">
+                              <ons-label>ค้นหาชื่อวัตถุดิบ</ons-label>
+                              <input type="text" id="searchText" placeholder="คำค้นหา อย่างน้อย 2 ตัวอักษร" style="font-family:'Kanit'; height:'35px'; border:none; font-size:large; width: 70%">
+                              <ons-button id="btn_ingredientSearch" modifier="cta">
+                                  <ons-icon icon="md-search" size="30px" fixed-width="true"></ons-icon>
+                              </ons-button>
+
+                              <ons-label>ชื่อวัตถุดิบ</ons-label>
+                              <select id="ingList" onblur="getUnit()" class="highTD" style="font-family:'kanit';font-size:large; width:99%"></select>
+
+                              <ons-label>ปริมาณ</ons-label><br>
+                              <table width="100%">
+                                  <tbody><tr>
+                                      <td width="40%">
+                                          <input type="text" id="adding_quantity" class="pPopup" style="border: 1px solid red; font-family:'Kanit'; font-size:large; width:65%">
+                                      </td>
+                                      <td width="35%">
+                                          <select id="quanunit" style="font-family:'Kanit'; font-size:large; border:none;">
+                                              <option value="0">กรัม</option>
+                                              <option value="1">ช้อนชา</option>
+                                              <option value="2">ช้อนกินข้าว</option>
+                                              <option value="3">ทัพพี</option>
+                                              <option value="4">ถ้วยตวง</option>
+                                              <option value="5">ส่วน</option>
+                                              <option value="6">ฟอง</option>
+                                              <option value="7">ผล/ยวง/ฝัก</option>
+                                              <option value="8">ชิ้นพอคำ</option>
+                                              <option value="9">เม็ด</option>
+                                          </select>
+                                      </td>
+                                      <td width="25%">
+                                          <ons-button id="btn_addingsave" style="font-family:'Kanit'">บันทึก</ons-button>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="3" width="100%" style="font-size:1em">
+                      <div id="aQ1_2" class="autoQ">1/2</div><div id="aQ1_3" class="autoQ">1/3</div><div id="aQ1_4" class="autoQ">1/4</div><div id="aQ3_4" class="autoQ">3/4</div><div id="aQ1_8" class="autoQ">1/8</div>
+                                      </td>
+                                  </tr>
+                              </tbody></table>
+                          </ons-card>
+                      </div>
+                  </ons-card>
+                  <ons-card id="onsAnalyze" style="font-family:'Kanit'; padding-top:2px; padding-bottom:2px">
+                      <div id="div_ingredientPass" class="keep-scrolling" style="overflow-y:scroll;">
+                          <table width="100%" border="0" style="overflow-y:hidden">
+                              <tbody><tr><td colspan="2" align="right"><i id="btn_ingPassClose" class="fa-solid fa-circle-xmark" data-fa-transform="grow-2"></i></td></tr>
+                              <tr>
+                                  <td colspan="2" align="center"><h1><font style="color:red">ยังไม่ผ่านเกณฑ์วัตถุดิบ</font></h1></td>
+                              </tr>
+                              <tr>
+                                  <td colspan="2" align="center">ข้อกำหนดเกณฑ์รับรองเมนูชูสุขภาพ</td>
+                              </tr>
+                              <tr>
+                                  <td width="8%" class="lightBlue">เกณฑ์</td>
+                                  <td width="92%" align="center" class="lightBlue">ข้อกำหนด</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond1" align="center"></td>
+                                  <td>1. ทำจากอาหารกลุ่มเนื้อสัตว์ ปลา ถั่ว ไข่ เต้าหู้ และผัก</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond2" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">2. มีส่วนประกอบกลุ่มข้าวแป้ง ไม่เกิน 2 ทัพพี/คน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond3" align="center"></td>
+                                  <td>3. ใช้เนื้อสัตว์ที่มีไขมันต่ำ ถั่วเมล็ดแห้ง เช่นปลา เนื้อสัตว์ไม่ติดมัน 2-4 ช้อนกินข้าว/คน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond4" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">4. ใช้ผักและผลไม้ที่ปลอดภัยต่อสุขภาพ เช่นผักอินทรีย์ ผักพื้นบ้าน ไม่น้อยกว่า 2 ทัพพี หรือ 140 กรัมต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond5" align="center"></td>
+                                  <td>5. ไม่หวานจัด โดยใช้น้ำตาลไม่เกิน ครึ่งช้อนชาต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond6" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">6. เป็นอาหารที่ไม่มันจัด ใช้น้ำมันไม่เกิน 2 ช้อนชา หรือหัวกะทิไม่เกิน 2 ช้อนกินข้าวต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond7" align="center"></td>
+                                  <td>7. เป็นอาหารที่ไม่เค็มจัด ใช้น้ำปลา/ซีอิ๊ว/ซอสปรุงรส ไม่เกิน 1 ช้อนชา หรือเกลือไม่เกิน 1/8 ช้อนชาต่อคน</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond8" align="center" class="llightBlue"></td>
+                                  <td class="llightBlue">8. ต้องใช้เครื่องปรุงรสเสริมไอโอดีน อย่างน้อย 1 รายการ</td>
+                              </tr>
+                              <tr>
+                                  <td id="cond9" align="center"></td>
+                                  <td>9. ไม่ใช้ผงชูรส, ซุปก้อนสำเร็จรูป หรือผงปรุงรส</td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                      <div id="div_recipeAdjust" class="keep-scrolling" style="overflow-y:scroll; font-family:'Kanit'">
+                          <table id="tbl_recipeAdjust" width="100%" border="0" style="overflow-y:hidden; height:98%">
+                              <tbody><tr><td colspan="2" align="right"><i id="btn_recpAdjClose" class="fa-solid fa-circle-xmark"></i></td></tr>
+                              <tr>
+                                  <td align="center" id="pass_fail"><font style="color:red"><h1><span id="pass_fail1"></span></h1></font></td>
+                              </tr>
+                              <tr>
+                                  <td align="center"><span id="cause"></span></td>
+                              </tr>
+                              <tr>
+                                  <td><span id="howtofix"></span></td>
+                              </tr>
+                          </tbody></table>
+                      </div>
+                  </ons-card>
+              </div>
+          </ons-page>
+      </template>
+
+      <!--certificate.html-->
+      <template id="certificate.html">
+        <ons-page class="main_pages" id="certificate-page" modifier="certificate_bg" style="font-family:'Kanit';">
+            <ons-toolbar class="noborder" modifier="transparent">
+                <div class="left">&nbsp;</div>
+                <div class="center" style="text-align:center; font-family:Kanit"><font style="color:white">ใบรับรองเมนูชูสุขภาพ</font></div>
+                <div class="right"><span id="btn_certdownload" hidden=""><font style="color:white"><li class="fa-solid fa-file-arrow-down fa-xl"></li>&nbsp;&nbsp;</font></span></div>
+            </ons-toolbar>
+            <ons-card id="ons_certificate" style="font-family:'Kanit'; height:98%">
+                <div id="div_certificate" style="width:100%; height:100%; overflow-y:scroll" class="keep-scrolling">
+                    <div width="100%" style="border:1px solid #E26119; border-radius:10px; padding:10px 5px 10px 28px">
+                                <ons-radio name="certtype" id="hm" value="1" checked="" onchange="changeCerttype()"></ons-radio><ons-label>&nbsp;&nbsp;เมนูชูสุขภาพ</ons-label><br>
+                                <ons-radio name="certtype" id="s20" value="2" onchange="changeCerttype()"></ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดโซเดียม 20%</ons-label><br>
+                                <ons-radio name="certtype" id="u20" value="3" onchange="changeCerttype()"></ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดน้ำตาล 20%</ons-label><br>
+                                <ons-radio name="certtype" id="f20" value="4" onchange="changeCerttype()"></ons-radio><ons-label>&nbsp;&nbsp;เมนูทางเลือก ลดไขมัน 20%</ons-label><br>
+                            </div><table id="tbl_certificate" width="100%" border="0" style="overflow-y:hidden; border-collapse:collapse">
+                        <tbody><tr>
+                            
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr class="highRow">
+                            <td colspan="3" align="center" style="background-color:#BBE2EC">รายชื่อเมนูที่ผ่านการรับรอง</td>
+                        </tr>
+                    </tbody></table>
+                </div>
+            </ons-card>
+      </ons-page>
+      </template>
+
+      <!--hmmap.html-->
+      <template id="hmmap.html">
+          <ons-page class="main_pages" id="hmmap-page" modifier="hmmap_bg" style="font-family:'Kanit';">
+              <ons-toolbar class="noborder" modifier="transparent">
+                  <div class="left"><span id="btn_locreset" hidden=""><font style="color:white">&nbsp;&nbsp;<i class="fa-solid fa-arrow-left"></i></font></span></div>
+                  <div class="center" style="text-align:center; font-family:Kanit"><font style="color:white">แผนที่เมนูชูสุขภาพ</font></div>
+                  <div class="right"><span id="btn_save"><font style="color:white"></font></span></div>
+              </ons-toolbar>
+
+              <div id="allmap"></div>
+              <div id="div_nearyou" style="text-align:center">
+                  <ons-radio name="maprange" id="allrange" value="1" checked="" onchange="changeMapRange();"></ons-radio><ons-label>&nbsp;&nbsp;แสดงทั้งหมด</ons-label>&nbsp;&nbsp;&nbsp;
+                  <ons-radio name="maprange" id="nearyou" value="2" onchange="changeMapRange();"></ons-radio><ons-label>&nbsp;&nbsp;ร้านใกล้คุณ</ons-label><br>
+              </div>
+
+              <div id="div_hmmap" class="keep-scrolling">
+                  <div id="div_markerShop" class="keep-scrolling">
+                      <div id="div_markerShop1">
+                          <table id="tbl_markerShop" width="100%" border="0" cellpadding="7">
+                              <tbody><tr>
+                                  <td width="5%"></td>
+                                  <td width="95%" align="center" class="f12"></td>
+                                  <td width="1px" style="visibility:collapse;"></td>
+                              </tr>       
+                              <tr>
+                                  <td colspan="3" align="center" class="f12">โปรดเลือกเมนูชูสุขภาพ</td>
+                              </tr>       
+                          </tbody></table>    
+                      </div>
+                  </div>
+                  <div id="div_markershopDetail">
+                      <ons-card style="font-family:'Kanit'; text-align:center">
+                          <ons-label><font size="+2.5"><span id="loc_menuname"></span></font></ons-label>
+                          <div id="div_hmImg" style="width:100%"></div>
+                      </ons-card>
+                      <ons-card style="font-family:'Kanit';">
+                          <div id="div_hmMapNut">
+                              <table width="100%" border="0" style="border-collapse:collapse, border:2px solid white">
+                                  <tbody><tr>
+                                      <td class="highRowG"><font color="white">ชื่อร้าน:</font></td>
+                                      <td class="highRowY"><font size="+1.75"><span id="loc_name"></span></font></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">ที่อยู่:</font></td>
+                                      <td class="highRowY"><span id="loc_address"></span></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">เวลาเปิด-ปิด:</font></td>
+                                      <td class="highRowY"><span id="loc_officehour"></span></td>
+                                  </tr>
+                                  <tr>
+                                      <td class="highRowG"><font color="white">โทรศัพท์:</font></td>
+                                      <td class="highRowY"><span id="loc_telno"></span></td>
+                                  </tr>
+                              </tbody></table>
+                          </div>
+                      </ons-card>
+                      <ons-card style="font-family:'Kanit'">
+                          <div>
+                              <table width="100%" border="0">
+                                  <tbody><tr>
+                                      <td colspan="2" align="center"><font size="+1.8">คุณค่าทางโภชนาการ</font></td>
+                                  </tr>
+                                  <tr class="highRowDB">
+                                      <td align="center">รายการ</td>
+                                      <td align="center">ปริมาณ</td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>พลังงาน/Energy (kcal)</td>
+                                      <td align="center"><span id="loc_energy"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>คาร์โบไฮเดรท/Carbohydrate (g)</td>
+                                      <td align="center"><span id="loc_carbohydrate"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โปรตีน/Protein (g)</td>
+                                      <td align="center"><span id="loc_protein"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ไขมัน/Fat (g)</td>
+                                      <td align="center"><span id="loc_fat"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>แคลเซียม/Calcium (mg)</td>
+                                      <td align="center"><span id="loc_calcium"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โพแทสเซียม/Potassium (mg)</td>
+                                      <td align="center"><span id="loc_potassium"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>เส้นใยอาหาร/Dietaryfiber (g)</td>
+                                      <td align="center"><span id="loc_dietaryfiber"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>น้ำตาล/Sugar (g)</td>
+                                      <td align="center"><span id="loc_sugar"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>โซเดียม/Sodium (mg)</td>
+                                      <td align="center"><span id="loc_sodium"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>คอเลสเตอรอล/Cholesterol (g)</td>
+                                      <td align="center"><span id="loc_cholesterol"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>เหล็ก/Iron (mg)</td>
+                                      <td align="center"><span id="loc_iron"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน เอ/Vitamin A (IU)</td>
+                                      <td align="center"><span id="loc_vitamina"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>วิตามิน บี1/Vitamin B1 (mg)</td>
+                                      <td align="center"><span id="loc_vitaminb1"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน บี2/Vitamin B2 (mg)</td>
+                                      <td align="center"><span id="loc_vitaminb2"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>วิตามิน ซี/Vitamin C (mg)</td>
+                                      <td align="center"><span id="loc_vitaminc"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>วิตามิน อี/Vitamin E (mg)</td>
+                                      <td align="center"><span id="loc_vitamine"></span></td>
+                                  </tr>                                <tr class="highRow">
+                                      <td>ฟอสฟอรัส/Phosphorus (mg)</td>
+                                      <td align="center"><span id="loc_phosphorus"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>แมกนีเซียม/Magnesium (mg)</td>
+                                      <td align="center"><span id="loc_magnesium"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ทองแดง/Copper (mg)</td>
+                                      <td align="center"><span id="loc_copper"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>สังกะสี/Zinc (mg)</td>
+                                      <td align="center"><span id="loc_zinc"></span></td>
+                                  </tr>
+                                  <tr class="highRow">
+                                      <td>ไอโอดีน/Iodine (mg)</td>
+                                      <td align="center"><span id="loc_iodine"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>เบต้าแคโรทีน/Betacarotine (mg)</td>
+                                      <td align="center"><span id="loc_betacarotine"></span></td>
+                                  </tr>
+
+                                  <tr class="highRowLB">
+                                      <td>ไนอาซิน/Niacin (mg)</td>
+                                      <td align="center"><span id="loc_niacin"></span></td>
+                                  </tr>
+                                  <tr class="highRowLB">
+                                      <td>โฟเลต/Folate (mg)</td>
+                                      <td align="center"><span id="loc_folate"></span></td>
+                                  </tr>
+                              </tbody></table>
+                          </div>
+                      </ons-card>
+                      <ons-card id="ons_lochmmap" style="font-family:'Kanit';">
+
+                      </ons-card>
+                  </div>
+              </div>
+          </ons-page>
+      </template>
+
+      <!--other.html-->
+      <template id="other.html">
+        <ons-page class="main_pages" id="other-page" modifier="other_bg" style="font-family:'Kanit';">
+            <ons-toolbar class="noborder" modifier="transparent">
+                <div class="left"><span id="btn_otherBack" hidden=""><font style="color:white">&nbsp;&nbsp;<li class="fa-solid fa-arrow-left"></li></font></span></div>
+                <div class="center" style="text-align:center; font-family:Kanit"><font style="color:white; font-family:Kanit"><span id="other_header">อื่นๆ</span></font></div>
+                <div class="right"><span id="btn_save"><font style="color:white"></font></span></div>
+            </ons-toolbar>
+            <div id="div_othermenu">
+                <ons-card style="font-family:'Kanit'; position:relative; top:5%">
+                    <ons-button id="btn_suggestion" modifier="large" width="90%" style="font-family:'Kanit'">แนะนำติชม</ons-button><br><br>
+                    <ons-button id="btn_howtouse" modifier="large" width="90%" style="font-family:'Kanit'">วิธีการใช้งาน</ons-button><br><br>
+                    <ons-button id="btn_logodownload" modifier="large" width="90%" style="font-family:'Kanit'">ดาวน์โหลดสัญลักษณ์โลโก้</ons-button><br><br>
+                    <ons-button id="btn_HMcriteria" modifier="large" width="90%" style="font-family:'Kanit'">เกณฑ์รับรองเมนูชูสุขภาพและเมนูทางเลือก</ons-button><br><br>
+                    <ons-button id="btn_healthPoint" modifier="large" width="90%" style="font-family:'Kanit'">คะแนน Health Point</ons-button><br><br>
+                    <ons-button id="btn_expcertificate" modifier="large" width="90%" style="font-family:'Kanit'">ใบรับรองฯ ที่กำลังจะหมดอายุ</ons-button>
+                </ons-card>
+            </div>
+            <div id="div_sugggroup" class="keep-scrolling" style="text-align:center; height:100%">
+                <ons-card style="font-family:'Kanit'; height:98%">
+                <table id="tbl_suggestion" width="100%">
+                    <tbody><tr>
+                        <td width="100%">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" class="highRow">
+                            <select id="suggType" size="1" style="width:80%; line-height:90%; height:90%; font-family:'Kanit'; font-size:large" onchange="suggChange()">
+                                <option value="1">การใช้งาน</option>
+                                <option value="2">เพิ่มความสามารถของโปรแกรม</option>
+                                <option value="7">ขอเพิ่มวัตถุดิบที่ไม่มีในรายการ</option>
+                                <option value="8">ความพึงพอใจ</option>
+                            </select>
+                            <button id="btn_suggsend" class="ui blue button" style="font-family:'Kanit'; background-color:#4395A3">ส่ง</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="sp_satisfaction" hidden="">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s10.png" id="s_s1">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s20.png" id="s_s2">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s30.png" id="s_s3">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s40.png" id="s_s4">&nbsp;<img src="https://mnm19.com/f4h3m/www/images/s50.png" id="s_s5"></span>
+                            <textarea id="txt_suggestion" rows="15" style="width:98%; max-width:100%; height:100%; font-family:'Kanit'; font-size:large" placeholder="กรุณาเขียนคำแนะนำของท่าน เมื่อเสร็จแล้วกดปุ่ม 'ส่ง'"></textarea></td>
+                    </tr>
+                </tbody></table>
+                </ons-card>
+            </div>
+            <div id="div_howtouse" class="keep-scrolling" style="text-align:center; overflow-y:scroll;">
+                <ons-card style="font-family:'Kanit'">
+                    <video id="v_howtouse" controls="" loop="" style="width:100%; height:auto">
+                      <source src="" type="video/mp4">
+                      This browser does not display the video tag.
+                    </video>
+                </ons-card>
+            </div>
+            <div id="div_logodownload" style="height:100%">
+                <ons-card style="font-family:'Kanit';height:98%; text-align:center">
+                    <a href="https://mnm19.com/f4h3m/www/images/healthymenuLogo.png" id="download_logo" download="download"><img src="https://mnm19.com/f4h3m/www/images/healthymenuLogo.png" width="95%"></a><br>
+                    <ons-label>คลิ๊กที่สัญลักษณ์โลโก้ เพื่อดาวน์โหลด</ons-label>
+                </ons-card>
+            </div>
+            <div id="div_hmcriteria" style="width:100%; height:100%">
+                <ons-card style="font-family:Kanit; width:95%; height:98%; overflow-y:scroll" class="keep-scrolling">
+                    <table width="100%" height="100%" border="0">
+                        <tbody><tr>
+                            <td id="hmcriteria" width="100%" style="font-size:14px;"></td>
+                        </tr>
+                    </tbody></table>
+                </ons-card>
+            </div>
+            <div id="div_healthpoint" style="width:100%; height:100%">
+                <ons-card style="font-family:Kanit; height:97%; overflow-y:scroll" class="keep-scrolling">
+                    <table width="100%" height="100%" border="0">
+                      <tbody><tr><td width="100%" align="center" style="height:30%"><img src="https://mnm19.com/f4h3m/www/images/healthpoint.png" width="60%" <="" td=""></td></tr>
+                      <tr><td width="100%" align="center" style="font-size:2em">ท่านมีคะแนน<br>Health Point</td></tr>
+                        <tr><td id="healthpoint" width="100%" style="font-size:3.5em; color: blue; text-align:center"></td></tr>
+                      <tr><td width="100%" align="center" style="font-size:1.4em">คะแนน</td>
+                    </tr></tbody></table>
+                </ons-card>
+            </div>
+            <div id="div_expcertificate" style="width:100%; height:100%">
+                <ons-card style="font-family:Kanit; height:97%; overflow-y:scroll" class="keep-scrolling">
+                    <table id="tbl_expcertificate" width="100%" border="0">
+                      <tbody><tr>
+                          <td width="30%" align="center" class="highRowDB" style="color:white">วันที่อนุมัติ</td>
+                            <td width="30%" align="center" class="highRowDB" style="color:white">วันที่หมดอายุ</td>
+                            <td width="40%" align="center" class="highRowDB" style="color:white">ชื่อเมนู</td>
+                        </tr>
+                    </tbody></table>
+                </ons-card>
+            </div>
+        </ons-page>
+      </template>
+
+      <!--setup.html-->
+      <template id="setup.html">
+        <ons-page class="main_pages" id="setup-page" modifier="setup_bg" style="font-family:'Kanit';">
+            <ons-toolbar class="noborder" modifier="transparent">
+                <div class="left"><span id="btn1"><font style="color:white"></font></span></div>
+                <div class="center" style="text-align:center; font-family:Kanit"><font style="color:white">ตั้งค่าระบบ</font></div>
+                <div class="right"><span id="btn2"><font style="color:white"></font></span></div>
+            </ons-toolbar>
+            <div id="div_setup" class="keep-scrolling" style="text-align:center; overflow-y:scroll;">
+              <div id="div_setuptop">
+                    <ons-card style="font-family:'Kanit'">
+                        <ons-label>ชื่อ-นามสกุล<font style="color:red"> *</font></ons-label>
+                        <input id="name" placeholder="ชื่อ-นามสกุล" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                    </ons-card>
+                    <ons-card>
+                        <ons-label>เพศ<font style="color:red"> *</font></ons-label><br>
+                        <ons-radio name="gender" id="gender_1" value="1" checked=""></ons-radio><ons-label>&nbsp;&nbsp;ชาย</ons-label><br><br>
+                        <ons-radio name="gender" id="gender_2" value="2"></ons-radio><ons-label>&nbsp;&nbsp;หญิง</ons-label><br><br>
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit'">
+                        <ons-label>ชื่อร้านอาหาร<font style="color:red"> *</font></ons-label>
+                        <input id="shopname" placeholder="ชื่อร้านอาหาร" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit'">
+                        <ons-label>ที่อยู่<font style="color:red"> * (หากมีแต่บ้านเลขที่ ให้เพิ่ม หมู่ที่ หรือซอย หรือถนน ต่อท้าย)</font></ons-label>
+                        <input id="address" placeholder="บ้านเลขที่ หมู่ที่ ถนน" type="text" size="98%" style="width:99%; border:none; font-size:large" float="">
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit'">
+                        <table width="100%" border="0">
+                            <tbody><tr>
+                                <td class="highRow">
+                                    <ons-label for="province">จังหวัด<font style="color:red"> *</font><ons-label><br>
+                                        <select id="province" placeholder="จังหวัด" onchange="clearDistrict()" onclick="clearDistrict()" onblur="fillDistrict()" class="tall" style="border:none; width:99%; font-size:large">
+                                    </select><br><br><br>
+                                </ons-label></ons-label></td>
+                            </tr>
+                            <tr>
+                                <td class="highRow">
+                                    <ons-label for="amphur">อำเภอ/เขต<font style="color:red"> *</font></ons-label><br>
+                                        <select id="amphur" placeholder="อำเภอ/เขต" onchange="clearSubDistrict()" onclick="clearSubDistrict()" onblur="fillSubDistrict()" class="tall" style="border:none; width:99%; font-size:large">
+                                    </select><br><br><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="highRow">
+                                    <ons-label for="tumbol">ตำบล/แขวง<font style="color:red"> *</font></ons-label><br>
+                                    <select id="tumbol" placeholder="ตำบล/แขวง" class="tall" style="border:none; width:99%; font-size:large" onblur="showRegMap();"></select><br><br>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </ons-card>
+
+                    <ons-card style="font-family:'Kanit'">
+                        <ons-label>เวลาเปิด-ปิด<font style="color:red"> *</font></ons-label>
+                        <input id="officehour" placeholder="เวลาเปิด-ปิด (เพิ่ม น. ต่อท้ายเวลา)" type="text" size="98%" style="width:99%; border:none; font-size:large" float="" onblur="checkOfficehour()">
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit'">
+                        <ons-label>หมายเลขโทรศัพท์<font style="color:red"> * (ไม่เว้นวรรค ไม่มีเครื่องหมายใดๆ)</font></ons-label>
+                        <input id="peopleid" placeholder="หมายเลขโทรศัพท์ (ไม่เว้นวรรค ไม่มีเครื่องหมายใดๆ)" type="number" size="98%" maxlength="13" style="width:99%; border:none; font-size:large" float="">
+                    </ons-card>
+                    <ons-card id="ons_map" style="font-family:'Kanit', height:250px">
+                        <ons-label>แผนที่ร้าน<font style="color:red"> *</font></ons-label>
+
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit', text-align:center">
+                        <ons-label>รูปถ่ายร้านอาหาร/เจ้าของร้าน<font style="color:red"> *</font></ons-label>
+                        <div id="div_imgusr" style="width:100%"><img src="https://mnm19.com/f4h3m/www/images/img-placeholder.png" width="100%" style="opacity:20%"></div>
+                        <input type="file" id="img_user" accept="" "images="" *"="" onchange="uploadFile(this.files[0])" hidden="">
+                    </ons-card>
+                    
+                    <ons-card style="font-family:'Kanit', text-align:center">
+                        <ons-label>LineMan url (ถ้ามี)<font style="color:red"> </font></ons-label>
+                        <input id="linemanurl" placeholder="LineMan url" type="text" size="98%" maxlength="30" style="width:99%; border:none; font-size:large" float="">
+                    </ons-card>
+                    <ons-card style="font-family:'Kanit'">
+                        รหัสผ่าน 6 หลัก<font style="color:red"> *</font>
+                        <table id="tbl_pin" width="100%" border="0" cellspacing="8">
+                            <tbody><tr class="highRow">
+                                <td align="center" class="pinsetupRow">
+                                    <input type="number" id="pin1" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                    <input type="number" id="pin2" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                    <input type="number" id="pin3" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                    <input type="number" id="pin4" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                    <input type="number" id="pin5" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                    <input type="number" id="pin6" size="1" length="1" style="text-align:center; width:8%; font-size:large">
+                                </td>
+                            </tr>
+                        </tbody></table>
+            </ons-card></div>
+          </div>
+            
+
+            <div id="div_pdpa" style="width:100%; height: 100%; display:none; overflow-y: scroll" class="keep-scrolling">
+                <ons-card>
+                    <table width="100%" border="0">
+                        <tbody><tr>
+                            <td style="display: block">
+                                
+                            </td>                        
+                        </tr>
+                        <tr><td id="pdpa" width="100%"></td></tr>
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" id="inp_pdpa">
+                                <label for="inp_pdpa">ยอมรับเงื่อนไข</label>
+                                <ons-button modifier="large" id="btn_saveuser" style="width:85%; margin: 0 auto; background-color: red; font-family:'Kanit';'" disabled="true">ลงทะเบียน</ons-button>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </ons-card>
+            </div>
+        </ons-page>
+      </template>
+    </body">
+  </body>
+</html>
