@@ -1,0 +1,513 @@
+@font-face {
+  font-family: Kanit;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/kanit/v12/nKKZ-Go6G5tXcraBGwCKd6xBDFs.woff2) format('woff2');
+  unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
+body{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+#home-page .page--home_bg__background{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+	background-color: transparent;
+}
+
+#certificate-page .page--certificate_bg__background{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+	background-color: transparent;
+}
+
+#hmmap-page .page--hmmap_bg__background{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+	background-color: transparent;
+}
+
+#other-page .page--other_bg__background{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+	background-color: transparent;
+}
+
+#setup-page .page--setup_bg__background{
+/*    background: url('https://mnm19.com/f4h3m/www/images/f4h3m-background.png');*/
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+	background-color: transparent;
+}
+
+/*Home.html*/
+/*---------*/
+.highTD{
+    height:35px;
+    background-color:linen;
+}
+
+.highRow{
+    height:35px;
+    background-color: transparent;
+}
+
+.highRowY{
+    height:35px;
+    background-color:#FFF6E9;
+}
+
+.highRowDB{
+    height:35px;
+    background-color:#40A2E3;
+}
+
+.highRowLB{
+    height:35px;
+    background-color:#BBE2EC;
+}
+
+.highRowG{
+    height:35px;
+    background-color:#0D9276;
+}
+
+.pinsetupRow{
+	height:calc(width * 0.1);
+}
+
+#div_analyzeresult{
+    width:100%;
+    overflow-y: scroll;
+
+}
+
+#allmap{
+    width:100%;
+    height:95%;
+    background-color:transparent;
+}
+
+#div_nearyou{
+    position:relative;
+    width:100%;
+    height:5%;
+    background-color:lightblue;
+}
+
+#div_hmmap{
+    position:relative;
+    height:100%;
+    overflow-y:scroll;
+}
+
+#div_markerShop{
+    width:100%;
+    height:99.8%;
+    background-color:transparent;
+    display:none;
+    overflow-y:scroll;
+}
+
+#div_markerShop1{
+	position:relative;
+	float:left;
+	width:100% ;
+    height:100%;
+	background-color:lightblue;
+	overflow-y:hidden;
+}
+
+#div_markershopDetail{
+    position:relative;
+    float:left;
+    width:100%;
+    background-color: transparent;
+    overflow-y:hidden;
+    display:none;
+}
+
+#div_menuingredient{
+    width:100%;
+    height:100%;
+
+}
+
+#onsAnalyze{
+    position:relative;
+    display:none;
+
+}
+
+#div_ingredientPass{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+#div_recipeAdjust{
+    position:relative;
+    width:100%;
+    height:100%;
+
+}
+
+/*end home.html*/
+/*-------------*/
+
+/*other.html*/
+#div_othermenu{
+    position:relative;
+    float:left;
+    width:100%;
+    height:100%;
+    background-color:white;
+
+}
+
+#div_sugggroup{
+    position:relative;
+    float:left;
+    width:100%;
+    display:none;
+
+}
+
+#div_howtouse{
+    position:relative;
+    float:left;
+    width:100%;
+    display:none;
+
+}
+
+#div_logodownload{
+    position:relative;
+    float:left;
+    width:100%;
+    display:none;
+
+}
+/*----------*/
+
+
+/*pinentry.html*/
+/*-------------*/
+.pd{
+    position: relative;
+    background-color: #000;
+    display: block;
+    width: 10%;
+    height: 10%;
+    float:left;
+    top: 35%;
+    border: 1px solid grey;
+    border-radius: 100%;
+    background: white;
+}
+
+#PINlogin{
+    position:relative;
+    float:left;
+    width:100%;
+    height:100%;
+	text-align:center;
+	margin:0 auto;
+}
+
+/*numeric keypad*/
+#pk1{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 0%;
+    left:7.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+/*    display: grid;*/
+    align-items: center;
+}
+#pk2{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 0%;
+    left:10.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+/*    display: grid;*/
+    align-items: center;
+}
+#pk3{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 0%;
+    left:13%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+/*    display: grid;*/
+    align-items: center;
+}
+#pk4{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 1%;
+    left:7.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk5{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 1%;
+    left:10.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk6{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 1%;
+    left:13%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk7{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 2%;
+    left:7.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk8{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 2%;
+    left:10.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk9{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 2%;
+    left:13%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pkA{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 3%;
+    left:7.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk0{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 3%;
+    left:10.5%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+#pk11{
+    position: relative;
+/*    background-color:#F17F58;*/
+    color: white;
+    width: 25%;
+    height: 18%;
+    float:left;
+    top: 3%;
+    left:13%;
+    border: 3px solid white;
+	border-radius: 25px;
+    text-align: center;
+    font-size: xx-large;
+    display: grid;
+    align-items: center;
+}
+/*end pinentry.html*/
+/*-----------------*/
+
+/*setup.html*/
+/*----------*/
+.pds{
+    position: relative;
+    background-color: #000;
+    display: block;
+    width: 10%;
+    height: 10%;
+    float:left;
+    top: 45%;
+    border: 1px solid grey;
+    border-radius: 100%;
+    background: white;
+}
+#div_setup{
+    position:relative;
+    float:left;
+    height:98%;
+    
+
+}
+
+/*-------------*/
+.tabbar{
+/*	background-color:#EF6694;
+	color:white;*/
+}
+
+.toolbar {
+/*	background-color:#F17F58;*/
+}
+
+.keep-scrolling::-webkit-scrollbar {
+    display: none;
+}
+
+.page__content{
+    overflow-y:hidden;
+}
+
+.f12{
+	font-size:16px;
+	table-layout:fixed;	
+}
+
+.gWhite{
+	color:#FFF;				    /*green*/
+	background-color:#8DC73F;	/*white*/
+}
+
+.highRow{
+    height: 30px;
+
+}
+
+.highRowU{
+    height:30px;
+    border-bottom:.25px solid blue;
+}
+
+.noBorder{
+    border: 1px solid transparent;
+    border-bottom:grey .25px solid;
+    
+}
+
+.lightBlue{
+    background-color: #BBE2EC;
+
+}
+
+.llightBlue{
+    background-color: lightcyan;
+
+}
+
+.autoQ{
+	position:relative;
+	float:left;
+	border:1px solid blue;
+	padding: 3px;	
+	width:10%;
+	font-size:1em;
+	margin:2%;
+}
