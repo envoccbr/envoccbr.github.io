@@ -568,16 +568,17 @@
 	<script>
 	  function authorize() {
         tokenClient.callback = async function(resp) {
-          if (resp.error !== undefined) {
-            throw (resp)
-          }
+          if (resp.error !== undefined) { throw resp } 
+		  console.log(resp)
           console.log("Signed in successfully.")
         }
         if (gapi.client.getToken() === null) {
           tokenClient.requestAccessToken({prompt: 'consent'})
+		  console.log(gapi.client.getToken())
         } 
 		else {
           tokenClient.requestAccessToken({prompt: 'none'})
+		  console.log(gapi.client.getToken())
         }
       }
 	</script>
@@ -822,3 +823,5 @@
     </script>
   </body>
 </html>
+
+
