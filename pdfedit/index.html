@@ -48,11 +48,11 @@
 </main>
 
 <script>
-    let { PDFDocument, rgb } = PDFLib;
-    let pdfBytes, pdfDoc, fabricCanvas;
-    let pageStates = {}; // Stores JSON of Fabric objects per page
-    let currentPage = 1;
-    let undoStack = [];
+    var { PDFDocument, rgb } = PDFLib;
+    var pdfBytes, pdfDoc, fabricCanvas;
+    var pageStates = {}; // Stores JSON of Fabric objects per page
+    var currentPage = 1;
+    var undoStack = [];
 
     // 1. Initialize Fabric Canvas
     fabricCanvas = new fabric.Canvas('editor-canvas');
@@ -62,17 +62,17 @@
     async function loadPdf(url) {
         document.getElementById('loader').style.display = 'flex';
         pdfBytes = await fetch(url).then(res => res.arrayBuffer());
-        let pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
+        var pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
         
-        let panel = document.getElementById('thumbnail-panel');
-        for (let i = 1; i <= pdf.numPages; i++) {
-            let page = await pdf.getPage(i);
-            let viewport = page.getViewport({scale: 0.2});
-            let canvas = document.createElement('canvas');
+        var panel = document.getElementById('thumbnail-panel');
+        for (var i = 1; i <= pdf.numPages; i++) {
+            var page = await pdf.getPage(i);
+            var viewport = page.getViewport({scale: 0.2});
+            var canvas = document.createElement('canvas');
             canvas.width = viewport.width; canvas.height = viewport.height;
             await page.render({canvasContext: canvas.getContext('2d'), viewport}).promise;
             
-            let img = document.createElement('img');
+            var img = document.createElement('img');
             img.src = canvas.toDataURL();
             img.className = 'thumb';
             img.onclick = () => renderPage(i);
@@ -86,12 +86,12 @@
         // Save current state before switching
         pageStates[currentPage] = JSON.stringify(fabricCanvas.toJSON());
         
-        let pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
-        let page = await pdf.getPage(num);
-        let viewport = page.getViewport({scale: 1.5}); // Editor Zoom
+        var pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
+        var page = await pdf.getPage(num);
+        var viewport = page.getViewport({scale: 1.5}); // Editor Zoom
         
-        let canvas = document.createElement('canvas');
-        let ctx = canvas.getContext('2d');
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
         canvas.width = viewport.width; canvas.height = viewport.height;
         await page.render({canvasContext: ctx, viewport}).promise;
 
@@ -107,7 +107,7 @@
 
     // 4. Tools
     function addText() {
-        let text = new fabric.IText('Type here', { left: 50, top: 50, fontSize: 20, fill: document.getElementById('colorPicker').value });
+        var text = new fabric.IText('Type here', { left: 50, top: 50, fontSize: 20, fill: document.getElementById('colorPicker').value });
         fabricCanvas.add(text).setActiveObject(text);
     }
 
@@ -121,17 +121,17 @@
     async function saveFinal() {
         document.getElementById('loader').style.display = 'flex';
         pageStates[currentPage] = JSON.stringify(fabricCanvas.toJSON());
-        let exportDoc = await PDFDocument.load(pdfBytes);
-        let pages = exportDoc.getPages();
+        var exportDoc = await PDFDocument.load(pdfBytes);
+        var pages = exportDoc.getPages();
 
-        for (let i = 0; i < pages.length; i++) {
-            let state = pageStates[i+1];
+        for (var i = 0; i < pages.length; i++) {
+            var state = pageStates[i+1];
             if (!state) continue;
-            let data = JSON.parse(state);
-            let page = pages[i];
-            let { width, height } = page.getSize();
+            var data = JSON.parse(state);
+            var page = pages[i];
+            var { width, height } = page.getSize();
 
-            for (let obj of data.objects) {
+            for (var obj of data.objects) {
                 if (obj.type === 'i-text') {
                     page.drawText(obj.text, {
                         x: obj.left * (width / fabricCanvas.width),
@@ -144,13 +144,13 @@
         }
         
         exportDoc.getForm().flatten();
-        let finalBytes = await exportDoc.save();
+        var finalBytes = await exportDoc.save();
         download(finalBytes, "edited.pdf", "application/pdf");
         document.getElementById('loader').style.display = 'none';
     }
 
     // Start
-    window.onload = () => loadPdf('https://pdf-lib.js.org');
+    window.onload = async () => loadPdf('https://pdf-lib.js.org');
 </script>
 </body>
 </html>
