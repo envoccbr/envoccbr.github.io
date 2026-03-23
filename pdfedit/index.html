@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS PDF Editor Pro</title>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com"></script>
+    <script src="https://cdnjs.cloudflare.com"></script>
+    <script src="https://unpkg.com"></script>
+    <script src="https://unpkg.com"></script>
+
+    <style>
+        body { display: flex; height: 100vh; margin: 0; font-family: sans-serif; background: #2c3e50; color: white; }
+        .sidebar { width: 200px; background: #34495e; overflow-y: auto; padding: 10px; border-right: 1px solid #1a252f; }
+        .workspace { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; overflow: auto; }
+        .toolbar { background: #ecf0f1; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; color: black; }
+        .canvas-container { box-shadow: 0 0 20px rgba(0,0,0,0.5); background: white; }
+        .thumb { width: 100%; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; }
+        .thumb.active { border-color: #3498db; }
+        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:99; justify-content:center; align-items:center; }
+    </style>
+</head>
+<body>
+
+<div id="loader">Processing...</div>
+
+<aside class="sidebar" id="thumbnail-panel"></aside>
+
+<main class="workspace">
+    <div class="toolbar">
+        <button onclick="addText()">Add Text</button>
+        <button onclick="undo()">Undo (Ctrl+Z)</button>
+        <button onclick="saveFinal()">Save & Flatten PDF</button>
+        <input type="color" id="colorPicker" onchange="changeColor(this.value)">
+    </div>
+    <div id="wrapper">
+        <canvas id="editor-canvas"></canvas>
+    </div>
+</main>
+
+<script>
+    const { PDFDocument, rgb } = PDFLib;
+    let pdfBytes, pdfDoc, fabricCanvas;
+    let pageStates = {}; // Stores JSON of Fabric objects per page
+    let currentPage = 1;
+    let undoStack = [];
+
+    // 1. Initialize Fabric Canvas
+    fabricCanvas = new fabric.Canvas('editor-canvas');
+    fabricCanvas.on('object:added', () => { undoStack.push(JSON.stringify(fabricCanvas.toJSON())); });
+
+    // 2. Load PDF & Generate Thumbnails
+    async function loadPdf(url) {
+        document.getElementById('loader').style.display = 'flex';
+        pdfBytes = await fetch(url).then(res => res.arrayBuffer());
+        const pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
+        
+        const panel = document.getElementById('thumbnail-panel');
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({scale: 0.2});
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width; canvas.height = viewport.height;
+            await page.render({canvasContext: canvas.getContext('2d'), viewport}).promise;
+            
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL();
+            img.className = 'thumb';
+            img.onclick = () => renderPage(i);
+            panel.appendChild(img);
+        }
+        renderPage(1);
+    }
+
+    // 3. Render Page to Workspace
+    async function renderPage(num) {
+        // Save current state before switching
+        pageStates[currentPage] = JSON.stringify(fabricCanvas.toJSON());
+        
+        const pdf = await pdfjsLib.getDocument({data: pdfBytes}).promise;
+        const page = await pdf.getPage(num);
+        const viewport = page.getViewport({scale: 1.5}); // Editor Zoom
+        
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        await page.render({canvasContext: ctx, viewport}).promise;
+
+        fabricCanvas.setDimensions({width: viewport.width, height: viewport.height});
+        fabricCanvas.setBackgroundImage(canvas.toDataURL(), fabricCanvas.renderAll.bind(fabricCanvas));
+        
+        fabricCanvas.clear();
+        if (pageStates[num]) fabricCanvas.loadFromJSON(pageStates[num]);
+        
+        currentPage = num;
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    // 4. Tools
+    function addText() {
+        const text = new fabric.IText('Type here', { left: 50, top: 50, fontSize: 20, fill: document.getElementById('colorPicker').value });
+        fabricCanvas.add(text).setActiveObject(text);
+    }
+
+    function undo() {
+        if (undoStack.length < 2) return;
+        undoStack.pop(); // Remove current
+        fabricCanvas.loadFromJSON(undoStack[undoStack.length - 1], fabricCanvas.renderAll.bind(fabricCanvas));
+    }
+
+    // 5. Final Merge & Flatten
+    async function saveFinal() {
+        document.getElementById('loader').style.display = 'flex';
+        pageStates[currentPage] = JSON.stringify(fabricCanvas.toJSON());
+        const exportDoc = await PDFDocument.load(pdfBytes);
+        const pages = exportDoc.getPages();
+
+        for (let i = 0; i < pages.length; i++) {
+            const state = pageStates[i+1];
+            if (!state) continue;
+            const data = JSON.parse(state);
+            const page = pages[i];
+            const { width, height } = page.getSize();
+
+            for (const obj of data.objects) {
+                if (obj.type === 'i-text') {
+                    page.drawText(obj.text, {
+                        x: obj.left * (width / fabricCanvas.width),
+                        y: height - ((obj.top + obj.fontSize) * (height / fabricCanvas.height)),
+                        size: obj.fontSize * (height / fabricCanvas.height),
+                        color: rgb(0,0,0) // Simplification: Use Black
+                    });
+                }
+            }
+        }
+        
+        exportDoc.getForm().flatten();
+        const finalBytes = await exportDoc.save();
+        download(finalBytes, "edited.pdf", "application/pdf");
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    // Start
+    loadPdf('https://pdf-lib.js.org');
+</script>
+</body>
+</html>
