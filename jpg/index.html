@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
+
+    <title>JPG Image Converter</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+			
+        body { 
+            font-family: 'Sarabun', sans-serif;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; background-color: #f4f7f6; margin: 0; 
+        }
+        .converter-box { 
+            background: white; padding: 30px; border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; 
+            width: 90%; max-width: 500px; 
+        }
+        h2 { color: #333; margin-bottom: 20px; }
+        input[type="file"] { margin-bottom: 20px; width: 100%; }
+        #previewContainer { 
+            margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; 
+        }
+        #imagePreview { 
+            max-width: 100%; max-height: 300px; border-radius: 8px; 
+            margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+        .controls { margin-bottom: 20px; }
+        #qualitySlider { width: 100%; cursor: pointer; }
+        label { font-weight: 600; color: #555; }
+        button { 
+            background-color: #007bff; color: white; border: none; 
+            padding: 12px 24px; font-size: 16px; border-radius: 6px; 
+            cursor: pointer; transition: background 0.3s; width: 100%; 
+        }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+  <div class="converter-box">
+    <h2>JPG Image Converter</h2>
+    <!-- File Input -->
+    <input type="file" id="imageInput" accept="image/*">
+    
+    <!-- Dynamic Preview & Controls -->
+    <div id="previewContainer" style="display:none;">
+        <p><label>Live Preview:</label></p>
+        <img id="imagePreview" src="" alt="Preview">
+        
+        <div class="controls">
+            <label for="qualitySlider">JPG Quality: <span id="qualityValue">100</span>%</label><br>
+            <input type="range" id="qualitySlider" min="10" max="100" value="100">
+        </div>
+
+        <button id="convertBtn">Download as JPG</button>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualityValue = document.getElementById('qualityValue');
+    const convertBtn = document.getElementById('convertBtn');
+
+    // Update quality percentage text
+    qualitySlider.oninput = function() {
+        qualityValue.innerText = this.value;
+    }
+
+    // Handle file selection and show live preview
+    imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Process conversion to JPG using Canvas
+    convertBtn.addEventListener('click', function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Match canvas dimensions to the actual image resolution
+        canvas.width = imagePreview.naturalWidth;
+        canvas.height = imagePreview.naturalHeight;
+
+        // Fill background with white (prevents black background on transparent PNGs)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw image onto canvas
+        ctx.drawImage(imagePreview, 0, 0);
+
+        // Convert slider value (10-100) to Canvas quality ratio (0.1-1.0)
+        const quality = qualitySlider.value / 100;
+
+        // Export canvas as JPG and trigger browser download
+        const link = document.createElement('a');
+        link.download = 'converted-image.jpg';
+        link.href = canvas.toDataURL("image/jpeg", quality);
+        link.click();
+    });
+  </script>
+</body>
+</html>
