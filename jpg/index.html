@@ -85,7 +85,7 @@
         if (this.files && this.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-				console.log(e.target.result);
+				// console.log(e.target.result);
                 imagePreview.src = e.target.result;
                 previewContainer.style.display = 'block';
             }
