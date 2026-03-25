@@ -84,7 +84,8 @@
     imageInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = function(e) {
+				console.log(e.target.result);
                 imagePreview.src = e.target.result;
                 previewContainer.style.display = 'block';
             }
