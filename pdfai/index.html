@@ -645,7 +645,7 @@
       function openTextEditor(elem) {
         let isNew = !elem;
         let txtVal = isNew ? '' : elem.text;
-        let sizeVal = isNew ? 18 : elem.fontSize;
+        let sizeVal = isNew ? 16 : elem.fontSize;
         let colorVal = isNew ? '#000000' : elem.color;
         Swal.fire({
           title: isNew ? 'เพิ่มข้อความ' : 'แก้ไขข้อความ',
@@ -973,10 +973,11 @@
       async function getThaiFont() {
         if (State.thaiFontBytes) { return State.thaiFontBytes; }
         try {
-          let res = await fetch('https://fonts.gstatic.com/s/sarabun/v13/DtVjJx26TKEr37c9aAFjnA.ttf');
+          let res = await fetch('https://fontmeme.com/fonts/webfonts/37885f3/THSarabunNew.ttf?v=1');
           State.thaiFontBytes = await res.arrayBuffer();
         } catch (_) {
-          State.thaiFontBytes = null;
+          let res = await fetch('/THSarabunNew.ttf');
+          State.thaiFontBytes = await res.arrayBuffer();
         }
         return State.thaiFontBytes;
       }
