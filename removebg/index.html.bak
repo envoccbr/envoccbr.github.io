@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B2 + Transformers.js Background Removal</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🖼️</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <title>B2 + Transformers.js Background Removal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🖼️</text></svg>"> -->
+    <title>Transformers.js Background Removal</title>
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -206,8 +212,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🖼️ B2 + Transformers.js Background Removal</h1>
-        <p class="subtitle">Client-side AI Image Background Removal using Transformers.js + Backblaze B2</p>
+        <!-- <h1>🖼️ B2 + Transformers.js Background Removal</h1>
+        <p class="subtitle">Client-side AI Image Background Removal using Transformers.js + Backblaze B2</p> -->
+        <h1>🖼️ Transformers.js Background Removal</h1>
+        <p class="subtitle">Client-side AI Image Background Removal using Transformers.js</p>
 
         <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px; margin-bottom: 25px; border-radius: 5px;">
             <p style="margin: 0; line-height: 1.6; color: #555; font-size: 0.95em;">
