@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
+	
+    <title>Universal Converter (PDF/Images/Office)</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&family=Prompt:wght@300;400;700&family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (For UI Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --primary-color: #3b82f6;
+            --secondary-bg: #f3f4f6;
+            --border-color: #e5e7eb;
+        }
+
+        /* Themes */
+        body.theme-dark {
+            --bg-color: #111827; --text-color: #f9fafb; --primary-color: #60a5fa; --secondary-bg: #1f2937; --border-color: #374151;
+        }
+        body.theme-pink {
+            --bg-color: #fdf2f8; --text-color: #831843; --primary-color: #ec4899; --secondary-bg: #fce7f3; --border-color: #fbcfe8;
+        }
+
+        body {
+            background-color: var(--bg-color); 
+			color: var(--text-color); 
+			/* font-family: 'Prompt', sans-serif; */ 
+			font-family: 'Kanit'; 
+			transition: all 0.3s ease;
+        }
+        
+        .card { background-color: var(--secondary-bg); border-color: var(--border-color); }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .text-primary { color: var(--primary-color); }
+
+        /* Drag & Drop Highlight */
+        .drag-over { border-color: var(--primary-color); background-color: rgba(59, 130, 246, 0.1); }
+        
+        /* Grid vs List View */
+        #preview-container.view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        #preview-container.view-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        
+        .preview-item { transition: transform 0.2s; cursor: grab; }
+        .preview-item:active { cursor: grabbing; }
+
+        /* Loader */
+        .progress-bar-fill { width: 0%; transition: width 0.3s; background-color: var(--primary-color); }
+    </style>
+</head>
+<body class="min-h-screen p-4">
+
+    <!-- Navbar & Settings -->
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center mb-6 gap-4">
+        <h1 class="text-3xl font-bold"><i class="fa-solid fa-file-export text-primary mr-2"></i> Universal Converter</h1>
+        <div class="flex gap-3 text-sm items-center flex-wrap">
+            <!-- UI Font -->
+            <select id="ui-font" class="p-2 rounded border card" onchange="changeUIFont()">
+                <option value="Prompt">ฟอนต์: Prompt</option>
+                <option value="Sarabun">ฟอนต์: Sarabun</option>
+                <!-- <option value="Kanit">ฟอนต์: Kanit</option> -->
+            </select>
+            <!-- Themes -->
+            <select id="ui-theme" class="p-2 rounded border card" onchange="changeTheme()">
+                <option value="light">ธีม: สว่าง (Light)</option>
+                <option value="dark">ธีม: มืด (Dark)</option>
+                <option value="pink">ธีม: หวาน (Pink)</option>
+                <!-- <option value="custom">ธีม: กำหนดสีเอง</option> -->
+            </select>
+            <input type="color" id="custom-color-picker" class="hidden h-10 w-10 cursor-pointer" onchange="applyCustomColor()">
+            <!-- View Mode -->
+			<!-- 
+            <button onclick="toggleViewMode('grid')" class="p-2 rounded card hover:bg-gray-200"><i class="fa-solid fa-grip"></i></button>
+            <button onclick="toggleViewMode('list')" class="p-2 rounded card hover:bg-gray-200"><i class="fa-solid fa-list"></i></button>
+			-->
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left Panel: Settings & Tools -->
+        <div class="col-span-1 space-y-6">
+            
+            <!-- Mode Selector -->
+            <div class="card p-4 rounded-lg shadow border">
+                <h2 class="font-bold mb-3"><i class="fa-solid fa-sliders"></i> โหมดการทำงาน</h2>
+                <select id="app-mode" class="w-full p-2 border rounded mb-2" onchange="toggleModeSettings()">
+                    <option value="img2pdf">รูปภาพ ➔ PDF</option>
+                    <option value="pdf2img">PDF ➔ รูปภาพ</option>
+                    <option value="api-convert">PDF ⟷ Office (Word/Excel/PowerPoint)</option>
+                </select>
+            </div>
+
+            <!-- PDF Settings (For Img->PDF) -->
+            <div id="pdf-settings-panel" class="card p-4 rounded-lg shadow border">
+                <h2 class="font-bold mb-3"><i class="fa-solid fa-file-pdf"></i> ตั้งค่าหน้ากระดาษ PDF</h2>
+                
+                <label class="block text-sm mb-1">ขนาดกระดาษ</label>
+                <select id="page-size" class="w-full p-2 border rounded mb-3" onchange="checkCustomSize()">
+                    <option value="a4">A4 (595 x 842)</option>
+                    <option value="letter">Letter (612 x 792)</option>
+                    <option value="legal">Legal (612 x 1008)</option>
+                    <option value="custom">กำหนดเอง (Custom)</option>
+                </select>
+                <div id="custom-size-inputs" class="hidden flex gap-2 mb-3">
+                    <input type="number" id="custom-w" placeholder="กว้าง (pt)" class="w-1/2 p-2 border rounded">
+                    <input type="number" id="custom-h" placeholder="สูง (pt)" class="w-1/2 p-2 border rounded">
+                </div>
+
+                <label class="block text-sm mb-1">ทิศทางกระดาษ (รวม)</label>
+                <select id="page-orientation" class="w-full p-2 border rounded mb-3">
+                    <option value="portrait">แนวตั้ง (Portrait)</option>
+                    <option value="landscape">แนวนอน (Landscape)</option>
+                </select>
+
+                <label class="block text-sm mb-1">การจัดวางรูปภาพ</label>
+                <select id="image-layout" class="w-full p-2 border rounded mb-3">
+                    <option value="fit">พอดีหน้า (เว้นขอบ - Fit)</option>
+                    <option value="fill">เต็มจอ (ไร้ขอบ - Fill)</option>
+                    <option value="center">กึ่งกลาง (ไม่ขยายรูป)</option>
+                </select>
+
+                <label class="block text-sm mb-1">บีบอัดรูปภาพ (ลดขนาดไฟล์ PDF)</label>
+                <input type="range" id="compress-quality" min="0" max="100" value="80" class="w-full mb-1" onchange="updateQualityLabel()">
+                <div class="text-xs text-right mb-3">คุณภาพ: <span id="quality-val">80</span>%</div>
+            </div>
+
+            <!-- Security & Watermark -->
+            <div id="security-panel" class="card p-4 rounded-lg shadow border">
+                <h2 class="font-bold mb-3"><i class="fa-solid fa-shield"></i> ความปลอดภัย & ลายน้ำ</h2>
+                <input type="password" id="pdf-password" placeholder="ตั้งรหัสผ่านไฟล์ PDF (ไม่ใส่ก็ได้)" class="w-full p-2 border rounded mb-3">
+                
+                <input type="text" id="pdf-watermark" placeholder="ข้อความลายน้ำ (รองรับภาษาไทย)" class="w-full p-2 border rounded mb-2">
+                <div class="flex gap-2">
+                    <input type="number" id="watermark-size" placeholder="ขนาดฟอนต์" value="48" class="w-1/2 p-2 border rounded">
+                    <select id="watermark-font" class="w-1/2 p-2 border rounded">
+                        <option value="prompt">Prompt</option>
+                        <option value="sarabun">Sarabun</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- API Convert Panel -->
+            <div id="api-panel" class="card p-4 rounded-lg shadow border hidden">
+                <h2 class="font-bold mb-3"><i class="fa-solid fa-cloud"></i> API Office Converter</h2>
+				<!-- 
+                <select id="api-provider" class="w-full p-2 border rounded mb-3">
+                    <option value="convertapi">ConvertAPI</option>
+                    <option value="zamzar">Zamzar API</option>
+                </select>
+				-->
+                <input type="text" id="api-key" placeholder="ใส่ API Key ของคุณ" class="w-full p-2 border rounded mb-3">
+                <select id="api-target-format" class="w-full p-2 border rounded mb-3">
+                    <option value="docx">แปลงเป็น Word (.docx)</option>
+                    <option value="xlsx">แปลงเป็น Excel (.xlsx)</option>
+                    <option value="pptx">แปลงเป็น PowerPoint (.pptx)</option>
+                    <option value="pdf">แปลงกลับเป็น PDF</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Right Panel: Dropzone & Preview -->
+        <div class="col-span-1 lg:col-span-2 space-y-4">
+            
+            <!-- Dropzone -->
+            <div id="dropzone" class="border-4 border-dashed rounded-xl p-10 text-center cursor-pointer transition card"
+                 ondragover="event.preventDefault(); this.classList.add('drag-over')" 
+                 ondragleave="this.classList.remove('drag-over')" 
+                 ondrop="handleDrop(event)"
+                 onclick="document.getElementById('file-input').click()">
+                <i class="fa-solid fa-cloud-arrow-up text-5xl text-gray-400 mb-3"></i>
+                <h3 class="text-xl font-bold">ลากไฟล์มาวางที่นี่ (Drag & Drop)</h3>
+                <p class="text-sm opacity-70">หรือคลิกเพื่อเลือกไฟล์รูปภาพ / PDF / Office</p>
+                <input type="file" id="file-input" class="hidden" multiple onchange="handleFiles(this.files)">
+            </div>
+
+            <!-- Action Bar -->
+            <div class="flex flex-wrap gap-2 justify-between items-center bg-gray-50 dark:bg-gray-800 p-3 rounded shadow">
+                <div class="flex gap-2 items-center">
+                    <input type="text" id="output-filename" value="document.pdf" class="p-2 border rounded text-sm w-48 text-black" placeholder="ชื่อไฟล์ปลายทาง">
+                    <select id="img-export-format" class="p-2 border rounded text-sm hidden text-black">
+                        <option value="jpeg">JPG</option><option value="png">PNG</option>
+                        <option value="webp">WebP</option><option value="gif">GIF</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="performOCR()" id="btn-ocr" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded text-sm font-bold shadow hidden">
+                        <i class="fa-solid fa-search"></i> สแกนข้อความไทย (OCR)
+                    </button>
+                    <button onclick="startConversion()" class="btn-primary hover:opacity-80 px-6 py-2 rounded font-bold shadow text-sm">
+                        <i class="fa-solid fa-bolt"></i> เริ่มการแปลงไฟล์
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-container" class="hidden w-full bg-gray-200 rounded-full h-4 shadow-inner">
+                <div id="progress-bar" class="progress-bar-fill h-4 rounded-full text-xs flex justify-center items-center text-white font-bold">0%</div>
+            </div>
+            <div id="status-text" class="text-sm text-center font-bold text-primary hidden">กำลังประมวลผล...</div>
+
+            <!-- Preview Container -->
+            <div id="preview-container" class="view-grid p-4 rounded bg-gray-100 dark:bg-gray-900 min-h-[300px]">
+                <!-- Item renders here -->
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let appFiles = [];
+        let tesseractWorker = null;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        // Font URLs for PDF-lib (CORS friendly CDNs)
+        const FONTS = {
+            prompt: 'https://cdn.jsdelivr.net/fontsource/fonts/prompt@latest/thai-400-normal.ttf',
+            sarabun: 'https://cdn.jsdelivr.net/fontsource/fonts/sarabun@latest/thai-400-normal.ttf'
+        };
+
+        // --- UI & THEME LOGIC ---
+        function changeUIFont() {
+            // document.body.style.fontFamily = `'${document.getElementById('ui-font').value}', sans-serif`;
+			document.body.style.fontFamily = `'${document.getElementById('ui-font').value}', Kanit`;
+        }
+
+        function changeTheme() {
+            const theme = document.getElementById('ui-theme').value;
+            document.body.className = `min-h-screen p-4 theme-${theme}`;
+            
+            const colorPicker = document.getElementById('custom-color-picker');
+            if (theme === 'custom') {
+                colorPicker.classList.remove('hidden');
+                colorPicker.click();
+            } else {
+                colorPicker.classList.add('hidden');
+                document.documentElement.style.removeProperty('--primary-color');
+            }
+        }
+
+        function applyCustomColor() {
+            const color = document.getElementById('custom-color-picker').value;
+            document.documentElement.style.setProperty('--primary-color', color);
+            document.documentElement.style.setProperty('--bg-color', '#ffffff');
+            document.documentElement.style.setProperty('--secondary-bg', '#f0f0f0');
+        }
+
+        function toggleViewMode(mode) {
+            const container = document.getElementById('preview-container');
+            container.className = `p-4 rounded bg-gray-100 dark:bg-gray-900 min-h-[300px] view-${mode}`;
+        }
+
+        function toggleModeSettings() {
+            const mode = document.getElementById('app-mode').value;
+            document.getElementById('pdf-settings-panel').classList.toggle('hidden', mode !== 'img2pdf');
+            document.getElementById('security-panel').classList.toggle('hidden', mode !== 'img2pdf');
+            document.getElementById('api-panel').classList.toggle('hidden', mode !== 'api-convert');
+            document.getElementById('img-export-format').classList.toggle('hidden', mode !== 'pdf2img');
+            document.getElementById('btn-ocr').classList.toggle('hidden', mode !== 'img2pdf');
+            
+            if (mode === 'pdf2img') {
+                document.getElementById('output-filename').placeholder = 'ชื่อไฟล์ (เช่น doc)';
+                document.getElementById('output-filename').value = 'image_export';
+            } else {
+                document.getElementById('output-filename').value = 'document.pdf';
+            }
+            
+            appFiles = [];
+            renderPreview();
+        }
+
+        function checkCustomSize() {
+            const val = document.getElementById('page-size').value;
+            document.getElementById('custom-size-inputs').classList.toggle('hidden', val !== 'custom');
+        }
+
+        function updateQualityLabel() {
+            document.getElementById('quality-val').innerText = document.getElementById('compress-quality').value;
+        }
+
+        function formatBytes(bytes, decimals = 2) {
+            if (!+bytes) return '0 Bytes';
+            const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+        }
+
+        // --- FILE HANDLING ---
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('drag-over');
+            handleFiles(e.dataTransfer.files);
+        }
+
+        async function handleFiles(fileList) {
+            const mode = document.getElementById('app-mode').value;
+            for (let file of fileList) {
+                const id = Date.now() + Math.random().toString(36).substr(2, 9);
+                
+                let fileObj = {
+                    id, file, name: file.name, originalSize: file.size, 
+                    type: file.type, rotation: 0, compressedData: null, compressedSize: file.size
+                };
+
+                if (file.type.startsWith('image/')) {
+                    const base64 = await toBase64(file);
+                    fileObj.base64 = base64;
+                    if (mode === 'img2pdf') {
+                        // Apply compression immediately for preview stats
+                        const quality = document.getElementById('compress-quality').value / 100;
+                        fileObj = await compressImageProcess(fileObj, quality);
+                    }
+                }
+                appFiles.push(fileObj);
+            }
+            renderPreview();
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // --- IMAGE COMPRESSION LOGIC ---
+        function compressImageProcess(fileObj, quality) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width; canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const compressedData = canvas.toDataURL('image/jpeg', quality);
+                    
+                    // Calculate base64 size roughly
+                    const base64Length = compressedData.length - (compressedData.indexOf(',') + 1);
+                    const padding = (compressedData.charAt(compressedData.length - 2) === '=') ? 2 : ((compressedData.charAt(compressedData.length - 1) === '=') ? 1 : 0);
+                    const compressedSize = (base64Length * 0.75) - padding;
+
+                    fileObj.compressedData = compressedData;
+                    fileObj.compressedSize = compressedSize;
+                    resolve(fileObj);
+                };
+                img.src = fileObj.base64;
+            });
+        }
+
+        // --- PREVIEW RENDERER ---
+        function renderPreview() {
+            const container = document.getElementById('preview-container');
+            container.innerHTML = '';
+
+            appFiles.forEach((f, index) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item card p-2 border rounded shadow-sm relative flex flex-col bg-white dark:bg-gray-800 text-black dark:text-white';
+                div.setAttribute('data-id', f.id);
+
+                let previewHtml = '';
+                if (f.type.startsWith('image/')) {
+                    const percentSaved = ((f.originalSize - f.compressedSize) / f.originalSize * 100).toFixed(1);
+                    const imgSrc = f.compressedData || f.base64;
+                    previewHtml = `
+                        <div class="relative h-32 w-full overflow-hidden bg-gray-200 rounded flex justify-center items-center">
+                            <img src="${imgSrc}" style="transform: rotate(${f.rotation}deg); max-height:100%; max-width:100%; transition: transform 0.3s;" />
+                        </div>
+                        <div class="mt-2 text-xs truncate font-bold" title="${f.name}">${index+1}. ${f.name}</div>
+                        <div class="text-[10px] text-gray-500">
+                            เดิม: ${formatBytes(f.originalSize)}<br>
+                            บีบแล้ว: ${formatBytes(f.compressedSize)} <span class="text-green-500">(-${percentSaved > 0 ? percentSaved : 0}%)</span>
+                        </div>
+                        <div class="flex gap-1 mt-2 justify-between">
+                            <button onclick="rotateItem('${f.id}', -90)" class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs hover:bg-blue-200" title="หมุนซ้าย"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button onclick="rotateItem('${f.id}', 90)" class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs hover:bg-blue-200" title="หมุนขวา"><i class="fa-solid fa-rotate-right"></i></button>
+                            <button onclick="removeItem('${f.id}')" class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs hover:bg-red-200" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                } else {
+                    previewHtml = `
+                        <div class="relative h-32 w-full bg-gray-200 rounded flex flex-col justify-center items-center text-gray-500">
+                            <i class="fa-solid fa-file-pdf text-4xl mb-2"></i>
+                            <span class="text-xs font-bold px-2 text-center break-all">${f.name}</span>
+                        </div>
+                        <div class="mt-2 text-xs text-center text-gray-500">${formatBytes(f.originalSize)}</div>
+                        <button onclick="removeItem('${f.id}')" class="mt-auto bg-red-100 text-red-600 px-2 py-1 rounded text-xs w-full"><i class="fa-solid fa-trash"></i> ลบออก</button>
+                    `;
+                }
+                div.innerHTML = previewHtml;
+                container.appendChild(div);
+            });
+
+            // Initialize Sortable
+            new Sortable(container, {
+                animation: 150,
+                ghostClass: 'opacity-50',
+                onEnd: function (evt) {
+                    const itemEl = evt.item;
+                    const oldIndex = evt.oldIndex;
+                    const newIndex = evt.newIndex;
+                    const movedItem = appFiles.splice(oldIndex, 1)[0];
+                    appFiles.splice(newIndex, 0, movedItem);
+                    renderPreview(); // re-render to update numbers
+                },
+            });
+        }
+
+        function rotateItem(id, deg) {
+            const item = appFiles.find(f => f.id === id);
+            if(item) {
+                item.rotation = (item.rotation + deg) % 360;
+                renderPreview();
+            }
+        }
+
+        function removeItem(id) {
+            appFiles = appFiles.filter(f => f.id !== id);
+            renderPreview();
+        }
+
+        // --- UI UTILS ---
+        function setProgress(percent, text) {
+            document.getElementById('progress-container').classList.remove('hidden');
+            document.getElementById('status-text').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-bar').innerText = Math.round(percent) + '%';
+            if (text) document.getElementById('status-text').innerText = text;
+            
+            if(percent >= 100) {
+                setTimeout(() => {
+                    document.getElementById('progress-container').classList.add('hidden');
+                    document.getElementById('status-text').classList.add('hidden');
+                    document.getElementById('progress-bar').style.width = '0%';
+                }, 2000);
+            }
+        }
+
+        // --- CORE CONVERSION LOGIC ---
+        async function startConversion() {
+            if (appFiles.length === 0) return alert("กรุณาเพิ่มไฟล์ก่อนเริ่มแปลง");
+            const mode = document.getElementById('app-mode').value;
+
+            try {
+                if (mode === 'img2pdf') await generatePDF();
+                else if (mode === 'pdf2img') await convertPDFtoImages();
+                else if (mode === 'api-convert') await convertViaAPI();
+            } catch (error) {
+                alert("เกิดข้อผิดพลาด: " + error.message);
+                console.error(error);
+                setProgress(100, "ล้มเหลว");
+            }
+        }
+
+        // 1. Image to PDF
+        async function generatePDF() {
+            setProgress(5, "กำลังเตรียมสร้าง PDF...");
+            const { PDFDocument, degrees, rgb } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+            pdfDoc.registerFontkit(window.fontkit);
+
+            // Fetch Thai Font for Watermark
+            let customFont = null;
+            const watermarkText = document.getElementById('pdf-watermark').value;
+            if (watermarkText) {
+                setProgress(10, "กำลังโหลดฟอนต์ไทยสำหรับลายน้ำ...");
+                const fontSelect = document.getElementById('watermark-font').value;
+                const fontBytes = await fetch(FONTS[fontSelect]).then(res => res.arrayBuffer());
+                customFont = await pdfDoc.embedFont(fontBytes);
+            }
+
+            const pageSizeInput = document.getElementById('page-size').value;
+            const globalOri = document.getElementById('page-orientation').value;
+            const layout = document.getElementById('image-layout').value;
+
+            // Page dimensions math
+            let pageWidth = 595.28, pageHeight = 841.89; // A4 default
+            if (pageSizeInput === 'letter') { pageWidth = 612; pageHeight = 792; }
+            if (pageSizeInput === 'legal') { pageWidth = 612; pageHeight = 1008; }
+            if (pageSizeInput === 'custom') {
+                pageWidth = parseFloat(document.getElementById('custom-w').value) || 595;
+                pageHeight = parseFloat(document.getElementById('custom-h').value) || 842;
+            }
+            if (globalOri === 'landscape') { [pageWidth, pageHeight] = [pageHeight, pageWidth]; }
+
+            const totalFiles = appFiles.length;
+            
+            for (let i = 0; i < totalFiles; i++) {
+                const fileObj = appFiles[i];
+                if (!fileObj.type.startsWith('image/')) continue;
+
+                setProgress(15 + ((i / totalFiles) * 70), `กำลังประมวลผลหน้าที่ ${i + 1}/${totalFiles}...`);
+
+                const page = pdfDoc.addPage([pageWidth, pageHeight]);
+                
+                // Embed Image
+                let image;
+                const imgDataURL = fileObj.compressedData || fileObj.base64;
+                if (imgDataURL.includes('image/png')) {
+                    image = await pdfDoc.embedPng(imgDataURL);
+                } else {
+                    image = await pdfDoc.embedJpg(imgDataURL);
+                }
+
+                let imgW = image.width;
+                let imgH = image.height;
+                let drawX = 0, drawY = 0;
+
+                // Handle Layout
+                if (layout === 'fit') {
+                    const scale = Math.min(pageWidth / imgW, pageHeight / imgH);
+                    imgW *= scale; imgH *= scale;
+                    drawX = (pageWidth - imgW) / 2; drawY = (pageHeight - imgH) / 2;
+                } else if (layout === 'fill') {
+                    const scale = Math.max(pageWidth / imgW, pageHeight / imgH);
+                    imgW *= scale; imgH *= scale;
+                    drawX = (pageWidth - imgW) / 2; drawY = (pageHeight - imgH) / 2;
+                } else if (layout === 'center') {
+                    drawX = (pageWidth - imgW) / 2; drawY = (pageHeight - imgH) / 2;
+                }
+
+                // Handle individual rotation
+                let drawOpts = { x: drawX, y: drawY, width: imgW, height: imgH };
+                
+                // Note: pdf-lib rotation is around bottom-left of the image. For simplicity in center rotation:
+                if (fileObj.rotation !== 0) {
+                     drawOpts.rotate = degrees(360 - fileObj.rotation); // pdf-lib rotates counter-clockwise
+                     // complex pivot math skipped for brevity, standard placement with rotation:
+                     if(fileObj.rotation === 90 || fileObj.rotation === 270) {
+                         drawOpts.x = drawX + imgW; // Adjust anchor
+                     }
+                }
+
+                page.drawImage(image, drawOpts);
+
+                // Add Watermark
+                if (watermarkText && customFont) {
+                    const fontSize = parseInt(document.getElementById('watermark-size').value) || 48;
+                    const textWidth = customFont.widthOfTextAtSize(watermarkText, fontSize);
+                    page.drawText(watermarkText, {
+                        x: (pageWidth - textWidth) / 2,
+                        y: pageHeight / 2,
+                        size: fontSize,
+                        font: customFont,
+                        color: rgb(0.5, 0.5, 0.5),
+                        opacity: 0.5,
+                        rotate: degrees(45)
+                    });
+                }
+            }
+
+            // Encryption
+            const pass = document.getElementById('pdf-password').value;
+            if (pass) {
+                setProgress(90, "กำลังเข้ารหัสไฟล์ PDF...");
+                pdfDoc.encrypt({ userPassword: pass, ownerPassword: pass + "_owner", permissions: { printing: 'highResolution' } });
+            }
+
+            setProgress(95, "กำลังบันทึกไฟล์...");
+            const pdfBytes = await pdfDoc.save();
+            triggerDownload(pdfBytes, document.getElementById('output-filename').value || 'document.pdf', 'application/pdf');
+            setProgress(100, "เสร็จสิ้น!");
+        }
+
+        // 2. PDF to Images
+        async function convertPDFtoImages() {
+            if (!appFiles[0] || appFiles[0].type !== 'application/pdf') return alert("กรุณาอัปโหลดไฟล์ PDF");
+            setProgress(10, "กำลังโหลด PDF Engine...");
+
+            const format = document.getElementById('img-export-format').value;
+            const mimeType = `image/${format}`;
+            const fileObj = appFiles[0];
+            const arrayBuffer = await fileObj.file.arrayBuffer();
+            
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const totalPages = pdf.numPages;
+            const baseName = document.getElementById('output-filename').value || 'page';
+
+            for (let i = 1; i <= totalPages; i++) {
+                setProgress(10 + ((i / totalPages) * 80), `กำลังแปลงหน้า ${i}/${totalPages}...`);
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2.0 }); // High res
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                const dataUrl = canvas.toDataURL(mimeType, 1.0);
+                
+                // Auto trigger download for each page (or zip, but doing direct download for client side)
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = `${baseName}_${i}.${format}`;
+                a.click();
+            }
+            setProgress(100, "ดาวน์โหลดรูปภาพเสร็จสิ้น!");
+        }
+
+        // 3. API Converter (Office <-> PDF)
+        async function convertViaAPI() {
+            const apiKey = document.getElementById('api-key').value;
+            if (!apiKey) return alert("กรุณาใส่ API Key");
+            const targetFormat = document.getElementById('api-target-format').value;
+			// const provider = document.getElementById('api-provider').value;
+            // const provider = document.getElementById('api-provider').value || "convertapi";
+			const provider = 'convertapi';
+            const file = appFiles[0].file;
+            const ext = file.name.split('.').pop().toLowerCase();
+
+            setProgress(20, "กำลังอัปโหลดไฟล์ไปยัง API...");
+
+            if (provider === 'convertapi') {
+                // ConvertAPI Flow
+                try {
+                    const formData = new FormData();
+                    formData.append('File', file);
+                    const url = `https://v2.convertapi.com/convert/${ext}/to/${targetFormat}?Secret=${apiKey}`;
+                    
+                    const response = await fetch(url, { method: 'POST', body: formData });
+                    const result = await response.json();
+                    
+                    if (result.Files && result.Files[0]) {
+                        setProgress(80, "กำลังดาวน์โหลดไฟล์ผลลัพธ์...");
+                        const fileData = result.Files[0].FileData;
+                        const byteCharacters = atob(fileData);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        triggerDownload(byteArray, result.Files[0].FileName, "application/octet-stream");
+                        setProgress(100, "เสร็จสิ้น!");
+                    } else {
+                        throw new Error(result.Message || "Conversion Failed");
+                    }
+                } catch(e) {
+                    alert("API Error: " + e.message);
+                    setProgress(100, "ล้มเหลว");
+                }
+            } else {
+                alert("ตัวอย่างนี้เชื่อมระบบแบบเต็มรูปแบบเฉพาะ ConvertAPI (กรุณาใช้ ConvertAPI)");
+                setProgress(0, "");
+            }
+        }
+
+        // --- OCR LOGIC (Tesseract) ---
+        async function performOCR() {
+            if (appFiles.length === 0 || !appFiles[0].type.startsWith('image/')) {
+                return alert("กรุณาอัปโหลดรูปภาพเพื่อทำ OCR");
+            }
+            
+            if (!tesseractWorker) {
+                setProgress(10, "กำลังโหลด AI สแกนภาษาไทย...");
+                tesseractWorker = Tesseract.createWorker({
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            setProgress(20 + (m.progress * 80), "กำลังแกะตัวอักษร: " + Math.round(m.progress * 100) + "%");
+                        }
+                    }
+                });
+                await tesseractWorker.load();
+                await tesseractWorker.loadLanguage('tha+eng');
+                await tesseractWorker.initialize('tha+eng');
+            }
+
+            setProgress(20, "เริ่มทำการสแกน...");
+            const { data: { text } } = await tesseractWorker.recognize(appFiles[0].base64);
+            
+            setProgress(100, "สแกนสำเร็จ!");
+            // Display result
+            setTimeout(() => {
+                const w = window.open("", "_blank", "width=600,height=400");
+                // w.document.write(`<html lang="th"><head><meta charset="utf-8"><title>ผลลัพธ์ OCR</title></head><body style="font-family:sans-serif; padding:20px;"><textarea style="width:100%;height:100%;">${text}</textarea></body></html>`);
+				w.document.write(`<html lang="th"><head><meta charset="utf-8"><title>ผลลัพธ์ OCR</title></head><body style="font-family:Kanit; padding:20px;"><textarea style="width:100%;height:100%;">${text}</textarea></body></html>`);
+            }, 500);
+        }
+
+        // --- HELPERS ---
+        function triggerDownload(uint8Array, filename, type) {
+            const blob = new Blob([uint8Array], { type: type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Setup initial compressor listener
+        document.getElementById('compress-quality').addEventListener('change', async (e) => {
+            if(document.getElementById('app-mode').value !== 'img2pdf') return;
+            const quality = e.target.value / 100;
+            // setProgress(10, "กำลังคำนวณการบีบอัดใหม่...");
+            for(let i=0; i<appFiles.length; i++) {
+                if(appFiles[i].type.startsWith('image/')) {
+                    appFiles[i] = await compressImageProcess(appFiles[i], quality);
+                }
+            }
+            // renderPreview();
+            // setProgress(100, "บีบอัดเรียบร้อย");
+        });
+
+        // Init setup
+        window.onload = () => { toggleModeSettings(); };
+		
+    </script>
+</body>
+</html>
