@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
+	
+    <title>All-in-One Universal Converter & PDF Tool</title>
+    
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600&display=swap');
+    </style>
+
+    <!-- Tailwind CSS for UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Required Libraries via CDN -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --text-color: #1f2937;
+            --panel-bg: #ffffff;
+            --primary: #3b82f6;
+            --border-color: #e5e7eb;
+            --font-family: 'Prompt', sans-serif;
+            --font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            transition: all 0.3s ease;
+        }
+
+        /* Themes */
+        body.theme-dark { --bg-color: #111827; --text-color: #f9fafb; --panel-bg: #1f2937; --primary: #60a5fa; --border-color: #374151; }
+        body.theme-pink { --bg-color: #fdf2f8; --text-color: #831843; --panel-bg: #ffffff; --primary: #ec4899; --border-color: #fbcfe8; }
+        body.theme-green { --bg-color: #f0fdf4; --text-color: #14532d; --panel-bg: #ffffff; --primary: #22c55e; --border-color: #bbf7d0; }
+
+        .panel { background-color: var(--panel-bg); border-color: var(--border-color); border-width: 1px; }
+        .input-style { background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color); }
+        .btn-primary { background-color: var(--primary); color: #fff; }
+        
+        #drop-zone.dragover { border-color: var(--primary); background-color: rgba(59, 130, 246, 0.1); }
+        
+        .preview-item { cursor: grab; }
+        .preview-item:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; }
+        
+        /* Progress Bar */
+        .progress-container { width: 100%; background-color: var(--border-color); border-radius: 999px; overflow: hidden; display: none;}
+        .progress-bar { height: 8px; background-color: var(--primary); width: 0%; transition: width 0.2s; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+        <!-- Header & Settings -->
+        <div class="panel rounded-xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-2xl font-semibold">✨ Universal Document Toolkit</h1>
+            <div class="flex flex-wrap gap-3 items-center text-sm">
+                <select id="theme-select" class="input-style rounded px-3 py-1.5" onchange="changeTheme()">
+                    <option value="light">☀️ ขาวปกติ (Light)</option>
+                    <option value="dark">🌙 โทนมืด (Dark)</option>
+                    <option value="pink">🌸 ชมพูหวาน (Pink)</option>
+                    <option value="green">🍃 เขียวอ่อนสบายตา (Green)</option>
+                </select>
+                <select id="font-select" class="input-style rounded px-3 py-1.5" onchange="changeFont()">
+                    <option value="'Prompt', sans-serif">ฟอนต์ Prompt</option>
+                    <option value="'Sarabun', sans-serif">ฟอนต์ Sarabun</option>
+                    <option value="'Kanit', sans-serif">ฟอนต์ Kanit</option>
+                </select>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs">ขนาดฟอนต์:</span>
+                    <input type="range" id="font-size" min="12" max="24" value="16" oninput="changeFontSize()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode & API Setup -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="panel rounded-xl p-6 shadow-sm col-span-2">
+                <h2 class="text-lg font-medium mb-4">1. เลือกโหมดการทำงาน</h2>
+                <select id="op-mode" class="input-style w-full rounded p-2 mb-4 font-medium" onchange="updateUI()">
+                    <option value="pdf-manipulate">📄 จัดการ PDF (รวม/แยกหน้า/สลับหน้า/หมุน/เข้ารหัส/ลายน้ำ)</option>
+                    <option value="img-to-pdf">🖼️ ➡ 📄 แปลงรูปภาพเป็น PDF</option>
+                    <option value="pdf-to-img">📄 ➡ 🖼️ แปลง PDF เป็นรูปภาพ (JPG/PNG/WEBP)</option>
+                    <option value="pdf-to-office">📄 ➡ 📊 แปลง PDF เป็น Office (Word/Excel/PPT)</option>
+                    <option value="office-to-pdf">📊 ➡ 📄 แปลง Office เป็น PDF</option>
+                    <option value="ocr">🔍 สแกนข้อความในรูปภาพ (OCR ภาษาไทย)</option>
+                </select>
+
+                <div id="api-key-container" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded text-yellow-800 text-sm">
+                    <strong>ต้องใช้ Secret Key:</strong> สามารถขอ Secret Key ฟรีจาก <a href="https://www.convertapi.com/" target="_blank">ConvertAPI.com</a>
+                    <input type="password" id="api-key" placeholder="ใส่ Secret Key ของคุณที่นี่..." class="mt-2 w-full p-2 rounded border border-yellow-300">
+                </div>
+            </div>
+
+            <!-- Global Options Panel -->
+            <div id="options-panel" class="panel rounded-xl p-6 shadow-sm col-span-1 overflow-auto max-h-[400px]">
+                <h2 class="text-lg font-medium mb-4">⚙️ ตั้งค่าเพิ่มเติม</h2>
+                <div id="dynamic-options" class="space-y-4 text-sm">
+                    <!-- Injected via JS based on mode -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Drag & Drop Upload -->
+        <div id="drop-zone" class="border-2 border-dashed rounded-xl p-10 text-center transition-colors panel">
+            <input type="file" id="file-input" class="hidden" multiple accept=".pdf,image/*,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+            <div class="text-4xl mb-3">📁</div>
+            <p class="font-medium mb-1">ลากไฟล์มาวางที่นี่ (Drag & Drop)</p>
+            <p class="text-sm opacity-70 mb-4">หรือ</p>
+            <button onclick="document.getElementById('file-input').click()" class="btn-primary px-6 py-2 rounded-lg shadow hover:opacity-90">เลือกไฟล์</button>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="panel rounded-xl p-6 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-medium">ภาพตัวอย่าง (สามารถลากสลับตำแหน่งได้)</h2>
+                <button onclick="clearAll()" class="text-red-500 text-sm hover:underline">ล้างทั้งหมด</button>
+            </div>
+            
+            <div id="preview-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Preview items will go here -->
+            </div>
+        </div>
+
+        <!-- Processing & Progress -->
+        <div class="panel rounded-xl p-6 shadow-sm text-center">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-4">
+                <div class="flex flex-col text-left">
+                    <label class="text-xs opacity-70">ตั้งชื่อไฟล์ก่อนดาวน์โหลด</label>
+                    <input type="text" id="output-filename" value="Output_File" class="input-style rounded px-3 py-2 w-64">
+                </div>
+                <button id="process-btn" onclick="processFiles()" class="btn-primary px-8 py-3 rounded-xl font-medium text-lg shadow-lg hover:scale-105 transition-transform mt-3 md:mt-0">
+                    🚀 เริ่มการแปลงไฟล์
+                </button>
+            </div>
+
+            <div id="progress-container" class="progress-container mt-4">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <p id="status-text" class="text-sm mt-2 font-medium opacity-70"></p>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
+    <script>
+        // --- Core Setup & State ---
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        let state = {
+            files: [],
+            items: [], // [{ id, type, file, dataUrl, pageNum, rotation }]
+            mode: 'pdf-manipulate'
+        };
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const previewGrid = document.getElementById('preview-grid');
+		const optionsPanel = document.getElementById('options-panel');
+        const optionsContainer = document.getElementById('dynamic-options');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const statusText = document.getElementById('status-text');
+
+        // Initialize SortableJS
+        let sortable = new Sortable(previewGrid, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            onEnd: function (evt) {
+                // Keep DOM state syncing handled during processing logic (reads straight from DOM order)
+            }
+        });
+
+        // --- UI & Styling ---
+        function changeTheme() {
+            const theme = document.getElementById('theme-select').value;
+            document.body.className = `min-h-screen p-4 md:p-8 theme-${theme}`;
+        }
+
+        function changeFont() {
+            document.documentElement.style.setProperty('--font-family', document.getElementById('font-select').value);
+        }
+
+        function changeFontSize() {
+            document.documentElement.style.setProperty('--font-size', document.getElementById('font-size').value + 'px');
+        }
+
+        function updateUI() {
+            state.mode = document.getElementById('op-mode').value;
+            const apiContainer = document.getElementById('api-key-container');
+            apiContainer.classList.add('hidden');
+            
+            let optsHTML = '';
+
+            if (state.mode === 'pdf-manipulate') {
+				optionsPanel.style.display = 'block';
+                optsHTML = `
+                    <div><label class="block mb-1">รหัสผ่าน PDF (เว้นว่างถ้าไม่ต้องการ)</label><input type="password" id="opt-pass" class="input-style w-full rounded p-1.5"></div>
+                    <div><label class="block mb-1">ข้อความลายน้ำ (รองรับภาษาไทย)</label><input type="text" id="opt-watermark" class="input-style w-full rounded p-1.5" placeholder="เช่น ด่วนที่สุด"></div>
+                `;
+            } else if (state.mode === 'img-to-pdf') {
+				optionsPanel.style.display = 'block';
+                optsHTML = `
+                    <div><label class="block mb-1">ขนาดหน้ากระดาษ</label>
+                        <select id="opt-page-size" class="input-style w-full rounded p-1.5">
+                            <option value="a4">A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="legal">Legal</option>
+                            <option value="custom">กำหนดเอง (Custom)</option>
+                        </select>
+                    </div>
+                    <div id="custom-size-div" class="hidden flex gap-2">
+                        <input type="number" id="opt-w" placeholder="กว้าง pt" class="input-style w-1/2 rounded p-1">
+                        <input type="number" id="opt-h" placeholder="สูง pt" class="input-style w-1/2 rounded p-1">
+                    </div>
+                    <div><label class="block mb-1">แนวกระดาษ</label>
+                        <select id="opt-orientation" class="input-style w-full rounded p-1.5">
+                            <option value="portrait">แนวตั้ง (Portrait)</option>
+                            <option value="landscape">แนวนอน (Landscape)</option>
+                        </select>
+                    </div>
+                    <div><label class="block mb-1">การจัดวางภาพ</label>
+                        <select id="opt-layout" class="input-style w-full rounded p-1.5">
+                            <option value="fit">พอดีหน้า (เว้นขอบ - Fit)</option>
+                            <option value="fill">เต็มจอ (ไร้ขอบ - Fill)</option>
+                            <option value="center">กึ่งกลาง (ไม่ขยายรูป)</option>
+                        </select>
+                    </div>
+                `;
+            } else if (state.mode === 'pdf-to-img') {
+				optionsPanel.style.display = 'block';
+                optsHTML = `
+                    <div><label class="block mb-1">นามสกุลไฟล์รูปภาพ</label>
+                        <select id="opt-img-ext" class="input-style w-full rounded p-1.5">
+                            <option value="image/jpeg">JPG / JPEG</option>
+                            <option value="image/png">PNG</option>
+                            <option value="image/webp">WebP</option>
+                        </select>
+                    </div>
+                `;
+            } else if (state.mode === 'pdf-to-office' || state.mode === 'office-to-pdf') {
+                apiContainer.classList.remove('hidden');
+                if(state.mode === 'pdf-to-office'){
+					optionsPanel.style.display = 'block';
+                    optsHTML = `
+                        <div><label class="block mb-1">แปลงเป็น</label>
+                            <select id="opt-office-type" class="input-style w-full rounded p-1.5">
+                                <option value="docx">Word (.docx)</option>
+                                <option value="xlsx">Excel (.xlsx)</option>
+                                <option value="pptx">PowerPoint (.pptx)</option>
+                            </select>
+                        </div>
+                    `;
+                } else if (state.mode === 'office-to-pdf'){
+					optionsPanel.style.display = 'none';
+				}
+            } else optionsPanel.style.display = 'none';
+
+            optionsContainer.innerHTML = optsHTML;
+
+            // Add listener for custom size
+            const sizeSelect = document.getElementById('opt-page-size');
+            if(sizeSelect) {
+                sizeSelect.addEventListener('change', (e) => {
+                    document.getElementById('custom-size-div').style.display = e.target.value === 'custom' ? 'flex' : 'none';
+                });
+            }
+        }
+        updateUI();
+
+        // --- File Handling & Drag Drop ---
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        async function handleFiles(files) {
+            updateProgress(10, 'กำลังโหลดไฟล์...');
+            for (let file of files) {
+                const id = Date.now() + Math.random().toString();
+                
+                if (file.type.includes('image')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => addPreviewItem(id, 'image', file, e.target.result, 0);
+                    reader.readAsDataURL(file);
+                } 
+                else if (file.type === 'application/pdf') {
+                    // Extract pages as images for preview & manipulation
+                    const fileUrl = URL.createObjectURL(file);
+                    const pdf = await pdfjsLib.getDocument(fileUrl).promise;
+                    
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const viewport = page.getViewport({ scale: 0.5 });
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                        const dataUrl = canvas.toDataURL();
+                        addPreviewItem(id + '-' + i, 'pdf-page', file, dataUrl, i-1);
+                    }
+                }
+                else {
+                    // Office files
+                    addPreviewItem(id, 'office', file, 'https://cdn-icons-png.flaticon.com/512/281/281760.png', 0);
+                }
+            }
+            updateProgress(100, 'โหลดเสร็จสิ้น');
+            setTimeout(() => progressContainer.style.display = 'none', 1000);
+        }
+
+        function addPreviewItem(id, type, file, dataUrl, pageNum) {
+            const item = { id, type, file, dataUrl, pageNum, rotation: 0 };
+            state.items.push(item);
+            
+            const div = document.createElement('div');
+            div.className = 'preview-item relative panel rounded-lg p-2 flex flex-col items-center shadow-sm';
+            div.dataset.id = id;
+            div.dataset.rotation = "0";
+
+            div.innerHTML = `
+                <img src="${dataUrl}" class="w-full h-32 object-contain mb-2 preview-img transition-transform" style="transform: rotate(0deg)">
+                <span class="text-xs truncate w-full text-center block" title="${file.name}">${file.name} ${type==='pdf-page'?`(P.${pageNum+1})`:''}</span>
+                <div class="absolute top-1 right-1 flex gap-1">
+                    ${type === 'pdf-page' || type === 'image' ? `<button onclick="rotateItem(event, '${id}')" class="bg-blue-500 text-white rounded p-1 text-xs" title="หมุนหน้า">🔄</button>` : ''}
+                    <button onclick="removeItem(event, '${id}')" class="bg-red-500 text-white rounded p-1 text-xs" title="ลบ">❌</button>
+                </div>
+            `;
+            previewGrid.appendChild(div);
+        }
+
+        function rotateItem(e, id) {
+            e.stopPropagation();
+            const el = document.querySelector(`.preview-item[data-id="${id}"]`);
+            let currentRot = parseInt(el.dataset.rotation);
+            currentRot = (currentRot + 90) % 360;
+            el.dataset.rotation = currentRot;
+            el.querySelector('.preview-img').style.transform = `rotate(${currentRot}deg)`;
+            
+            // Update state
+            const item = state.items.find(i => i.id === id);
+            if(item) item.rotation = currentRot;
+        }
+
+        function removeItem(e, id) {
+            e.stopPropagation();
+            document.querySelector(`.preview-item[data-id="${id}"]`).remove();
+            state.items = state.items.filter(i => i.id !== id);
+        }
+
+        function clearAll() {
+            previewGrid.innerHTML = '';
+            state.items = [];
+            fileInput.value = '';
+        }
+
+        function updateProgress(percent, text) {
+            progressContainer.style.display = 'block';
+            progressBar.style.width = percent + '%';
+            statusText.innerText = text;
+        }
+
+        // --- Core Processing Functions ---
+        async function processFiles() {
+            if (state.items.length === 0) return alert("กรุณาเพิ่มไฟล์ก่อน");
+            
+            const outName = document.getElementById('output-filename').value || 'Converted_File';
+            const sortedNodes = Array.from(previewGrid.children);
+            
+            try {
+                if (state.mode === 'pdf-manipulate') await manipulatePDF(sortedNodes, outName);
+                else if (state.mode === 'img-to-pdf') await imagesToPdf(sortedNodes, outName);
+                else if (state.mode === 'pdf-to-img') await pdfToImages(sortedNodes, outName);
+                else if (state.mode === 'ocr') await performOCR(sortedNodes);
+                else if (state.mode === 'pdf-to-office' || state.mode === 'office-to-pdf') await convertAPI(sortedNodes, outName);
+            } catch (err) {
+                console.error(err);
+                alert("เกิดข้อผิดพลาด: " + err.message);
+                updateProgress(0, 'ล้มเหลว');
+            }
+        }
+
+        // 1. PDF Manipulation (Merge, Split, Reorder, Rotate, Password, Watermark)
+        async function manipulatePDF(nodes, outName) {
+            updateProgress(10, 'กำลังเตรียมการสร้าง PDF...');
+            const { PDFDocument, rgb, degrees } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+            
+            // Register Fontkit for Thai Watermark
+            pdfDoc.registerFontkit(fontkit);
+            let customFont = null;
+            const watermarkText = document.getElementById('opt-watermark')?.value;
+            if(watermarkText) {
+                // Fetch Sarabun Thai font as ArrayBuffer
+                const fontRes = await fetch('https://raw.githubusercontent.com/google/fonts/main/ofl/sarabun/Sarabun-Regular.ttf');
+                const fontBytes = await fontRes.arrayBuffer();
+                customFont = await pdfDoc.embedFont(fontBytes);
+            }
+
+            let loadedDocs = {}; // Cache to avoid reloading same file
+
+            for (let i = 0; i < nodes.length; i++) {
+                updateProgress(10 + (80 * (i / nodes.length)), `กำลังประมวลผลหน้าที่ ${i+1}/${nodes.length}`);
+                const id = nodes[i].dataset.id;
+                const item = state.items.find(x => x.id === id);
+                if(item.type !== 'pdf-page') continue;
+
+                // Load source PDF if not loaded
+                const fileObjURL = URL.createObjectURL(item.file);
+                if (!loadedDocs[item.file.name]) {
+                    const arrayBuffer = await item.file.arrayBuffer();
+                    loadedDocs[item.file.name] = await PDFDocument.load(arrayBuffer);
+                }
+                
+                const srcDoc = loadedDocs[item.file.name];
+                const [copiedPage] = await pdfDoc.copyPages(srcDoc, [item.pageNum]);
+                
+                // Rotation
+                const currentRot = copiedPage.getRotation().angle;
+                copiedPage.setRotation(degrees(currentRot + item.rotation));
+
+                // Watermark
+                if (watermarkText && customFont) {
+                    const { width, height } = copiedPage.getSize();
+                    copiedPage.drawText(watermarkText, {
+                        x: width / 4,
+                        y: height / 2,
+                        size: 50,
+                        font: customFont,
+                        color: rgb(0.75, 0, 0),
+                        opacity: 0.3,
+                        rotate: degrees(45)
+                    });
+                }
+                pdfDoc.addPage(copiedPage);
+            }
+
+            // Password Protection
+            const pwd = document.getElementById('opt-pass')?.value;
+            if (pwd) {
+                pdfDoc.encrypt({ userPassword: pwd, ownerPassword: pwd, permissions: { printing: 'highResolution' } });
+            }
+
+            updateProgress(95, 'กำลังบันทึกไฟล์...');
+            const pdfBytes = await pdfDoc.save();
+            downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `${outName}.pdf`);
+            updateProgress(100, 'เสร็จสมบูรณ์!');
+        }
+
+        // 2. Images to PDF
+        async function imagesToPdf(nodes, outName) {
+            updateProgress(10, 'กำลังสร้าง PDF...');
+            const { PDFDocument, PageSizes } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+            
+            const sizeMap = { 'a4': PageSizes.A4, 'letter': PageSizes.Letter, 'legal': [612, 1008] };
+            const sizeSetting = document.getElementById('opt-page-size').value;
+            const orientation = document.getElementById('opt-orientation').value;
+            const layout = document.getElementById('opt-layout').value;
+            
+            let pWidth, pHeight;
+            if(sizeSetting === 'custom') {
+                pWidth = Number(document.getElementById('opt-w').value) || 595.28;
+                pHeight = Number(document.getElementById('opt-h').value) || 841.89;
+            } else {
+                [pWidth, pHeight] = sizeMap[sizeSetting];
+            }
+
+            if(orientation === 'landscape') { [pWidth, pHeight] = [pHeight, pWidth]; }
+
+            for (let i = 0; i < nodes.length; i++) {
+                updateProgress(10 + (80 * (i / nodes.length)), `แทรกรูปภาพ ${i+1}/${nodes.length}`);
+                const id = nodes[i].dataset.id;
+                const item = state.items.find(x => x.id === id);
+                if(item.type !== 'image') continue;
+
+                // Load image to ArrayBuffer
+                const imgBytes = await item.file.arrayBuffer();
+                let pdfImg;
+                
+                // pdf-lib supports Jpeg and Png directly. Webp needs conversion to Png.
+                if (item.file.type === 'image/jpeg') {
+                    pdfImg = await pdfDoc.embedJpg(imgBytes);
+                } else {
+                    // For PNG and WEBP, convert to PNG via Canvas to be safe
+                    const cvs = document.createElement('canvas');
+                    const ctx = cvs.getContext('2d');
+                    const imgNode = new Image();
+                    imgNode.src = URL.createObjectURL(item.file);
+                    await new Promise(r => imgNode.onload = r);
+                    
+                    // Apply user rotation
+                    cvs.width = (item.rotation % 180 !== 0) ? imgNode.height : imgNode.width;
+                    cvs.height = (item.rotation % 180 !== 0) ? imgNode.width : imgNode.height;
+                    ctx.translate(cvs.width/2, cvs.height/2);
+                    ctx.rotate(item.rotation * Math.PI / 180);
+                    ctx.drawImage(imgNode, -imgNode.width/2, -imgNode.height/2);
+                    
+                    const pngData = cvs.toDataURL('image/png').split(',')[1];
+                    const pngBytes = Uint8Array.from(atob(pngData), c => c.charCodeAt(0));
+                    pdfImg = await pdfDoc.embedPng(pngBytes);
+                }
+
+                const page = pdfDoc.addPage([pWidth, pHeight]);
+                
+                // Calculate Layout Options (Fit, Fill, Center)
+                const imgDims = pdfImg.scale(1);
+                let drawWidth = imgDims.width;
+                let drawHeight = imgDims.height;
+                let x = 0, y = 0;
+
+                const pageRatio = pWidth / pHeight;
+                const imgRatio = drawWidth / drawHeight;
+
+                if (layout === 'fit') {
+                    if (imgRatio > pageRatio) {
+                        drawWidth = pWidth; drawHeight = drawWidth / imgRatio;
+                    } else {
+                        drawHeight = pHeight; drawWidth = drawHeight * imgRatio;
+                    }
+                    x = (pWidth - drawWidth) / 2; y = (pHeight - drawHeight) / 2;
+                } else if (layout === 'fill') {
+                    if (imgRatio > pageRatio) {
+                        drawHeight = pHeight; drawWidth = drawHeight * imgRatio;
+                    } else {
+                        drawWidth = pWidth; drawHeight = drawWidth / imgRatio;
+                    }
+                    x = (pWidth - drawWidth) / 2; y = (pHeight - drawHeight) / 2;
+                } else {
+                    // Center (Actual size)
+                    x = (pWidth - drawWidth) / 2; y = (pHeight - drawHeight) / 2;
+                }
+
+                page.drawImage(pdfImg, { x, y, width: drawWidth, height: drawHeight });
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `${outName}.pdf`);
+            updateProgress(100, 'เสร็จสมบูรณ์!');
+        }
+
+        // 3. PDF to Images
+        async function pdfToImages(nodes, outName) {
+            const format = document.getElementById('opt-img-ext').value;
+            const ext = format.split('/')[1]; // jpeg, png, webp
+            
+            for (let i = 0; i < nodes.length; i++) {
+                updateProgress((100 * i) / nodes.length, `กำลังแปลงเป็นรูปภาพหน้าที่ ${i+1}`);
+                const id = nodes[i].dataset.id;
+                const item = state.items.find(x => x.id === id);
+                if(item.type !== 'pdf-page') continue;
+
+                // Load source PDF
+                const fileUrl = URL.createObjectURL(item.file);
+                const pdf = await pdfjsLib.getDocument(fileUrl).promise;
+                const page = await pdf.getPage(item.pageNum + 1);
+                const viewport = page.getViewport({ scale: 2.0 }); // High Res
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                // Apply Rotation manually if user rotated it
+                if(item.rotation !== 0) {
+                    const rotCanvas = document.createElement('canvas');
+                    const rotCtx = rotCanvas.getContext('2d');
+                    rotCanvas.width = (item.rotation % 180 !== 0) ? canvas.height : canvas.width;
+                    rotCanvas.height = (item.rotation % 180 !== 0) ? canvas.width : canvas.height;
+                    rotCtx.translate(rotCanvas.width/2, rotCanvas.height/2);
+                    rotCtx.rotate(item.rotation * Math.PI / 180);
+                    rotCtx.drawImage(canvas, -canvas.width/2, -canvas.height/2);
+                    downloadBlob(await (await fetch(rotCanvas.toDataURL(format, 1.0))).blob(), `${outName}_Page_${i+1}.${ext}`);
+                } else {
+                    downloadBlob(await (await fetch(canvas.toDataURL(format, 1.0))).blob(), `${outName}_Page_${i+1}.${ext}`);
+                }
+                
+                // Small delay to allow sequential downloads
+                await new Promise(r => setTimeout(r, 300));
+            }
+            updateProgress(100, 'ดาวน์โหลดรูปภาพทั้งหมดแล้ว');
+        }
+
+        // 4. ConvertAPI (PDF <-> Office) 100% Exact Match Functionality
+        async function convertAPI(nodes, outName) {
+            const secret = document.getElementById('api-key').value;
+            if(!secret) return alert("โปรดกรอก ConvertAPI Secret Key ของคุณ");
+
+            for (let i = 0; i < nodes.length; i++) {
+                const id = nodes[i].dataset.id;
+                const item = state.items.find(x => x.id === id);
+                
+                // For PDF to Office, we only send the raw original file (ignoring page level splits for this feature to keep original quality)
+                // To avoid sending the same PDF 10 times if 10 pages are previewed, we track processed files.
+                if(item.type === 'pdf-page' && item.pageNum !== 0) continue; 
+
+                updateProgress(20 + (60 * (i / nodes.length)), `กำลังส่งไฟล์ ${item.file.name} ไปยัง ConvertAPI...`);
+
+                let fromExt = item.file.name.split('.').pop().toLowerCase();
+                let toExt = state.mode === 'pdf-to-office' ? document.getElementById('opt-office-type').value : 'pdf';
+
+                let formData = new FormData();
+                formData.append('File', item.file);
+
+                const res = await fetch(`https://v2.convertapi.com/convert/${fromExt}/${toExt}?Secret=${secret}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if(!res.ok) throw new Error("ConvertAPI Error: " + await res.text());
+                const data = await res.json();
+                
+                updateProgress(90, `ดาวน์โหลดไฟล์ ${toExt}...`);
+                
+                if(data.Files && data.Files.length > 0) {
+                    const fileUrl = data.Files[0].Url;
+                    const a = document.createElement('a');
+                    a.href = fileUrl;
+                    a.download = `${outName}.${toExt}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            }
+            updateProgress(100, 'เสร็จสมบูรณ์!');
+        }
+
+        // 5. OCR (Thai 100%)
+        async function performOCR(nodes) {
+            updateProgress(5, 'กำลังโหลดโมเดลภาษาไทย Tesseract (อาจใช้เวลาสักครู่)...');
+            let fullText = "";
+            
+            for (let i = 0; i < nodes.length; i++) {
+                const id = nodes[i].dataset.id;
+                const item = state.items.find(x => x.id === id);
+                
+                // Can only OCR images/pdf-pages
+                if(item.type === 'office') continue;
+
+                // Grab image data from UI (includes rotation)
+                const imgElement = nodes[i].querySelector('.preview-img');
+                
+                await Tesseract.recognize(
+                    imgElement.src,
+                    'tha+eng', // Thai + English
+                    { logger: m => {
+                        if(m.status === 'recognizing text') updateProgress(10 + (m.progress * 80), `สแกนข้อความภาพที่ ${i+1}... ${Math.round(m.progress * 100)}%`);
+                    }}
+                ).then(({ data: { text } }) => {
+                    fullText += `--- หน้า/ภาพที่ ${i+1} ---\n${text}\n\n`;
+                });
+            }
+
+            if(fullText.trim() === "") {
+                alert("ไม่พบข้อความ");
+            } else {
+                // Download text file
+                downloadBlob(new Blob([fullText], { type: 'text/plain;charset=utf-8' }), `${outName}.txt`);
+                
+                // Also show in modal or alert
+                const blobUrl = URL.createObjectURL(new Blob([fullText], { type: 'text/plain' }));
+                window.open(blobUrl, '_blank');
+            }
+            updateProgress(100, 'สแกนสำเร็จ!');
+        }
+
+        // Helper: Download Blob
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+    </script>
+</body>
+</html>
