@@ -14,7 +14,7 @@
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true,
-      storageKey: "brm-env-club-auth"
+      storageKey: "br-env-club-auth"
     }
   });
 
