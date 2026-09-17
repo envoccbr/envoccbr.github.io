@@ -10,8 +10,8 @@
   "use strict";
 
   global.APP_CONFIG = {
-    SUPABASE_URL: "https://ooovzjovkrfyuqakkpig.supabase.co",
-    SUPABASE_PUBLISHABLE_KEY: "sb_publishable_ehPNQA2zT8Tpn7SD2Gw3sQ_Vn2TfHwi",
+    SUPABASE_URL: "https://aluytwcuwobtkunllwrm.supabase.co",
+    SUPABASE_PUBLISHABLE_KEY: "sb_publishable_lUjPp3JPPI6Y07MzI9jn0A_45qAW45k",
 
     /* ชื่อ bucket ที่เก็บไฟล์ */
     BUCKETS: {
