@@ -162,7 +162,17 @@
     <script>
         // --- Core Setup & State ---
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-        
+
+        function escapeHtml(s) {
+            if (s === null || s === undefined) return '';
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         let state = {
             files: [],
             items: [], // [{ id, type, file, dataUrl, pageNum, rotation }]
@@ -341,7 +351,7 @@
 
             div.innerHTML = `
                 <img src="${dataUrl}" class="w-full h-32 object-contain mb-2 preview-img transition-transform" style="transform: rotate(0deg)">
-                <span class="text-xs truncate w-full text-center block" title="${file.name}">${file.name} ${type==='pdf-page'?`(P.${pageNum+1})`:''}</span>
+                <span class="text-xs truncate w-full text-center block" title="${escapeHtml(file.name)}">${escapeHtml(file.name)} ${type==='pdf-page'?`(P.${pageNum+1})`:''}</span>
                 <div class="absolute top-1 right-1 flex gap-1">
                     ${type === 'pdf-page' || type === 'image' ? `<button onclick="rotateItem(event, '${id}')" class="bg-blue-500 text-white rounded p-1 text-xs" title="หมุนหน้า">🔄</button>` : ''}
                     <button onclick="removeItem(event, '${id}')" class="bg-red-500 text-white rounded p-1 text-xs" title="ลบ">❌</button>

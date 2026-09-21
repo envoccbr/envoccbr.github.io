@@ -260,7 +260,7 @@
       let bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-emerald-500' : 'bg-blue-500'
       let icon = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️'
       toast.className = `toast ${bgColor} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 max-w-sm`
-      toast.innerHTML = `<span>${icon}</span><span>${message}</span>`
+      toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`
       document.getElementById('toast-container').appendChild(toast)
       setTimeout(() => toast.remove(), 4000)
     }
@@ -1255,7 +1255,7 @@
           <div class="file-info">
             <div class="file-icon">PDF</div>
             <div class="file-details">
-              <h4>${file.name}</h4>
+              <h4>${escapeHtml(file.name)}</h4>
               <p>${formatFileSize(file.size)}</p>
             </div>
           </div>
@@ -1691,7 +1691,7 @@
             <div class="file-info">
               <div class="file-icon">PDF</div>
               <div class="file-details">
-                <h4>${compressFile.name}</h4>
+                <h4>${escapeHtml(compressFile.name)}</h4>
                 <p>${formatFileSize(compressFile.size)}</p>
               </div>
             </div>

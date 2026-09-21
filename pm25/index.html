@@ -316,6 +316,17 @@
     </main>
     <!-- let data -->
       <script>
+        function escapeHtml(s) {
+          if (s === null || s === undefined) return "";
+          return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+      </script>
+      <script>
         let data = {
           message: null,
           submitting: false,
@@ -412,7 +423,7 @@
                 if (res.data && res.data !== undefined && res.data.length != 0) {
                   Swal.fire({
                     icon: "success",
-                    title: "อำเภอ"+res.id,
+                    title: "อำเภอ"+escapeHtml(res.id),
                     html: "ค่า PM2.5 (µg/m³) : "+res.pm25+"<br>ระดับ PM2.5 : "+res.level+"<br><br>"+"<table class='table table-sm table-striped table-hover' id='dtable'></table>",
                     confirmButtonText:"<i class='fa fa-thumbs-o-up'></i>&nbsp; ปิดหน้าต่าง",
                     timerProgressBar: true,
@@ -467,7 +478,8 @@
               console.log(res);
               $.LoadingOverlay("hide");
               this.submitting = false;
-              results.innerHTML = "<a href='"+res.url+"'>"+res.name+"</a>";
+              let safeUrl = /^https?:\/\//i.test(res.url) ? res.url : "#";
+              results.innerHTML = "<a href='"+escapeHtml(safeUrl)+"'>"+escapeHtml(res.name)+"</a>";
             }
             catch (e) {
               this.submitting = false;

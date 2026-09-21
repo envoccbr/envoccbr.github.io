@@ -671,6 +671,18 @@
     </script>
 
     <script>
+	  function escapeHtml(s) {
+	    if (s === null || s === undefined) return ''
+	    return String(s)
+	      .replace(/&/g, '&amp;')
+	      .replace(/</g, '&lt;')
+	      .replace(/>/g, '&gt;')
+	      .replace(/"/g, '&quot;')
+	      .replace(/'/g, '&#39;')
+	  }
+	</script>
+
+    <script>
 	  function thaiNumber(number) {
 	    let arr = {'1':'๑', '2':'๒', '3':'๓', '4' : '๔', '5' : '๕', '6' : '๖', '7' : '๗', '8' : '๘', '9' : '๙', '0' : '๐'}
 	    let str = number.toString()
@@ -699,9 +711,9 @@
 	    let fullName = sessionStorage.getItem("name")
 	    let fileName = yearNew + ' ' + thaiMonth + ' ' + date + ' - ' + fullName + '.pdf'
 		
-		document.getElementById('fullName').innerHTML = fullName
-		document.getElementById('dateNew').innerHTML = dateNew
-		document.getElementById('dateExp').innerHTML = dateExp
+		document.getElementById('fullName').textContent = fullName
+		document.getElementById('dateNew').textContent = dateNew
+		document.getElementById('dateExp').textContent = dateExp
 		document.getElementById('element-to-print').style.display = 'inline'
 		
 		let element = document.getElementById('element-to-print')
@@ -834,13 +846,13 @@
               Swal.fire({
                 icon: 'success', 
                 title: 'ผลการทดสอบ', 
-                html: `<span>${this.ID} ทำคะแนนได้ ${totalScore}/${this.config.count} คะแนน<br/>(ทำคะแนนได้มากกว่า ${scorePass} คะแนน จึงถือว่า <b>"ผ่าน"</b>)<br/><br/><button class="w3-button w3-round w3-theme-d4 w3-mobile" onclick="pdfFile()">ดาวน์โหลดไฟล์เกียรติบัตร</button></span>`,
+                html: `<span>${escapeHtml(this.ID)} ทำคะแนนได้ ${totalScore}/${this.config.count} คะแนน<br/>(ทำคะแนนได้มากกว่า ${scorePass} คะแนน จึงถือว่า <b>"ผ่าน"</b>)<br/><br/><button class="w3-button w3-round w3-theme-d4 w3-mobile" onclick="pdfFile()">ดาวน์โหลดไฟล์เกียรติบัตร</button></span>`,
 				confirmButtonText: 'OK'
               }).then(function(result) {
 			    if (result.isConfirmed) {
-				  document.getElementById('fullName').innerHTML = ''
-				  document.getElementById('dateNew').innerHTML = ''
-				  document.getElementById('dateExp').innerHTML = ''
+				  document.getElementById('fullName').textContent = ''
+				  document.getElementById('dateNew').textContent = ''
+				  document.getElementById('dateExp').textContent = ''
 				  document.getElementById('element-to-print').style.display = 'none'
 				}
 			  })
@@ -852,7 +864,7 @@
               Swal.fire({
                 icon: 'error', 
                 title: 'ผลการทดสอบ', 
-                html: `<span>${this.ID} ทำคะแนนได้ ${totalScore}/${this.config.count} คะแนน<br/>(ทำคะแนนได้น้อยกว่า ${scorePass} คะแนน จึงถือว่า <b>"ไม่ผ่าน"</b>)</span>`,
+                html: `<span>${escapeHtml(this.ID)} ทำคะแนนได้ ${totalScore}/${this.config.count} คะแนน<br/>(ทำคะแนนได้น้อยกว่า ${scorePass} คะแนน จึงถือว่า <b>"ไม่ผ่าน"</b>)</span>`,
 				confirmButtonText: 'OK'
               })
             }
