@@ -270,28 +270,10 @@
 	</div>
 	<div class="container">
 	   <div class="scanner-card">
+		    <!-- html5-qrcode จะสร้าง UI ของตัวเองลงใน #reader ตอน render() (มันล้าง innerHTML ทิ้งก่อน)
+		         เดิมตรงนี้มีมาร์กอัปของไลบรารีก๊อปแปะไว้ตายตัว ทำให้ผู้ใช้เห็นปุ่มปลอมที่กดไม่ได้ก่อนสคริปต์ทำงาน -->
 		    <div id="reader" style="position: relative; padding: 0px; border: 1px solid silver;">
-				<div id="reader__dashboard" style="width: 100%;">
-					<div id="reader__dashboard_section" style="width: 100%; padding: 10px 0px; text-align: left;">
-						<div id="reader__dashboard_section_csr" style="display: block;">
-							<div style="text-align: center;">
-								<button id="html5-qrcode-button-camera-permission" class="html5-qrcode-element">Request Camera Permissions</button>
-							</div>
-						</div>
-						<div style="text-align: center; margin: auto auto 10px; width: 80%; max-width: 600px; border: 6px dashed rgb(235, 235, 235); padding: 10px; display: none;">
-							<label for="html5-qrcode-private-filescan-input" style="display: inline-block;">
-								<button id="html5-qrcode-button-file-selection" class="html5-qrcode-element">Choose Image - No image choosen</button>
-								<input id="html5-qrcode-private-filescan-input" class="html5-qrcode-element" type="file" accept="image/*" style="display: none;">
-							</label>
-							<div style="font-weight: 400;">
-								Or drop an image to scan
-							</div>
-						</div>
-						<div style="text-align: center;">
-							<a id="html5-qrcode-anchor-scan-type-change" class="html5-qrcode-element" style="text-decoration: underline;">Scan an Image File</a>
-						</div>
-					</div>
-				</div>
+				<p style="text-align:center; padding: 2rem 1rem; color: var(--text-muted); margin: 0;">กำลังเตรียมกล้อง...</p>
 			</div>
 			<div id="scanned-result"></div>
 	   </div>
@@ -318,7 +300,10 @@
 			header.className = 'result-header';
 			const format = document.createElement('span');
 			format.className = 'result-format';
-			format.innerText = decodedResult.result.format.formatName;
+			// บางเส้นทางถอดรหัส (เช่น BarcodeDetector ของเบราว์เซอร์) ไม่ส่ง format กลับมา
+			// เดิมอ่าน .formatName ตรง ๆ ทำให้ throw แล้วผลการสแกนไม่ถูกแสดงเลย
+			let fmt = decodedResult && decodedResult.result && decodedResult.result.format;
+			format.innerText = (fmt && fmt.formatName) ? fmt.formatName : 'QR / Barcode';
 			const time = document.createElement('span');
 			time.style.fontSize = '0.75rem';
 			time.style.color = 'var(--text-muted)';

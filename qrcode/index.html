@@ -303,10 +303,16 @@
 		
         function updateLogoSizeLabel() { document.getElementById('logo-size-label').innerText = Math.round(document.getElementById('logoSize').value * 100) + '%'; }
 
+        // รูปแบบ WIFI: ต้อง escape \\ ; , : " ด้วย backslash ไม่งั้น SSID/รหัสผ่านที่มีอักขระเหล่านี้
+        // จะทำให้เครื่องที่สแกนอ่าน payload ผิดหรือเชื่อมต่อไม่ได้
+        function escapeWifi(value) {
+            return String(value === null || value === undefined ? '' : value).replace(/([\\;,:"])/g, '\\$1');
+        }
+
         function getQRData() {
             if (currentType === 'url') return document.getElementById('data-url').value;
             else if (currentType === 'text') return document.getElementById('data-text').value;
-            else if (currentType === 'wifi') { let ssid = document.getElementById('wifi-ssid').value; let pass = document.getElementById('wifi-pass').value; let type = document.getElementById('wifi-type').value; if(ssid) return "WIFI:S:" + ssid + ";T:" + type + ";P:" + pass + ";H:false;;"; }
+            else if (currentType === 'wifi') { let ssid = document.getElementById('wifi-ssid').value; let pass = document.getElementById('wifi-pass').value; let type = document.getElementById('wifi-type').value; if(ssid) return "WIFI:S:" + escapeWifi(ssid) + ";T:" + type + ";P:" + escapeWifi(pass) + ";H:false;;"; }
             else if (currentType === 'phone') { let p = document.getElementById('data-phone').value; if(p) return "tel:" + p; }
             else if (currentType === 'email') { let e = document.getElementById('email-to').value; let s = document.getElementById('email-sub').value; if(e) return "mailto:" + e + "?subject=" + encodeURIComponent(s); }
             else if (currentType === 'promptpay') return generatePromptPayPayload(document.getElementById('promptpay-id').value, document.getElementById('promptpay-amount').value);
@@ -365,10 +371,29 @@
             return '<span class="' + classes + 'bg-gray-100 text-gray-800">' + typeStr + '</span>';
         }
 
+        let SETTINGS_KEY = 'qr_promaker_settings';
+
+        function isHexColor(v) { return /^#[0-9a-f]{6}$/i.test(v || ''); }
+
+        function loadStoredSettings() {
+            // อ่านค่าที่บันทึกไว้ ถ้าไม่มีหรือพังก็ถอยไปใช้ค่าเริ่มต้น ไม่ปล่อยให้ throw
+            try {
+                let raw = localStorage.getItem(SETTINGS_KEY);
+                let parsed = raw ? JSON.parse(raw) : null;
+                if (parsed && typeof parsed === 'object') { return parsed; }
+            } catch (e) { /* ค่าที่เก็บไว้เสีย ใช้ค่าเริ่มต้นแทน */ }
+            return {};
+        }
+
+        // เดิม window.onload เรียก fetchSettings() โดยไม่ส่ง argument ทำให้ data เป็น undefined
+        // แล้ว throw ทุกครั้งที่เปิดหน้า ธีมจึงไม่เคยถูกนำมาใช้เลย
         function fetchSettings(data) {
-                document.getElementById('setting-color1').value = data.themeColor1 || '#8b5cf6';
-                document.getElementById('setting-color2').value = data.themeColor2 || '#d946ef';
-                applyTheme(document.getElementById('setting-color1').value, document.getElementById('setting-color2').value);			
+            if (!data || typeof data !== 'object') { data = loadStoredSettings(); }
+            let c1 = isHexColor(data.themeColor1) ? data.themeColor1 : '#8b5cf6';
+            let c2 = isHexColor(data.themeColor2) ? data.themeColor2 : '#d946ef';
+            document.getElementById('setting-color1').value = c1;
+            document.getElementById('setting-color2').value = c2;
+            applyTheme(c1, c2);
         }
         
         function saveSettings() {
@@ -378,8 +403,12 @@
             btn.disabled = true;
             let data = { themeColor1: document.getElementById('setting-color1').value, themeColor2: document.getElementById('setting-color2').value };
             applyTheme(data.themeColor1, data.themeColor2);
-			Toast.fire({ icon: 'success', title: 'บันทึกการตั้งค่าเรียบร้อย' }); 
-			fetchSettings(data); 
+            // เดิมขึ้นข้อความว่าบันทึกแล้ว แต่ไม่ได้เขียนลงที่ไหนเลย ค่าจึงหายทุกครั้งที่รีโหลด
+            let saved = true;
+            try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(data)); }
+            catch (e) { saved = false; }
+            Toast.fire({ icon: saved ? 'success' : 'error', title: saved ? 'บันทึกการตั้งค่าเรียบร้อย' : 'บันทึกไม่สำเร็จ (เบราว์เซอร์ไม่อนุญาตให้เก็บข้อมูล)' });
+            fetchSettings(data); 
 			btn.innerHTML = original;
 			btn.disabled = false;
         }
@@ -402,8 +431,13 @@
             let tag = (t.length >= 15) ? "03" : (t.length === 13) ? "02" : "01";
             let ppa = (tag === "01") ? '0066' + t.substring(1) : t;
             let mid = "0016A000000677010111" + tag + String(ppa.length).padStart(2, '0') + ppa;
-            let p = "00020101021129" + String(mid.length).padStart(2, '0') + mid + "5802TH5303764";
-            if (amount > 0) { let s = parseFloat(amount).toFixed(2); p += "54" + String(s.length).padStart(2, '0') + s; }
+            // Point of Initiation Method: 11 = static (ผู้จ่ายกรอกจำนวนเงินเอง), 12 = dynamic (ฝังจำนวนเงินมาแล้ว)
+            // เดิมใช้ 11 เสมอ ทั้งที่ใส่จำนวนเงินไปด้วย ซึ่งผิดสเปก EMVCo/พร้อมเพย์
+            let amountNum = parseFloat(amount);
+            let hasAmount = isFinite(amountNum) && amountNum > 0;
+            let poim = hasAmount ? "12" : "11";
+            let p = "000201" + "0102" + poim + "29" + String(mid.length).padStart(2, '0') + mid + "5802TH5303764";
+            if (hasAmount) { let s = amountNum.toFixed(2); p += "54" + String(s.length).padStart(2, '0') + s; }
             p += "6304";
             let crc = 0xFFFF;
             for (let i = 0; i < p.length; i++) {

@@ -179,7 +179,7 @@
           <div class="space-y-2">
             <button onclick="setPassword()" class="w-full flex items-center space-x-3 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg transition border border-slate-700">
               <i class="fa-solid fa-shield-halved w-5 text-emerald-400 text-center"></i>
-              <span class="text-sm" id="btn-text-password">ตั้งรหัสผ่าน (Protect)</span>
+              <span class="text-sm" id="btn-text-password">รหัสผ่านไฟล์ (ยังไม่รองรับ)</span>
             </button>
             <button onclick="unlockPDF()" class="w-full flex items-center space-x-3 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg transition border border-slate-700">
               <i class="fa-solid fa-layer-group w-5 text-purple-400 text-center"></i>
@@ -208,10 +208,10 @@
         <div class="mb-5">
           <label class="settings-label"><i class="fa-solid fa-key mr-1"></i> Gemini API Key</label>
           <div class="flex gap-2">
-            <input type="password" id="settings-apikey" class="settings-input" placeholder="AIzaSy...">
+            <input type="password" id="settings-apikey" class="settings-input" placeholder="AIzaSy..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <button onclick="toggleApiKeyVisibility()" class="px-3 py-2 bg-slate-700 rounded-lg text-slate-300 hover:bg-slate-600 transition text-sm"><i id="eye-icon" class="fa-solid fa-eye"></i></button>
           </div>
-          <p class="text-xs text-slate-500 mt-2">ใช้สำหรับฟีเจอร์ AI (สรุป PDF / ถาม-ตอบ) &mdash; <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-400 hover:underline">รับ API Key ฟรี</a></p>
+          <p class="text-xs text-slate-500 mt-2">ใช้สำหรับฟีเจอร์ AI (สรุป PDF / ถาม-ตอบ) &mdash; <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">รับ API Key ฟรี</a></p>
         </div>
         <div class="mb-6">
           <label class="settings-label"><i class="fa-solid fa-palette mr-1"></i> โทนสีหลัก</label>
@@ -287,7 +287,9 @@
       }
       function loadSettings() {
         State.settings.apiKey = localStorage.getItem('pdf_toolkit_apikey') || '';
-        State.settings.themeColor = '#4f46e5';
+        // เดิมบันทึก pdf_toolkit_theme ลง localStorage แต่ไม่เคยอ่านกลับ ธีมจึงรีเซ็ตทุกครั้งที่เปิดหน้า
+        let savedTheme = localStorage.getItem('pdf_toolkit_theme') || '';
+        State.settings.themeColor = /^#[0-9a-f]{6}$/i.test(savedTheme) ? savedTheme : '#4f46e5';
         applyTheme(State.settings.themeColor, null);
       }
       async function callGemini(prompt, systemInstruction) {
@@ -298,7 +300,9 @@
           openSettings();
           return null;
         }
-        let url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=' + apiKey;
+        // ส่ง API key ทาง header ไม่ใช่ query string: URL หลุดไปอยู่ใน Referer,
+        // ประวัติเบราว์เซอร์, log ของ proxy และข้อความ error ได้
+        let url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
         let payload = {
           contents: [{ parts: [{ text: prompt }] }],
           systemInstruction: { parts: [{ text: systemInstruction }] }
@@ -308,14 +312,16 @@
           try {
             let response = await fetch(url, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
               body: JSON.stringify(payload)
             });
             if (!response.ok) {
               let errData = await response.json().catch(function () { return {}; });
               let msg = 'HTTP ' + response.status;
               if (errData && errData.error && errData.error.message) { msg = errData.error.message; }
-              throw new Error(msg);
+              let httpErr = new Error(msg);
+              httpErr.status = response.status;
+              throw httpErr;
             }
             let result = await response.json();
             let answer = "ไม่สามารถสร้างคำตอบได้";
@@ -326,7 +332,10 @@
             }
             return answer;
           } catch (e) {
-            if (i === 4) {
+            // ลองใหม่เฉพาะกรณีที่ลองแล้วมีโอกาสสำเร็จ: เน็ตหลุด, โดน rate limit, ฝั่ง server พัง
+            // ถ้าเป็น 4xx อื่น (เช่น API key ผิด) ตอบกลับทันที ไม่ต้องให้ผู้ใช้รอ 31 วินาที
+            let retryable = !e.status || e.status === 429 || e.status >= 500;
+            if (i === 4 || !retryable) {
               console.error("Gemini API Error:", e);
               return "ขออภัย เกิดข้อผิดพลาด: " + e.message;
             }
@@ -373,8 +382,19 @@
         }
         return fullText;
       }
+      // ข้อความจาก PDF / จากผู้ใช้ / จากโมเดล ล้วนเป็นข้อมูลที่เชื่อไม่ได้
+      // ทุกจุดที่เอาไปต่อเป็น HTML ต้อง escape ก่อนเสมอ
+      function escapeHtml(value) {
+        return String(value === null || value === undefined ? '' : value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
       function formatAIResponse(text) {
-        return text
+        // escape ก่อน แล้วค่อยแปลง markdown เป็นแท็ก เพื่อไม่ให้ HTML จากโมเดลรันได้
+        return escapeHtml(text)
           .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
           .replace(/\*(.*?)\*/g, '<i>$1</i>')
           .replace(/\n\*/g, '<br>•')
@@ -423,7 +443,7 @@
             let newChat = '<div class="text-left text-sm mb-4 border-b pb-4">' +
               '<div class="flex items-start gap-2 mb-2">' +
                 '<div class="bg-gray-200 text-gray-700 px-2 py-1 rounded font-bold text-xs mt-0.5">คุณ</div>' +
-                '<div class="font-medium text-gray-800">' + question + '</div>' +
+                '<div class="font-medium text-gray-800">' + escapeHtml(question) + '</div>' +
               '</div>' +
               '<div class="flex items-start gap-2">' +
                 '<div class="bg-pink-100 text-pink-700 px-2 py-1 rounded font-bold text-xs mt-0.5"><i class="fa-solid fa-robot"></i></div>' +
@@ -476,6 +496,7 @@
         reader.readAsArrayBuffer(file);
       }
       async function loadPDFToViewer() {
+        let previousDoc = State.pdfDoc;
         let dataToPass = new Uint8Array(State.pdfBytes);
         let loadingTask = pdfjsLib.getDocument({ data: dataToPass, isEvalSupported: false });
         State.pdfDoc = await loadingTask.promise;
@@ -484,8 +505,26 @@
         if (State.currentPage < 1) { State.currentPage = 1; }
         document.getElementById('page-total').innerText = State.totalPages;
         await renderPage(State.currentPage);
+        // ปิดเอกสารเดิมหลังเรนเดอร์ชุดใหม่เสร็จ ไม่งั้นทุกครั้งที่หมุน/ลบ/รวมหน้า
+        // จะทิ้งเอกสารค้างไว้ใน worker จนหน่วยความจำบวม
+        if (previousDoc && previousDoc !== State.pdfDoc) {
+          previousDoc.destroy().catch(function () {});
+        }
       }
-      async function renderPage(pageNum) {
+      // pdf.js ห้ามเรนเดอร์ลง canvas เดียวกันซ้อนกัน ("Cannot use the same canvas during
+      // multiple render() operations") ซึ่งเกิดได้จากกดเปลี่ยนหน้ารัว ๆ หรือย่อ/ขยายจอระหว่างเรนเดอร์
+      // จึงต่อคิวให้เรนเดอร์ทีละครั้ง และข้ามคิวที่มีคำสั่งใหม่กว่ามาแทนแล้ว
+      let renderSeq = 0;
+      let renderChain = Promise.resolve();
+      function renderPage(pageNum) {
+        let mySeq = ++renderSeq;
+        renderChain = renderChain.then(function () {
+          if (mySeq !== renderSeq) { return; }
+          return doRenderPage(pageNum);
+        }).catch(function (err) { console.error('renderPage error:', err); });
+        return renderChain;
+      }
+      async function doRenderPage(pageNum) {
         if (!State.pdfDoc) { return; }
         State.selectedElementId = null;
         let page = await State.pdfDoc.getPage(pageNum);
@@ -660,16 +699,16 @@
           title: isNew ? 'เพิ่มข้อความ' : 'แก้ไขข้อความ',
           html: '<div class="text-left space-y-4 mt-2">' +
                   '<div>' +
-                    '<textarea id="swal-text" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none" rows="3" placeholder="พิมพ์ข้อความที่นี่...">' + txtVal + '</textarea>' +
+                    '<textarea id="swal-text" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none" rows="3" placeholder="พิมพ์ข้อความที่นี่...">' + escapeHtml(txtVal) + '</textarea>' +
                   '</div>' +
                   '<div class="flex items-center space-x-4">' +
                     '<div class="flex-1">' +
                       '<label class="block text-sm font-medium text-gray-700 mb-1">ขนาดตัวอักษร</label>' +
-                      '<input type="number" id="swal-size" class="w-full border border-gray-300 rounded-lg p-2" value="' + sizeVal + '">' +
+                      '<input type="number" id="swal-size" class="w-full border border-gray-300 rounded-lg p-2" min="1" max="400" value="' + escapeHtml(sizeVal) + '">' +
                     '</div>' +
                     '<div class="flex-1">' +
                       '<label class="block text-sm font-medium text-gray-700 mb-1">สีข้อความ</label>' +
-                      '<input type="color" id="swal-color" class="w-full h-10 border border-gray-300 rounded-lg cursor-pointer" value="' + colorVal + '">' +
+                      '<input type="color" id="swal-color" class="w-full h-10 border border-gray-300 rounded-lg cursor-pointer" value="' + escapeHtml(colorVal) + '">' +
                     '</div>' +
                   '</div>' +
                 '</div>',
@@ -830,6 +869,11 @@
       function handleMergeUpload(e) {
         if (!State.pdfDoc || !e.target.files || e.target.files.length === 0) { return; }
         let file = e.target.files[0];
+        if (file.type !== 'application/pdf') {
+          showToast('กรุณาเลือกไฟล์ PDF เท่านั้น', 'error');
+          e.target.value = '';
+          return;
+        }
         Swal.fire({ title: 'กำลังเตรียมหน้ากระดาษ...', text: 'รอสักครู่...', allowOutsideClick: false, didOpen: function () { Swal.showLoading(); } });
         let reader = new FileReader();
         reader.onload = async function (event) {
@@ -841,6 +885,7 @@
             let newLoadingTask = pdfjsLib.getDocument({ data: dataToPass, isEvalSupported: false });
             let newPdfDoc = await newLoadingTask.promise;
             let newThumbs = await generateThumbnails(newPdfDoc, 'new');
+            await newPdfDoc.destroy().catch(function () {});
             Swal.close();
             openOrganizerModal(mainThumbs, newThumbs, newPdfBytes);
             e.target.value = '';
@@ -952,21 +997,21 @@
           Swal.close(); showToast('ประมวลผลเสร็จสิ้น!');
         } catch (error) { console.error(error); Swal.fire('Error', 'เกิดข้อผิดพลาดในการประมวลผล', 'error'); }
       }
+      // เดิมฟังก์ชันนี้รับรหัสผ่าน แล้วขึ้นข้อความว่า "มีรหัสผ่านป้องกันแล้ว 🔒"
+      // แต่ตอนส่งออกไม่ได้เข้ารหัสไฟล์จริงเลย ผู้ใช้จึงอาจส่งเอกสารสำคัญออกไปโดยเข้าใจผิดว่าถูกล็อกไว้
+      // ตอนนี้บอกตามจริงว่ายังทำไม่ได้ แทนที่จะให้ความมั่นใจปลอม ๆ
       function setPassword() {
         if (!State.pdfDoc) { return; }
         Swal.fire({
-          title: 'ตั้งรหัสผ่านป้องกันไฟล์',
-          text: 'รหัสผ่านนี้จะถูกฝังตอนคุณกดส่งออก (Download) เพื่อป้องกันการเปิดอ่าน',
-          input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน (ปล่อยว่างเพื่อยกเลิก)',
-          showCancelButton: true, confirmButtonText: 'ตกลง', cancelButtonText: 'ยกเลิก'
-        }).then(function (res) {
-          if (res.isConfirmed) {
-            State.password = res.value || null;
-            let btn = document.getElementById('btn-text-password');
-            btn.innerText = State.password ? 'มีรหัสผ่านป้องกันแล้ว 🔒' : 'ตั้งรหัสผ่าน (Protect)';
-            btn.className = State.password ? 'text-sm text-emerald-400 font-bold' : 'text-sm';
-            if (State.password) { showToast('ตั้งรหัสผ่านเตรียมส่งออกเรียบร้อย'); }
-          }
+          icon: 'info',
+          title: 'ยังใส่รหัสผ่านให้ไฟล์ไม่ได้',
+          html: '<div class="text-left text-sm leading-relaxed">' +
+                  '<p class="mb-2">เครื่องมือที่หน้านี้ใช้สร้าง PDF (pdf-lib) ยังไม่รองรับการเข้ารหัสไฟล์ ' +
+                  'ไฟล์ที่ดาวน์โหลดจากหน้านี้จึง<strong>เปิดอ่านได้โดยไม่ต้องใช้รหัสผ่าน</strong></p>' +
+                  '<p class="text-gray-600">ถ้าต้องการล็อกไฟล์จริง ๆ กรุณาใส่รหัสผ่านด้วยโปรแกรมอ่าน PDF ' +
+                  'ที่เครื่องของคุณอีกขั้นหนึ่งหลังดาวน์โหลด</p>' +
+                '</div>',
+          confirmButtonText: 'รับทราบ'
         });
       }
       function arrayBufferToBase64(buffer) {
@@ -995,7 +1040,14 @@
       async function buildExportedPDFBytes() {
         let pdfDoc = await PDFLib.PDFDocument.load(State.pdfBytes, { ignoreEncryption: true });
         let pages  = pdfDoc.getPages();
-        let thaiFontData = await getThaiFont().catch(function (e) { return null; });
+        let thaiFontData = await getThaiFont().catch(function (e) { console.error(e); return null; });
+        if (!thaiFontData) {
+          // ไม่มีฟอนต์ = ฝังข้อความไม่ได้ ต้องบอกผู้ใช้ ไม่ใช่ปล่อยให้ข้อความหายไปเฉย ๆ
+          let hasTextEdit = Object.keys(State.edits).some(function (k) {
+            return (State.edits[k] || []).some(function (it) { return it.type === 'text'; });
+          });
+          if (hasTextEdit) { showToast('โหลดฟอนต์ไทยไม่สำเร็จ ข้อความที่เพิ่มไว้จะไม่ถูกฝังลงไฟล์', 'error'); }
+        }
         if (thaiFontData) {
           pdfDoc.registerFontkit(window.fontkit);
           let customFont = await pdfDoc.embedFont(thaiFontData);
@@ -1048,7 +1100,6 @@
             }
           }
         }
-        if (State.password) { showToast('⚠️ การตั้งรหัสผ่านไม่รองรับในเวอร์ชันนี้', 'error'); }
         return await pdfDoc.save();
       }
       async function exportPDF() {
@@ -1060,7 +1111,7 @@
             title: '<i class="fa-solid fa-file-export text-indigo-500"></i> ส่งออก PDF',
             html: '<div class="flex flex-col gap-3">' + 
                     '<button id="btn-download-choice" class="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2" style="background:var(--theme-primary)">' + 
-                      '<i class="fa-solid fa-download"></i> ดาวน์โหลดบันทึกไฟล์ <strong>' + filename + '</strong> ลงเครื่อง' + 
+                      '<i class="fa-solid fa-download"></i> ดาวน์โหลดบันทึกไฟล์ <strong>' + escapeHtml(filename) + '</strong> ลงเครื่อง' + 
                     '</button>' + 
                   '</div>',
             showConfirmButton: false,
@@ -1084,7 +1135,7 @@
           } 
         } catch (error) {
           console.error(error);
-          Swal.fire('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการสร้างไฟล์ PDF: ' + error.message, 'error');
+          Swal.fire('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการสร้างไฟล์ PDF: ' + escapeHtml(error.message), 'error');
         }
       }
       async function unlockPDF() {
@@ -1124,7 +1175,7 @@
             zip.file('page-' + i + '.png', canvas.toDataURL('image/png').replace(/^data:image\/png;base64,/, ""), { base64: true });
           }
           let content = await zip.generateAsync({ type: 'blob' });
-          triggerDownload(content, State.fileName.replace('.pdf', '') + '_images.zip', 'application/zip');
+          triggerDownload(content, State.fileName.replace(/\.pdf$/i, '') + '_images.zip', 'application/zip');
           Swal.close(); showToast('ดาวน์โหลด ZIP สำเร็จ!', 'success');
         } catch (error) { Swal.fire('ข้อผิดพลาด', 'ไม่สามารถแปลง PDF ได้', 'error'); }
       }
@@ -1132,7 +1183,9 @@
         let blob = data instanceof Blob ? data : new Blob([data], { type: type });
         let url = URL.createObjectURL(blob);
         let a = document.createElement('a'); a.href = url; a.download = filename;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        // อย่า revoke ทันที บางเบราว์เซอร์ (Firefox/Safari) จะยกเลิกการดาวน์โหลดที่ยังไม่เริ่ม
+        setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
       }
       function openSettings() {
         let modal = document.getElementById('settings-modal');
