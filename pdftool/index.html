@@ -18,7 +18,7 @@
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
   <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>@view-transition { navigation: auto; }</style>
@@ -1142,8 +1142,14 @@
   </div>
 
   <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js'
-    
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+
+    let escapeHtml = text => {
+      let div = document.createElement('div')
+      div.textContent = text
+      return div.innerHTML
+    }
+
     let mergeFiles = []
     let splitFile = null
     let compressFile = null
@@ -1356,7 +1362,7 @@
 
       try {
         let arrayBuffer = await splitFile.arrayBuffer()
-        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise
           
         for (let i = 1; i <= pdf.numPages; i++) {
           let page = await pdf.getPage(i)
@@ -1618,7 +1624,7 @@
         
       try {
         let pdfBytes = await pdfDoc.save()
-        let pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise
+        let pdf = await pdfjsLib.getDocument({ data: pdfBytes, isEvalSupported: false }).promise
           
         for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) { 
           let page = await pdf.getPage(i)
@@ -1749,7 +1755,7 @@
 
       try {
         let arrayBuffer = await convertFile.arrayBuffer()
-        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise
           
         for (let i = 1; i <= pdf.numPages; i++) {
           let page = await pdf.getPage(i)
@@ -1799,7 +1805,7 @@
       if (!convertFile) return
       
       let arrayBuffer = await convertFile.arrayBuffer()
-      let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+      let pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise
       
       if (convertSelectedPages.size === pdf.numPages) {
           convertSelectedPages.clear()
@@ -1829,7 +1835,7 @@
 
       try {
         let arrayBuffer = await convertFile.arrayBuffer()
-        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+        let pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise
         
         let zip = new JSZip()
         let selectedArray = Array.from(convertSelectedPages).sort((a, b) => a - b)

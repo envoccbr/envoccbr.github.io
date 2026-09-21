@@ -19,9 +19,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@pdf-lib/fontkit@0.0.4/dist/fontkit.umd.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" >pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js';</script>
+    <script type="text/javascript" >pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <style>
       :root {
         --theme-primary: #4f46e5;
@@ -471,7 +471,7 @@
       }
       async function loadPDFToViewer() {
         let dataToPass = new Uint8Array(State.pdfBytes);
-        let loadingTask = pdfjsLib.getDocument({ data: dataToPass });
+        let loadingTask = pdfjsLib.getDocument({ data: dataToPass, isEvalSupported: false });
         State.pdfDoc = await loadingTask.promise;
         State.totalPages = State.pdfDoc.numPages;
         if (State.currentPage > State.totalPages) { State.currentPage = State.totalPages; }
@@ -832,7 +832,7 @@
             let newPdfBytes = new Uint8Array(arrayBuffer);
             let mainThumbs = await generateThumbnails(State.pdfDoc, 'main');
             let dataToPass = new Uint8Array(newPdfBytes); // copy
-            let newLoadingTask = pdfjsLib.getDocument({ data: dataToPass });
+            let newLoadingTask = pdfjsLib.getDocument({ data: dataToPass, isEvalSupported: false });
             let newPdfDoc = await newLoadingTask.promise;
             let newThumbs = await generateThumbnails(newPdfDoc, 'new');
             Swal.close();
