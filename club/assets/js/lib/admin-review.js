@@ -47,13 +47,13 @@
   /** ข้อมูลผู้สมัคร ใช้เหมือนกันทั้งสองหน้า */
   function memberHtml(row, m, orgTypes, rec) {
     return '<dl class="dl">' +
-      dt("ตำแหน่ง", m.position_name) +
-      dt("หน่วยงาน", A.orgLabel(m, orgTypes)) +
-      dt("อำเภอที่ปฏิบัติงาน", m.work_amphoe) +
+      dt("ตำแหน่ง", A.esc(m.position_name)) +
+      dt("หน่วยงาน", A.esc(A.orgLabel(m, orgTypes))) +
+      dt("อำเภอที่ปฏิบัติงาน", A.esc(m.work_amphoe)) +
       dt("เลขที่ใบอนุญาต",
-         m.license_no ? m.license_no + (m.license_type ? " (" + m.license_type + ")" : "") : "-") +
-      dt("เลขบัตร ปชช. (4 ท้าย)", m.national_id_last4 ? "xxxxxxxxx" + m.national_id_last4 : "-") +
-      dt("อีเมล", m.email) +
+         m.license_no ? A.esc(m.license_no) + (m.license_type ? " (" + A.esc(m.license_type) + ")" : "") : "-") +
+      dt("เลขบัตร ปชช. (4 ท้าย)", m.national_id_last4 ? "xxxxxxxxx" + A.esc(m.national_id_last4) : "-") +
+      dt("อีเมล", A.esc(m.email)) +
       dt("ค่าธรรมเนียม", A.fmt.money(row.fee_amount) + " บาท") +
       (rec ? dt("ใบสำคัญรับเงิน", A.esc(rec.receipt_no) + " (" + A.fmt.thaiDate(rec.issued_at) + ")") : "") +
       (row.review_note ? dt("บันทึกการตรวจ", A.esc(row.review_note)) : "") +
@@ -91,9 +91,9 @@
         (Number(pay.amount) !== Number(row.fee_amount)
           ? ' <span class="badge badge-err">ไม่ตรง</span>' : "")) +
       dt("วันเวลาที่โอน", pay.paid_at ? A.fmt.thaiDateTime(pay.paid_at) : "-") +
-      dt("ธนาคาร", pay.bank_name) +
-      dt("ผู้โอน", pay.payer_name) +
-      dt("เลขอ้างอิง", pay.ref_no) +
+      dt("ธนาคาร", A.esc(pay.bank_name)) +
+      dt("ผู้โอน", A.esc(pay.payer_name)) +
+      dt("เลขอ้างอิง", A.esc(pay.ref_no)) +
       dt("คะแนนตรวจอัตโนมัติ",
          pay.check_score === null || pay.check_score === undefined ? "-" : pay.check_score + "/100") +
       "</dl>" + checksHtml(pay) +
