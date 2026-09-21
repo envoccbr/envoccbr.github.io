@@ -9,10 +9,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" type="image/x-icon">
     <title>QR Code Generator Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=K2D:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ล็อกให้โหลดโค้ด/ฟอนต์/สไตล์ได้จากโดเมนตัวเองเท่านั้น -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: data:; worker-src 'self' blob:; child-src 'self' blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <!-- ไลบรารีทั้งหมดเก็บไว้ในรีโปนี้ (/assets) ไม่มีการเรียก CDN ภายนอก -->
+    <link href="../assets/css/tailwind.qrcode.css" rel="stylesheet">
+    <link href="../assets/css/fonts-k2d.css" rel="stylesheet">
+    <script src="../assets/js/qr-code-styling.js"></script>
+    <script src="../assets/js/sweetalert2.all.min.js"></script>
     <style>
         :root { --theme-color-1: #8b5cf6; --theme-color-2: #d946ef; }
         body { font-family: 'K2D', sans-serif; background-color: #fdfbfb; background-image: radial-gradient(at 0% 0%, rgba(var(--theme-color-1-rgb), 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(var(--theme-color-2-rgb), 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(var(--theme-color-1-rgb), 0.1) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(var(--theme-color-1-rgb), 0.1) 0px, transparent 50%); background-attachment: fixed; color: #334155; }

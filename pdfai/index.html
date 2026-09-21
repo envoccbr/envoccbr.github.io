@@ -9,19 +9,25 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>เครื่องมือจัดการ PDF & AI Assistant</title>
 		<link type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzP8AAAD//wD/AAAAAKX/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREREAAAAAAAAAAABVUAMABEQCAFBVAwAABAIAUAUDAAAEAgBQBQMAAAQCAFVVAzMERAIAUAUDAAQAAgBQBQMABAACAFBVAwAEAAIAVVADMwREAgAAAAAAAAAAABEREREREREAAAAAAAAAAAAAAAAAAAAADAAwAAgAEAAP//AACNxQAApfUAALX1AAC19QAAhEUAALXdAAC13QAApd0AAIxFAAD//wAAgAEAAMADAADgBwAA" rel="icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
-    <link type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script type="text/javascript" src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@pdf-lib/fontkit@0.0.4/dist/fontkit.umd.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" >pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <!-- ล็อกให้โหลดโค้ด/ฟอนต์/สไตล์ได้จากโดเมนตัวเองเท่านั้น เหลือทางออกเดียวคือ Gemini API -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: data: https://generativelanguage.googleapis.com; worker-src 'self' blob:; child-src 'self' blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <!-- ไลบรารีทั้งหมดเก็บไว้ในรีโปนี้ (/assets) ไม่มีการเรียก CDN ภายนอก -->
+    <link type="text/css" href="../assets/css/tailwind.pdfai.css" rel="stylesheet">
+    <link type="text/css" href="../assets/css/fonts-sarabun.css" rel="stylesheet">
+    <link type="text/css" href="../assets/css/toastify.css" rel="stylesheet">
+    <link type="text/css" href="../assets/css/fontawesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../assets/js/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="../assets/js/toastify.js"></script>
+    <script type="text/javascript" src="../assets/js/pdf-lib.min.js"></script>
+    <script type="text/javascript" src="../assets/js/fontkit.umd.min.js"></script>
+    <script type="text/javascript" src="../assets/js/jszip.min.js"></script>
+    <script type="module">
+      // pdf.js v4 ขึ้นไปเผยแพร่เป็น ES module เท่านั้น จึงต้อง import แล้วผูกเป็น global
+      // โมดูลจะทำงานเสร็จก่อน DOMContentLoaded/window.onload เสมอ โค้ดส่วนอื่นจึงเรียก pdfjsLib ได้ตามปกติ
+      import * as pdfjsLib from '../assets/js/pdf.min.mjs';
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '../assets/js/pdf.worker.min.mjs';
+      window.pdfjsLib = pdfjsLib;
+    </script>
     <style>
       :root {
         --theme-primary: #4f46e5;
@@ -975,13 +981,11 @@
       }
       async function getThaiFont() {
         if (State.thaiFontBytes) { return State.thaiFontBytes; }
-        try {
-          let res = await fetch('https://fontmeme.com/fonts/webfonts/37885f3/THSarabunNew.ttf?v=1');
-          State.thaiFontBytes = await res.arrayBuffer();
-        } catch (_) {
-          let res = await fetch('./THSarabunNew.ttf');
-          State.thaiFontBytes = await res.arrayBuffer();
-        }
+        // โหลดจากไฟล์ในรีโปเท่านั้น (เดิมดึงจาก fontmeme.com ก่อน แล้วค่อย fallback มาไฟล์นี้)
+        // ฟอนต์ตัวนี้ถูกฝังลงใน PDF ที่ผู้ใช้ส่งออก จึงต้องมาจากแหล่งที่เราควบคุมได้
+        let res = await fetch('./THSarabunNew.ttf');
+        if (!res.ok) { throw new Error('โหลดฟอนต์ไทยไม่สำเร็จ: HTTP ' + res.status); }
+        State.thaiFontBytes = await res.arrayBuffer();
         return State.thaiFontBytes;
       }
       let hexToRgb = function (hex) {

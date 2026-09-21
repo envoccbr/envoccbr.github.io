@@ -12,9 +12,10 @@
 	
     <title>HTML5 QR Code Scanner</title>
 	
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@400;600;700&amp;display=swap" rel="stylesheet">
+	<!-- ล็อกให้โหลดโค้ด/ฟอนต์/สไตล์ได้จากโดเมนตัวเองเท่านั้น -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: data:; worker-src 'self' blob:; child-src 'self' blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+	<!-- ฟอนต์เก็บไว้ในรีโปนี้ (/assets) ไม่มีการเรียก CDN ภายนอก -->
+	<link href="../../assets/css/fonts-inter-outfit.css" rel="stylesheet">
 	
 	<style>
 		:root {
@@ -295,8 +296,7 @@
 			<div id="scanned-result"></div>
 	   </div>
 	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+	<script src="../../assets/js/html5-qrcode.min.js"></script>
 	<script>
 		function docReady(fn) {
 			if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -340,8 +340,8 @@
 			}
 		}
 		window.onload = () => { docReady(function() {
-			// hljs.initHighlightingOnLoad(); // Deprecated as of 10.6.0. initHighlightingOnLoad() deprecated.  Use highlightAll() now.
-			hljs.highlightAll();
+			// เดิมหน้านี้โหลด highlight.js จาก CDN เพื่อเรียก hljs.highlightAll()
+			// แต่หน้านี้ไม่มี <pre><code> ให้ไฮไลต์เลย จึงตัดไลบรารีออกทั้งก้อน
 			let lastMessage;
 			let codeId = 0;
 			function onScanSuccess(decodedText, decodedResult) {
