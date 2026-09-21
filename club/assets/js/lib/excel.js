@@ -64,6 +64,16 @@
     replaced: "ถูกแทนที่"
   };
 
+  /*
+   * กันสูตร/DDE แฝงในข้อมูลที่ผู้สมัครกรอกเอง (เช่น ชื่อหน่วยงาน ที่อยู่)
+   * โปรแกรม Excel จะตีความค่าที่ขึ้นต้นด้วย = + - @ เป็นสูตรเมื่อเปิดไฟล์
+   * จึงเติม ' นำหน้าเพื่อบังคับให้เป็นข้อความล้วน ไม่กระทบค่าตัวเลข/วันที่ที่ระบบสร้างเอง
+   */
+  function sanitizeCell(v) {
+    if (typeof v !== "string") return v;
+    return /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
+  }
+
   function thaiDate(v) {
     if (!v) return "";
     var A = global.App;
@@ -109,7 +119,7 @@
     var body = data.map(function (r) {
       return COLUMNS.map(function (c) {
         var v = r[c[0]];
-        return v === null || v === undefined ? "" : v;
+        return v === null || v === undefined ? "" : sanitizeCell(v);
       });
     });
 

@@ -5,3 +5,4 @@ package-lock.json
 package.json
 _site/
 .DS_Store
+*.bak

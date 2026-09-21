@@ -19,9 +19,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/@pdf-lib/fontkit@0.0.4/dist/fontkit.umd.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script type="text/javascript" >pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script type="text/javascript" >pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js';</script>
     <style>
       :root {
         --theme-primary: #4f46e5;
@@ -277,10 +277,10 @@
     </main>
      <script type="text/javascript" >
       function getApiKey() {
-        return localStorage.getItem('pdf_toolkit_apikey') || '***REMOVED-API-KEY***';
+        return localStorage.getItem('pdf_toolkit_apikey') || '';
       }
       function loadSettings() {
-        State.settings.apiKey = '***REMOVED-API-KEY***';
+        State.settings.apiKey = localStorage.getItem('pdf_toolkit_apikey') || '';
         State.settings.themeColor = '#4f46e5';
         applyTheme(State.settings.themeColor, null);
       }
@@ -339,7 +339,7 @@
         selectedElementId: null,
         password: null,
         thaiFontBytes: null,
-        settings: { apiKey: '***REMOVED-API-KEY***', themeColor: '#4f46e5' }
+        settings: { apiKey: '', themeColor: '#4f46e5' }
       };
       function showToast(text, type) {
         if (!type) { type = 'success'; }

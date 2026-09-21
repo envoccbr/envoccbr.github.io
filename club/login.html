@@ -60,9 +60,10 @@
   A.renderFooter();
 
   var params = new URLSearchParams(location.search);
-  var next = params.get("next") || "app.html";
-  // กัน open redirect: อนุญาตเฉพาะ path ภายในระบบ
-  if (/^(https?:)?\/\//.test(next) || next.charAt(0) === "/") next = "app.html";
+  var next = (params.get("next") || "app.html").replace(/[\t\r\n]/g, "").trim();
+  // กัน open redirect: อนุญาตเฉพาะ path ภายในระบบ (กัน backslash ที่เบราว์เซอร์แปลงเป็น / ตอนนำทางด้วย)
+  var nextNormalized = next.replace(/\\/g, "/");
+  if (/^[a-z][a-z0-9+.-]*:/i.test(next) || nextNormalized.charAt(0) === "/") next = "app.html";
 
   A.auth.session().then(function (s) {
     if (s) location.replace(next);
