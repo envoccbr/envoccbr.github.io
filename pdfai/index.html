@@ -179,7 +179,7 @@
           <div class="space-y-2">
             <button onclick="setPassword()" class="w-full flex items-center space-x-3 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg transition border border-slate-700">
               <i class="fa-solid fa-shield-halved w-5 text-emerald-400 text-center"></i>
-              <span class="text-sm" id="btn-text-password">รหัสผ่านไฟล์ (ยังไม่รองรับ)</span>
+              <span class="text-sm" id="btn-text-password">ตั้งรหัสผ่าน (Protect)</span>
             </button>
             <button onclick="unlockPDF()" class="w-full flex items-center space-x-3 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg transition border border-slate-700">
               <i class="fa-solid fa-layer-group w-5 text-purple-400 text-center"></i>
@@ -475,6 +475,12 @@
             State.fileName = file.name;
             let arrayBuffer = event.target.result;
             State.pdfBytes = new Uint8Array(arrayBuffer);
+            State.edits = {};
+            // รหัสผ่านที่ตั้งไว้ผูกกับไฟล์เดิม ถ้าไม่รีเซ็ตตรงนี้ ไฟล์ใหม่ที่โหลดเข้ามา
+            // จะถูกเข้ารหัสด้วยรหัสผ่านเก่าแบบเงียบ ๆ ตอนส่งออกโดยผู้ใช้ไม่รู้ตัว
+            State.password = null;
+            let pwBtn = document.getElementById('btn-text-password');
+            if (pwBtn) { pwBtn.innerText = 'ตั้งรหัสผ่าน (Protect)'; pwBtn.className = 'text-sm'; }
             await loadPDFToViewer();
             document.getElementById('empty-state').classList.add('hidden');
             document.getElementById('canvas-wrapper').classList.remove('hidden');
@@ -997,21 +1003,45 @@
           Swal.close(); showToast('ประมวลผลเสร็จสิ้น!');
         } catch (error) { console.error(error); Swal.fire('Error', 'เกิดข้อผิดพลาดในการประมวลผล', 'error'); }
       }
-      // เดิมฟังก์ชันนี้รับรหัสผ่าน แล้วขึ้นข้อความว่า "มีรหัสผ่านป้องกันแล้ว 🔒"
-      // แต่ตอนส่งออกไม่ได้เข้ารหัสไฟล์จริงเลย ผู้ใช้จึงอาจส่งเอกสารสำคัญออกไปโดยเข้าใจผิดว่าถูกล็อกไว้
-      // ตอนนี้บอกตามจริงว่ายังทำไม่ได้ แทนที่จะให้ความมั่นใจปลอม ๆ
+      // pdf-lib (Hopding) ไม่รองรับการเข้ารหัส จึงเปลี่ยนไปใช้ @cantoo/pdf-lib
+      // ซึ่งเป็น fork ที่ API เดิมทุกอย่างเหมือนกัน (ยังเรียกผ่าน global PDFLib ตัวเดิม)
+      // แต่เพิ่ม pdfDoc.encrypt() แบบ AES-256 จริง ๆ (มาตรฐาน ISO 32000-2)
       function setPassword() {
         if (!State.pdfDoc) { return; }
         Swal.fire({
-          icon: 'info',
-          title: 'ยังใส่รหัสผ่านให้ไฟล์ไม่ได้',
-          html: '<div class="text-left text-sm leading-relaxed">' +
-                  '<p class="mb-2">เครื่องมือที่หน้านี้ใช้สร้าง PDF (pdf-lib) ยังไม่รองรับการเข้ารหัสไฟล์ ' +
-                  'ไฟล์ที่ดาวน์โหลดจากหน้านี้จึง<strong>เปิดอ่านได้โดยไม่ต้องใช้รหัสผ่าน</strong></p>' +
-                  '<p class="text-gray-600">ถ้าต้องการล็อกไฟล์จริง ๆ กรุณาใส่รหัสผ่านด้วยโปรแกรมอ่าน PDF ' +
-                  'ที่เครื่องของคุณอีกขั้นหนึ่งหลังดาวน์โหลด</p>' +
+          title: 'ตั้งรหัสผ่านป้องกันไฟล์ (AES-256)',
+          html: '<div class="text-left space-y-3 mt-2">' +
+                  '<div>' +
+                    '<label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่านเปิดไฟล์ (User password)</label>' +
+                    '<input type="password" id="swal-user-pass" class="w-full border border-gray-300 rounded-lg p-2" placeholder="เว้นว่าง = ยกเลิกการป้องกัน" value="' + escapeHtml(State.password ? State.password.userPassword : '') + '">' +
+                  '</div>' +
+                  '<div>' +
+                    '<label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่านเจ้าของไฟล์ (Owner password, ไม่บังคับ)</label>' +
+                    '<input type="password" id="swal-owner-pass" class="w-full border border-gray-300 rounded-lg p-2" placeholder="เว้นว่าง = ใช้รหัสผ่านเปิดไฟล์ชุดเดียวกัน" value="' + escapeHtml(State.password ? (State.password.ownerPassword || '') : '') + '">' +
+                  '</div>' +
+                  '<p class="text-xs text-gray-500">รหัสผ่านเปิดไฟล์ (User) ใช้เพื่อ<strong>เปิดอ่าน</strong>เอกสาร ส่วนรหัสผ่านเจ้าของไฟล์ (Owner) ใช้ควบคุมสิทธิ์แก้ไข/พิมพ์/คัดลอก — ถ้าไม่กรอกจะใช้รหัสผ่านเดียวกับ User</p>' +
                 '</div>',
-          confirmButtonText: 'รับทราบ'
+          showCancelButton: true, confirmButtonText: 'ตกลง', cancelButtonText: 'ยกเลิก',
+          preConfirm: function () {
+            let userPass = document.getElementById('swal-user-pass').value;
+            let ownerPass = document.getElementById('swal-owner-pass').value;
+            if (!userPass) { return { clear: true }; }
+            return { clear: false, userPassword: userPass, ownerPassword: ownerPass || userPass };
+          }
+        }).then(function (res) {
+          if (!res.isConfirmed) { return; }
+          let btn = document.getElementById('btn-text-password');
+          if (res.value.clear) {
+            State.password = null;
+            btn.innerText = 'ตั้งรหัสผ่าน (Protect)';
+            btn.className = 'text-sm';
+            showToast('ยกเลิกการตั้งรหัสผ่านแล้ว');
+          } else {
+            State.password = { userPassword: res.value.userPassword, ownerPassword: res.value.ownerPassword };
+            btn.innerText = 'มีรหัสผ่านป้องกันแล้ว 🔒';
+            btn.className = 'text-sm text-emerald-400 font-bold';
+            showToast('ตั้งรหัสผ่านเตรียมส่งออกเรียบร้อย (เข้ารหัสจริงตอนดาวน์โหลด)');
+          }
         });
       }
       function arrayBufferToBase64(buffer) {
@@ -1099,6 +1129,13 @@
               }
             }
           }
+        }
+        if (State.password && State.password.userPassword) {
+          pdfDoc.encrypt({
+            userPassword: State.password.userPassword,
+            ownerPassword: State.password.ownerPassword || State.password.userPassword,
+            permissions: { printing: 'highResolution', modifying: false, copying: false, annotating: false, fillingForms: true, contentAccessibility: true, documentAssembly: false }
+          });
         }
         return await pdfDoc.save();
       }

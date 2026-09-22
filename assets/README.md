@@ -16,7 +16,7 @@
 | `css/toastify.css`, `js/toastify.js` | Toastify JS | 1.12.0 | MIT |
 | `css/fonts-sarabun.css`, `css/fonts-k2d.css`, `css/fonts-inter-outfit.css` + `fonts/` | Google Fonts (Sarabun, K2D, Inter, Outfit) | ตามที่ Google Fonts ให้ ณ วันที่ดึง | SIL OFL 1.1 |
 | `js/sweetalert2.all.min.js` | SweetAlert2 | 11.26.25 | MIT |
-| `js/pdf-lib.min.js` | pdf-lib | 1.17.1 | MIT |
+| `js/pdf-lib.min.js` | @cantoo/pdf-lib (fork ของ pdf-lib) | 2.11.1 | MIT |
 | `js/fontkit.umd.min.js` | @pdf-lib/fontkit | 1.1.1 | MIT |
 | `js/pdf.min.mjs`, `js/pdf.worker.min.mjs` | pdf.js (pdfjs-dist, legacy build) | 6.3.289 | Apache-2.0 |
 | `js/jszip.min.js` | JSZip | 3.10.2 | MIT OR GPL-3.0-or-later |
@@ -40,6 +40,15 @@
 (CVE-2024-4367 — เปิดไฟล์ PDF ที่ถูกดัดแปลงแล้วรันจาวาสคริปต์ได้ ระดับ high กระทบทุกรุ่น ≤ 4.7.76)
 รุ่น 4 ขึ้นไปเผยแพร่เป็น ES module เท่านั้น หน้า `/pdfai/` จึง import ผ่าน `<script type="module">`
 แล้วผูกเป็น `window.pdfjsLib` ให้โค้ดเดิมเรียกใช้ได้เหมือนเดิม
+
+**pdf-lib** — เปลี่ยนจาก `pdf-lib` (Hopding) ตัวดั้งเดิมมาเป็น `@cantoo/pdf-lib` ซึ่งเป็น
+fork ที่ยังคง API และ global `PDFLib` ตัวเดิมทุกอย่าง (`PDFDocument.create/load`, `degrees`,
+`rgb`, `embedFont`, `embedPng`, `copyPages`, ฯลฯ ใช้แบบเดิมได้หมด) แต่เพิ่ม
+`pdfDoc.encrypt({ userPassword, ownerPassword, permissions })` ที่เข้ารหัสจริงด้วย AES-256
+(revision 6, มาตรฐาน ISO 32000-2) — pdf-lib ตัวเดิมไม่มีความสามารถนี้เลย ฟีเจอร์ "ตั้งรหัสผ่าน"
+ในหน้า `/pdfai/` เดิมจึงเป็นแค่ป้ายกำกับที่ไม่ได้ทำอะไรจริง ตอนนี้เข้ารหัสไฟล์จริงตอนส่งออก
+ตรวจแล้วว่า pdf.js (เวอร์ชันที่ vendor ไว้) ปฏิเสธเปิดไฟล์โดยไม่มีรหัสผ่าน/รหัสผิด และเปิด
++ อ่านข้อความ (รวมข้อความไทยที่ฝังฟอนต์) ได้ถูกต้องเมื่อใส่รหัสผ่านที่ถูกต้อง
 
 ### วิธีอัปเดตไลบรารีในอนาคต
 
